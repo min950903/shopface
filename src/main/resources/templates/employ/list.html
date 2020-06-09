@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+  <table id="userTable">
+     <thead>
+    <tr>
+         <th>이름</th>
+         <th>휴대폰 번호</th>
+         <th>이메일</th>
+         <th>급여</th>
+         <th>상태</th>
+     </tr>
+     </thead>
+     <tbody>
+     <tr th:each="employ : ${employList}">
+         <td th:text="${employ.name}"></td>    
+         <td th:if="${employ.phone != null}" th:text="${employ.phone}"></td>
+         <td th:if="${employ.email != null}" th:text="${employ.email}"></td>
+         <td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
+         <td th:text="${employ.state}">state</td>
+     </tr>
+     </tbody>
+     </table>
