@@ -1,1 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.sunmoon.shopface.member.MemberMapper">
+	<select id="selectAll" parameterType="member"
+		resultType="member">
+		SELECT NAME,PHONE,EMAIL,STATE
+		FROM MEMBER
+		<where>
+			<if test="name != null">AND NAME = #{name}</if>
+			<if test="state != null">AND STATE = #{state}</if>
+		</where>
+	</select>
+	<select id="select" parameterType="member" resultType="member">
+		SELECT ID, NAME, PASSWORD, PHONE, EMAIL, BANK_NAME, ACCOUNT_NUM, STATE
+		FROM MEMBER
+		WHERE ID = #{id}
+	</select>
+	<insert id="insert" parameterType="member">
+		INSERT INTO MEMBER
+		(ID, NAME,
+		PASSWORD, PHONE)
+		VALUES
+		(
+		#{id},
+		#{name},
+		#{password},
+		#{phone}
+		)
+	</insert>
+	<update id="update" parameterType="member">
+		UPDATE MEMBER
+		<set> 
+			<if test="name != null">NAME = #{name},</if>
+			<if test="password != null">PASSWORD = #{password},</if>
+			<if test="email != null">EMAIL = #{email},</if>
+			<if test="bankName != null">BANK_NAME = #{bankName},</if>
+			<if test="accountNum != null">ACCOUNT_NUM = #{accountNum}</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	<delete id="delete" parameterType="member">
+		DELETE FROM MEMBER
+		WHERE ID = #{id}
+	</delete>
+</mapper>
