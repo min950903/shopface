@@ -7,8 +7,8 @@
 		SELECT NAME,PHONE,EMAIL,STATE
 		FROM MEMBER
 		<where>
-			<if test="name != null">AND NAME = #{name}</if>
-			<if test="state != null">AND STATE = #{state}</if>
+			<if test="name != null and !name.equals('')">AND NAME = #{name}</if>
+			<if test="state != null and state != ''">AND STATE = #{state}</if>
 		</where>
 	</select>
 	<select id="select" parameterType="member" resultType="member">

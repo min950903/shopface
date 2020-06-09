@@ -66,6 +66,8 @@ public class MemberController {
 		return modelAndView;
 	}
 	
+	
+	//pathvariable 유용성 검사 필요
 	@PutMapping("/member/{id}")
 	public ModelAndView updateMember(@PathVariable String id, Member member) {
 		memberService.editMember(member);

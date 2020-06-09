@@ -1,7 +1,15 @@
 package kr.ac.sunmoon.shopface.member;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +24,8 @@ public class MemberServiceImpl implements MemberService {
 		if (member.getId() != null 
 				&& member.getPassword() != null
 				&& member.getPhone() != null) {
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			member.setPassword(passwordEncoder.encode(member.getPassword()));
 			memberMapper.insert(member);
 			
 			return true;
@@ -56,5 +66,19 @@ public class MemberServiceImpl implements MemberService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+		Member member = new Member();
+		member.setId(id);
+		
+		Member existMember = memberMapper.select(member);
+		
+		//TODO-관리자/유저 별 권한 부여 로직 
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+		
+		return new User(existMember.getId(), existMember.getPassword(), authorities);
 	}
 }

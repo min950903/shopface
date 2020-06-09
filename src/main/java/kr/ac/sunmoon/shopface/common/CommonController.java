@@ -28,22 +28,23 @@ public class CommonController {
 	 * 로그인 여부 확인 후 로그인 구현
 	 * */
 	
-	@PostMapping("/login")
-	public ModelAndView login(Member member, HttpSession httpSession
-			, RedirectAttributes redirectAttributes) {
-		ModelAndView modelAndView = new ModelAndView();
-		
-		if(commonService.login(member)) {
-			modelAndView.setView(new RedirectView("/member"));
-			
-			httpSession.setAttribute("loginUser", member.getId());
-		} else {
-			modelAndView.setView(new RedirectView("/login"));
-			redirectAttributes.addFlashAttribute("message", "로그인 정보가 일치하지 않습니다.");
-		}
-		
-		return modelAndView;
-	}
+	
+//	@PostMapping("/login")
+//	public ModelAndView login(Member member, HttpSession httpSession
+//			, RedirectAttributes redirectAttributes) {
+//		ModelAndView modelAndView = new ModelAndView();
+//		
+//		if(commonService.login(member)) {
+//			modelAndView.setView(new RedirectView("/member"));
+//			
+//			httpSession.setAttribute("loginUser", member.getId());
+//		} else {
+//			modelAndView.setView(new RedirectView("/login"));
+//			redirectAttributes.addFlashAttribute("message", "로그인 정보가 일치하지 않습니다.");
+//		}
+//		
+//		return modelAndView;
+//	}
 	
 	@GetMapping("/logout")
 	public ModelAndView logout(HttpSession httpSession) {
