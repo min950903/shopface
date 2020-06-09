@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j 
+@Service
 public class BranchServiceImple implements BranchService {
 	@Autowired
 	private BranchMapper branchMapper;
@@ -15,31 +20,30 @@ public class BranchServiceImple implements BranchService {
 	@Override
 	public boolean addBranch(Branch branch) {
 		//1. 입력 값이 존재하는가?
+		log.info("+++++++++++++branchService - addBranch - start");
 		try {
-			if (branch.getNo() != 0
-					&& branch.getBusinessmanId() != null
+			System.out.println(branch);
+			if (branch.getBusinessmanId() != null
 					&& !"".equals(branch.getBusinessmanId())
 					&& branch.getName() != null
 					&& !"".equals(branch.getName())
 					&& branch.getPhone() != null
 					&& !"".equals(branch.getPhone())
-					&& branch.getRegisterDate() != null
 					&& branch.getAddress() != null
-					&& !"".equals(branch.getAddress())
-					&& branch.getBusinessLicensePath() != null
-					&& !"".equals(branch.getBusinessLicensePath())
-					&& !"".equals(branch.getState())
-					&& !"".equals(branch.getApprovalStatus())){
+					&& !"".equals(branch.getAddress())) {
 				//2. 존재하면 정보 등록
+				log.info("--------------------------------if문 통과---------------------------------");
 				this.branchMapper.insert(branch);
-				
+				log.info("--------------------------------Mapper통과---------------------------------");
 				return true;
 			}
 		} catch(Exception e) {
 			//3. 아니면 false갑 반환
+			e.getStackTrace();
+			log.info("-----------------실패1----------------");
 			return false;
 		}
-		
+		log.info("-----------------실패2----------------");
 		return false;
 	}
 
@@ -80,13 +84,8 @@ public class BranchServiceImple implements BranchService {
 					&& !"".equals(branch.getName())
 					&& branch.getPhone() != null
 					&& !"".equals(branch.getPhone())
-					&& branch.getRegisterDate() != null
 					&& branch.getAddress() != null
-					&& !"".equals(branch.getAddress())
-					&& branch.getBusinessLicensePath() != null
-					&& !"".equals(branch.getBusinessLicensePath())
-					&& !"".equals(branch.getState())
-					&& !"".equals(branch.getApprovalStatus())){
+					&& !"".equals(branch.getAddress())) {
 				//2. 존재 시 지점 정보 수정 후 true값 밪환
 				this.branchMapper.update(branch);
 				return true;
