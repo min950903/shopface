@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,15 +24,38 @@ public class EmployServiceImpl implements EmployService {
     }
 
     @Override
-    public boolean getEmploy(Employ employ) {
-        return false;
+    public Employ getEmploy(Employ employ) {
+        return employMapper.select(employ);
     }
 
+    @Transactional
     @Override
     public boolean editEmploy(Employ employ) {
-        return false;
+        if(null != employ) {
+            if(employ.getState() != null) {
+                String state = employ.getState();
+                switch (state) {
+                case "합류전":
+                    state = "B";
+                    break;
+                case "합류완료":
+                    state = "C";
+                    break;
+                case "비활성화":
+                    state = "D";
+                    break;
+                }
+                employ.setState(state);
+            }
+            
+            employMapper.update(employ);
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    @Transactional
     @Override
     public boolean deleteEmploy(Employ employ) {
         return false;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,30 +30,44 @@ public class EmployController {
     }
     
     @GetMapping("/employ/{branchNo}")
-    public ModelAndView getEmployList(@PathVariable String branchNo) {
+    public ModelAndView getEmployList(@PathVariable int branchNo) {
         Employ employ = new Employ();
-        employ.setBranchNo((Integer.parseInt(branchNo)));
+        employ.setBranchNo(branchNo);
         
         List<Employ> employList = employService.getEmployList(employ);
         
-        ModelAndView mav = new ModelAndView("/employ/list.html");
-        mav.addObject("employList", employList);
+        ModelAndView modelAndView = new ModelAndView("employ/list.html");
+        modelAndView.addObject("employList", employList);
         
-        return mav;
+        return modelAndView;
     }
     
-    @GetMapping(value = "/employ/{id}", consumes = "application/json")
-    public List<Employ> getEmployList(@PathVariable String branchNo, Employ employ) {
+    @GetMapping(value = "/employ/{no}", consumes = "application/json")
+    public List<Employ> getEmployList(@PathVariable int branchNo, Employ employ) {
         return null;
     }
     
-    @PutMapping("/employ/{id}")
-    public ModelAndView editEmploy(@PathVariable String no , @RequestParam Employ employ) {
-        return null;
+    @GetMapping("/employ/employee/{no}")
+    public ModelAndView getEmploy(@PathVariable int no) {
+        Employ employ = new Employ();
+        employ.setNo(no);
+        
+        ModelAndView modelAndView = new ModelAndView("/employ/detail.html");
+        modelAndView.addObject("employ", employService.getEmploy(employ));
+        
+        return modelAndView;
     }
     
-    @DeleteMapping("/employ/{id}")
-    public ModelAndView removeEmploy(@PathVariable String no, @RequestParam Employ employ) {
+    @PutMapping("/employ/{no}")
+    public ModelAndView editEmploy(@PathVariable int no, Employ employ) {
+        employService.editEmploy(employ);
+        ModelAndView modelAndView = new ModelAndView("redirect:/employ/employee/" + employ.getNo());
+        
+        return modelAndView;
+    }
+    
+    @DeleteMapping("/employ/{no}")
+    public ModelAndView removeEmploy(@PathVariable("no") int no, @RequestParam Employ employ) {
         return null;
     }
     
