@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.sunmoon.shopface.work.ScheduleMapper">
+
+	<insert id="insert"
+		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
+		INSERT INTO SCHEDULE
+		VALUES
+	</insert>
+
+
+	<select id="select"
+		parameterType="kr.ac.sunmoon.shopface.work.Schedule"
+		resultType="kr.ac.sunmoon.shopface.work.Schedule">
+		SELECT
+		FROM SCHEDULE
+		WHERE = #{}
+	</select>
+
+	<select id="selectAll"
+		parameterType="kr.ac.sunmoon.shopface.work.Schedule"
+		resultType="kr.ac.sunmoon.shopface.work.Schedule">
+		SELECT
+
+		FROM SCHEDULE
+
+	</select>
+
+
+	<update id="update"
+		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
+		UPDATE SCHEDULE
+		SET =
+		WHERE
+	</update>
+
+	<delete id="delete"
+		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
+		DELETE
+		FROM SCHEDULE
+		WHERE
+	</delete>
+
+
+</mapper>
