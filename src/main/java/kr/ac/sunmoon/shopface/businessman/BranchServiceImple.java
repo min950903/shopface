@@ -20,7 +20,6 @@ public class BranchServiceImple implements BranchService {
 	@Override
 	public boolean addBranch(Branch branch) {
 		//1. 입력 값이 존재하는가?
-		log.info("+++++++++++++branchService - addBranch - start");
 		try {
 			System.out.println(branch);
 			if (branch.getBusinessmanId() != null
@@ -32,18 +31,14 @@ public class BranchServiceImple implements BranchService {
 					&& branch.getAddress() != null
 					&& !"".equals(branch.getAddress())) {
 				//2. 존재하면 정보 등록
-				log.info("--------------------------------if문 통과---------------------------------");
 				this.branchMapper.insert(branch);
-				log.info("--------------------------------Mapper통과---------------------------------");
 				return true;
 			}
 		} catch(Exception e) {
 			//3. 아니면 false갑 반환
 			e.getStackTrace();
-			log.info("-----------------실패1----------------");
 			return false;
 		}
-		log.info("-----------------실패2----------------");
 		return false;
 	}
 
@@ -103,36 +98,36 @@ public class BranchServiceImple implements BranchService {
 	 * */
 	@Override
 	public boolean removeBranch(Branch branch) {
-		//1. 입력 값 검증
-		try {
+		try{
+			//1. 입력 값 검증
 			if (branch.getNo() != 0
 					&& branch.getBusinessmanId() != null
-					&& !"".equals(branch.getBusinessmanId())
-					&& branch.getName() != null
-					&& !"".equals(branch.getName())
-					&& branch.getPhone() != null
-					&& !"".equals(branch.getPhone())
-					&& branch.getRegisterDate() != null
-					&& branch.getAddress() != null
-					&& !"".equals(branch.getAddress())
-					&& branch.getBusinessLicensePath() != null
-					&& !"".equals(branch.getBusinessLicensePath())
-					&& !"".equals(branch.getState())
-					&& !"".equals(branch.getApprovalStatus())){
-				//2. 존재 시  연관된 고용 있는지 확인 
-				if (true) {
-					//3. 연관된 고용 정보 없으면 삭제
-					this.branchMapper.delete(branch);
-					return true;					
-				} 
-				//4. 연관된 고용 정보 있으면 비활성화 
-				this.branchMapper.update(branch);
-				return true;
-			}
+					&& !"".equals(branch.getBusinessmanId())){
+				//2. 입력 값 검증 완료 시 지점 조회
+				List<Branch> result = this.branchMapper.select(branch);
+				// 3. 사업자 본인이 등록한 지점인지 확인 (전달받은 사업자id와 조회한 지점의 사업자id가 같은지 비교)
+				if (result != null && result.size() == 1) { //지점 조회 시 결과가 1개 있는지 검사
+					String resultId = result.get(1).getBusinessmanId();
+					if (resultId.equals(branch.getBusinessmanId())) {
+						//4. 같을 시 고용 목록 조회 (지점의 일련번호로 조회)
+						//5. 연관된 고용관계가 있는지 확인(지점 일련 번호와 고용정보의 지점 일련번호 일치 여부 확인)
+						//Employee employee = new Employee();
+						//employee.setBranchNo(branch.getBusinessmanId());
+						//List<Employee> employees = this.employeeMapper.selectAll(employee);
+						//6. 연결된 고용 정보 미존재 시 삭제
+						//if (employees == null) {
+						//	this.branchMapper.delete(branch);
+						//	return true;
+						//} else {
+						//	this.branchMapper.update(branch);
+						//	return true;
+						//} 
+					} return false;
+				} return false;
+			} return false;
+			//7. 연결된 고용 정보 존재 시 삭제하지 않고 비활성화
 		} catch(Exception e) {
-			//3. 존재 안할 시 false값 반환
 			return false;
 		}
-		return false;
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,8 +66,8 @@ public class BranchController {
 	/**
 	 * 지점 목록 조회
 	 * */
-	@GetMapping("/branch/{no}")
-	public ModelAndView getBranch(String businessmanId, char approvalStatus) {
+	@GetMapping("/branch/{businessmanId}")
+	public ModelAndView getBranch(@PathVariable("businessmanId") String businessmanId, char approvalStatus) {
 		return null;
 	}
 	
@@ -84,6 +85,14 @@ public class BranchController {
 	 * */
 	@DeleteMapping("/branch/{no}")
 	public ModelAndView removeBranch(Branch branch) {
+		ModelAndView mav = new ModelAndView(new RedirectView("/branch"));
+		try {
+			
+			boolean result = this.branchService.removeBranch(branch);
+			
+		} catch(Exception e) {
+			
+		}
 		return null;
 	}
 }
