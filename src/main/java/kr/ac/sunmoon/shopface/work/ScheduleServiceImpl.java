@@ -14,22 +14,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public List<Schedule> getScheduleList(Schedule schedule) {
-		return null;
+		return this.scheduleMapper.selectAll(schedule);
 	}
 
 	@Override
 	public Schedule getSchedule(Schedule schedule) {
-		return null;
+		return this.scheduleMapper.select(schedule);
+	}
+/*
+	@Override
+	public void editSchedule(Schedule schedule) {
+		this.scheduleMapper.update(schedule);
 	}
 
 	@Override
-	public boolean editSchedule(Schedule schedule) {
-		return false;
+	public void removeSchedule(Schedule schedule) {
+		this.scheduleMapper.delete(schedule);
 	}
-
-	@Override
-	public boolean removeSchedule(Schedule schedule) {
-		return false;
-	}
-	
+*/	
 }

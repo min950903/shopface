@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>스케줄 목록</title>
+</head>
+<body th:align="center">
+	<h1>사업자 목록</h1>
+		<table th:algin="center" border="1">
+			<tr>
+
+				<th>no</th>
+				<th>시간표 no</th>
+				<th>회원 ID</th>
+				<th>상태</th>
+
+				<tr th:each="schedule : ${list}">
+				<td th:text="${schedule.no}">
+				<td th:text="${schedule.timetableNo}">
+				<td th:text="${schedule.memberId}">
+				<td th:text="${schedule.state}">
+			</tr>
+		</table>
+	<br>
+</body>
+</html>

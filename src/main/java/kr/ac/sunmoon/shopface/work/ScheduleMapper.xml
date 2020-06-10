@@ -4,44 +4,57 @@
 
 <mapper namespace="kr.ac.sunmoon.shopface.work.ScheduleMapper">
 
-	<insert id="insert"
-		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
-		INSERT INTO SCHEDULE
-		VALUES
-	</insert>
+
 
 
 	<select id="select"
 		parameterType="kr.ac.sunmoon.shopface.work.Schedule"
 		resultType="kr.ac.sunmoon.shopface.work.Schedule">
 		SELECT
+		NO
+		,TIMETABLE_NO
+		,MEMBER_ID
+		,STATE
 		FROM SCHEDULE
-		WHERE = #{}
+		WHERE NO= #{no}
 	</select>
 
 	<select id="selectAll"
 		parameterType="kr.ac.sunmoon.shopface.work.Schedule"
 		resultType="kr.ac.sunmoon.shopface.work.Schedule">
 		SELECT
-
+		NO
+		,TIMETABLE_NO
+		,MEMBER_ID
+		,STATE
 		FROM SCHEDULE
-
 	</select>
+<!-- 
+	<insert id="insert"
+		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
+		INSERT INTO SCHEDULE
+		VALUES
+		(#{no},#{timetableNo},#{memberId},#{state})
+	</insert>
 
 
 	<update id="update"
 		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
 		UPDATE SCHEDULE
-		SET =
-		WHERE
+		<set>
+			<if test="state != null">
+				STATE = #{state}
+			</if>
+		</set>
+		WHERE NO = #{no}
 	</update>
 
 	<delete id="delete"
 		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
 		DELETE
 		FROM SCHEDULE
-		WHERE
+		WHERE NO = #{no}
 	</delete>
-
+ -->
 
 </mapper>
