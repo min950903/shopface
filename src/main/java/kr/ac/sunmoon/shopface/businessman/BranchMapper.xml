@@ -9,7 +9,7 @@
 		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, 'A', 'W')
 	</insert>
 	
-	<select id="select" parameterType="kr.ac.sunmoon.shopface.businessman.Branch" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<select id="selectAll" parameterType="kr.ac.sunmoon.shopface.businessman.Branch" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
 		SELECT 
 			 NO
 			,BUSINESSMAN_ID
@@ -21,27 +21,39 @@
 			,APPROVAL_STATUS
 		FROM BRANCH
 		<where>
-			<if test="businessmanId != null">
+			<if test="businessmanId != null and businessmanId != ''">
 				AND BUSINESSMAN_ID = #{businessmanId}
 			</if>
 			<if test="APPROVAL_STATUS != null">
 				AND APPROBVAL_STATUS = #{approvalStatus}
 			</if>
 		</where>
-			
-		 <!--  public List<Branch> select(String businessmanId, char approvalStatus);	 -->
+	</select>
+	
+	<select id="select" parameterType="int" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
+		SELECT 
+			 NO
+			,BUSINESSMAN_ID
+			,NAME
+			,PHONE
+			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
+			,ADDRESS
+			,STATE
+			,APPROVAL_STATUS
+		FROM BRANCH
+		WHERE NO = #{no}
 	</select>
 	
 	<update id="update" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
 		UPDATE BRANCH
 		<set>
-			<if test="name != null">
+			<if test="name != null and name != ''">
 				NAME = #{name},
 			</if> 
-			<if test="address != null">
+			<if test="address != null and address != ''">
 				ADDRESS = #{address},
 			</if>
-			<if test="phone != null">
+			<if test="phone != null and phone != ''">
 				PHONE = #{phone},
 			</if>
 			<if test="approvalStatus != null">

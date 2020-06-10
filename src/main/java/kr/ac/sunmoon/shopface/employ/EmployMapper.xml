@@ -35,6 +35,12 @@
                ,DECODE(E.STATE, 'B', '합류전', 'C', '합류완료', 'D', '비활성화') AS STATE, E.SALARY 
         FROM EMPLOY E JOIN MEMBER M
         ON E.MEMBER_ID = M.ID
+        WHERE E.NO = #{no}
+        <where>
+	        <if test="cretiCode != null and cretiCode != ''">
+	            AND CERTI_CODE = #{cretiCode}
+	        </if>
+        </where>
     </select>
     
     <insert id="insert"></insert>

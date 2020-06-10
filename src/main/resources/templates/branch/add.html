@@ -20,17 +20,21 @@
   			<form action='/branch' method='post'>
   				<input type="hidden" name="businessmanId" value="sofksh">
     			<tr>
-      				<td>지점 명 입력 : </td>
+      				<td>지점 명 : </td>
       				<td><input type="text" name="name" value=""></td>
-    			</tr>
-    			<tr>
-      				<td>연락처 : </td>
-      				<td><input type="text" name="phone" value=""></td>
     			</tr>
     			<tr>
       				<td>주소 : </td>
       				<td><input type="text" name="address" value=""></td>
-      				<td><input type="button" name="address" value=""></td>
+      				<td><input type="button" name="address_api_btn" value="주소 찾기"></td>
+    			</tr>
+    			<tr>
+      				<td>상세 주소 : </td>
+      				<td><input type="text" name="detailAddress" value=""></td>
+    			</tr>
+    			<tr>
+      				<td>전화 번호 : </td>
+      				<td><input type="text" name="phone" value=""></td>
     			</tr>
     			<td><input type="submit" value="등록" id="insert_btn"></td>
     		</form>
