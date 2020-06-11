@@ -141,11 +141,12 @@ public class BranchServiceImple implements BranchService {
 						
 						List<Employ> employs = this.employMapper.selectAll(employ);
 						if (employs != null && employs.size() >= 1) {
-							//6. 연결된 고용 정보 미존재 시 삭제
+							//6. 연결된 고용 정보 존재 시 삭제하지 않고 비활성화
+							branch.setState('D');
 							this.branchMapper.update(branch);
 							return true;
 						} else {
-							//7. 연결된 고용 정보 존재 시 삭제하지 않고 비활성화
+							//7. 연결된 고용 정보 미존재 시 삭제
 							this.branchMapper.delete(branch);
 							return true;
 						} 
