@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,16 +44,25 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean editMember(Member member) {
+	public boolean editMember(Member member, String oldPassword) {
 		Member existMember = memberMapper.select(member);
 		if (existMember != null) {
 			if (member.getPassword() != null) {
-				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-				member.setPassword(passwordEncoder.encode(member.getPassword()));
+				if (existMember.getPassword().equals(oldPassword)) {
+					BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+					member.setPassword(passwordEncoder.encode(member.getPassword()));
+					
+					memberMapper.update(member);
+					
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				memberMapper.update(member);
+				
+				return true;
 			}
-			memberMapper.update(member);
-			
-			return true;
 		} else {
 			return false;
 		}

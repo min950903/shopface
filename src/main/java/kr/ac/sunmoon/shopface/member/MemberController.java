@@ -33,11 +33,6 @@ public class MemberController {
 	public ModelAndView addMember(Member member, RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		log.info(member.getId());
-		log.info(member.getName());
-		log.info(member.getPassword());
-		log.info(member.getPhone());
-		
 		if (memberService.addMember(member)) {
 			modelAndView.setView(new RedirectView("/login"));
 			
@@ -71,18 +66,25 @@ public class MemberController {
 		member.setId(id);
 
 		modelAndView.addObject("member", memberService.getMember(member));
-		
 				
 		return modelAndView;
 	}
 	
-	
-	//pathvariable 유용성 검사 필요
 	@PutMapping("/member/{id}")
-	public ModelAndView updateMember(@PathVariable String id, Member member) {
-		memberService.editMember(member);
+	public ModelAndView updateMember(@PathVariable String id, Member member, String oldPassword,
+			RedirectAttributes redirectAttributes) {
+		ModelAndView modelAndView = new ModelAndView();
 		
-		return new ModelAndView(new RedirectView("/member"));
+		boolean isSuccess = memberService.editMember(member, oldPassword);
+		if(isSuccess) {
+			modelAndView.setView(new RedirectView("/member"));
+		} else {
+			redirectAttributes.addFlashAttribute("message", "기존 비밀번호가 일치하지 않습니다.");
+			
+			modelAndView.setView(new RedirectView("/member/" + id));
+		}
+		
+		return modelAndView;
 	}
 	
 	@DeleteMapping("/member/{id}")
