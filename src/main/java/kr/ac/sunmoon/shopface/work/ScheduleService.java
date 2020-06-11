@@ -6,6 +6,6 @@ public interface ScheduleService {
 
 	public List<Schedule> getScheduleList(Schedule schedule);
 	public Schedule getSchedule(Schedule schedule);
-	/*public void editSchedule(Schedule schedule);
-	public void removeSchedule(Schedule schedule);*/
+	public void editSchedule(Schedule schedule);
+	public void removeSchedule(Schedule schedule);
 }

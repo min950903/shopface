@@ -37,9 +37,9 @@
 		(#{no},#{timetableNo},#{memberId},#{state})
 	</insert>
 
-
+-->
 	<update id="update"
-		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
+		parameterType="kr.ac.sunmoon.shopface.work.Schedule">
 		UPDATE SCHEDULE
 		<set>
 			<if test="state != null">
@@ -50,11 +50,11 @@
 	</update>
 
 	<delete id="delete"
-		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
+		parameterType="kr.ac.sunmoon.shopface.work.Schedule">
 		DELETE
 		FROM SCHEDULE
 		WHERE NO = #{no}
 	</delete>
- -->
+
 
 </mapper>

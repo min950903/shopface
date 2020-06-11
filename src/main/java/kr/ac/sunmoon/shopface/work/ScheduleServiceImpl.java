@@ -21,7 +21,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public Schedule getSchedule(Schedule schedule) {
 		return this.scheduleMapper.select(schedule);
 	}
-/*
+
 	@Override
 	public void editSchedule(Schedule schedule) {
 		this.scheduleMapper.update(schedule);
@@ -31,5 +31,5 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public void removeSchedule(Schedule schedule) {
 		this.scheduleMapper.delete(schedule);
 	}
-*/	
+	
 }

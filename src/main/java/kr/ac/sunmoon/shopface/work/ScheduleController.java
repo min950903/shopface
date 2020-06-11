@@ -46,25 +46,28 @@ public class ScheduleController {
 		mav.addObject("schedule",scheduleService.getSchedule(schedule));
 	   return mav;
 	}
-	/*
-	@GetMapping("/schedule{no}")
+	
+	
+	@GetMapping("/schedule/edit/{no}")
 	public ModelAndView editSchedule(@PathVariable("no") int no, Schedule schedule) {
 		
-		ModelAndView mav = new ModelAndView("/schedule/edit");
-		mav.addObject("schedule",this.scheduleService.getSchedule(schedule));
+		ModelAndView mav = new ModelAndView("schedule/edit");
 		return mav;
 	}
-	@PutMapping("/schedule{no}")
+	@PutMapping("/schedule/edit")
 	public ModelAndView editSchedule(Schedule schedule) {
+		
 		this.scheduleService.editSchedule(schedule);
-		return new ModelAndView(new RedirectView("/schedule/list"));
+		return new ModelAndView(new RedirectView("schedule/list"));
 	}
 	
-	@DeleteMapping("/schedule{no}")
-	public ModelAndView removeSchedule(@PathVariable("no") int no,Schedule schedule) {
+	@GetMapping("/schedule/delete/{no}")
+	public ModelAndView removeSchedule(@PathVariable("no") int no) {
+		Schedule schedule = new Schedule();
+		schedule.setNo(no);
 		this.scheduleService.removeSchedule(schedule);
 		return new ModelAndView(new RedirectView("/schedule"));
 	}
 	
-	*/
+	
 }
