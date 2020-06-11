@@ -6,21 +6,41 @@
 	<body>
 		<form id="branch" th:action="@{/branch/{no}(no=${branch.no})}" method="post">
 			<input type="hidden" name="_method">
+			
 			<label for="name">지점 명 : </label>
 			<input type="text" name="name" th:value="${branch.name}"><br>
+			
 			<label for="phone">전화번호 : </label>
 			<input type="text" name="phone" th:value="${branch.phone}"><br>
+			
 			<label for="address">주소 : </label>
 			<input type="text" name="address" th:value="${branch.address}" ><br>
-			<label for="detailAddress"></label>
+			
+			<label for="detailAddress">상세주소</label>
 			<input type="text" name="detailAddress" th:value="${branch.detailAddress}"><br>
-			<label for="zipNo"></label>
+			
+			<label for="zipNo">우편번호</label>
 			<input type="text" name="zipNo" th:value="${branch.zipNo}"><br>
-			<label for="businessmanLicensePath">사업자등록증 업로드 : </label>
-			<input type="text" name="businessmanLicensePath" th:value="${branch.businessmanLicensePath}"><br>
+			
+			<label for="businessLPath">사업자등록증 업로드 : </label>
+			<input type="text" name="businessLPath" th:value="${branch.businessLPath}"><br>
+			
 			<div id="message_div"></div>
 			<a id="edit_button">수정</a>
 			<a id="delete_button">삭제</a>
 		</form>
 	</body>
 </html>
+<script>
+	$(document).ready(function(){
+		$('#edit_button').click(function() {
+			$('input[name=_method]').val('put');
+			$('#branch').submit();
+		});
+		
+		$('#delete_button').click(function(){
+			$('input[name=_method]').val('delete');
+			$('#branch').submit();
+		});
+	});
+</script>

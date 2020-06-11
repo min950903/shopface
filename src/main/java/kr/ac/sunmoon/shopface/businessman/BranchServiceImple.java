@@ -81,12 +81,15 @@ public class BranchServiceImple implements BranchService {
 		try {
 			//1. 입력 값 조회(일련번호 0 이상)
 			if (no > 0) {
-				branch = this.branchMapper.select(no);	
+				branch = this.branchMapper.select(no);
+				if(branch == null) {
+				}
 				return branch;				
 			}
 			
 			return null;
 		} catch (Exception e) {
+			e.printStackTrace();
 			//2. 조회 중 오류 발생 시 널값 반환
 			return null;
 		}

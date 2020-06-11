@@ -6,7 +6,6 @@
 	<body>
 		<table>
  			<thead>
- 				<span id="businessmanId" value="sofksh">
  				<!-- <span id="approvalStatus" value="">  -->
     			<tr>
       				<th>지점 명</th>
@@ -19,56 +18,54 @@
       				<td>검색 결과가 없습니다.</td>
     			</tr>
     			<tr>
-					<td><a th:href="@{/branch/form}">등록</td>
+					<td><a th:href="@{/branch/form}">등록</a></td>
 				</tr>
   			</tbody>
 		</table>
 	</body>
 	<script> 
-		var id = businessmanId != null ? businessmanId : "sofksh";
-		
-			function drawTable() {
-				$.ajax({
-					url : "/branch",
-					type : "get",
-					data : {
-						businessmanId : "sofksh"
-					},
-					headers : {
-						"Content-Type" : "application/json;charset=UTF-8"
-					},
-					success : function(data) {
-						var html = "";
-						var approvalStatus_result =  "";
-						if (data[i].approvalStatus == 'W') {
-							approvalStatus_result = "승인 대기";
-						} else if (data[i].approvalStatus == 'A') {
-							approvalStatus_result = "승인";
-						} else if (data[i].approvalStatus == 'N') {
-							approvalStatus_result = "거절";
-						}
-						
-						if (data.length > 0) {
-							for(var i = 0; i < data.length; i++) {
-								html+= "	<tr>";
-								html+= "		<td><a th:href='@{/branch/" + data[i].no + "}'>" + data[i].name + "</td>";
-								html+= "		<td>" + data[i].phone + "</td>";
-								html+= "		<td>" + approvalStatus_result + "</td>";
-								html+= "	</tr>";
-							}
-						} else {
-							html += "<tr><td>검색 결과가 없습니다!!!</td></tr>";
-						}
-		
-						html += "<tr>";
-						html += "	<td><a th:href='@{/branch/form}'>등록</td>";
-						html += "</tr>";
-						
-						$('#table').html(html);
-					}, error : function(request, status, error) {
-						console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+		function drawTable() {
+			$.ajax({
+				url : "/branch",
+				type : "get",
+				data : {
+					businessmanId : "sofksh"
+				},
+				headers : {
+					"Content-Type" : "application/json;charset=UTF-8"
+				},
+				success : function(data) {
+					var html = "";
+					var approvalStatus_result =  "";
+					if (data[i].approvalStatus == 'W') {
+						approvalStatus_result = "승인 대기";
+					} else if (data[i].approvalStatus == 'A') {
+						approvalStatus_result = "승인";
+					} else if (data[i].approvalStatus == 'N') {
+						approvalStatus_result = "거절";
 					}
-				})
-			}
+					
+					if (data.length > 0) {
+						for(var i = 0; i < data.length; i++) {
+							html+= "	<tr>";
+							html+= "		<td><a th:href='@{/branch/" + data[i].no + "}'>" + data[i].name + "</td>";
+							html+= "		<td>" + data[i].phone + "</td>";
+							html+= "		<td>" + approvalStatus_result + "</td>";
+							html+= "	</tr>";
+						}
+					} else {
+						html += "<tr><td>검색 결과가 없습니다!!!</td></tr>";
+					}
+	
+					html += "<tr>";
+					html += "	<td><a th:href='@{/branch/form}'>등록</td>";
+					html += "</tr>";
+					
+					$('#table').html(html);
+				}, error : function(request, status, error) {
+					console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			})
+		}
 	</script>
 </html>

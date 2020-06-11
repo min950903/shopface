@@ -4,12 +4,26 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.BranchMapper">
-	<insert id="insert" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<resultMap id="Branch" type="kr.ac.sunmoon.shopface.businessman.Branch">
+        <id column="NO" property="no"/>
+        <result column="BUSINESSMAN_ID" property="businessmanId"/>
+        <result column="NAME" property="name"/>
+        <result column="PHONE" property="phone"/>
+        <result column="REGISTER_DATE" property="registerDate"/>
+        <result column="ADDRESS" property="address"/>
+        <result column="DETAIL_ADDRESS" property="detailAddress"/>
+        <result column="ZIP_NO" property="zipNo"/>
+        <result column="BUSINESS_L_PATH" property="businessLPath"/>
+        <result column="STATE" property="state"/>
+        <result column="APPROVAL_STATUS" property="approvalStatus"/>
+    </resultMap>
+
+	<insert id="insert" parameterType="Branch">
 		INSERT INTO BRANCH(NO, BUSINESSMAN_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_NO, STATE, APPROVAL_STATUS)
 		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipNo}, 'A', 'W')
 	</insert>
 	
-	<select id="selectAll" parameterType="kr.ac.sunmoon.shopface.businessman.Branch" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<select id="selectAll" parameterType="Branch" resultType="Branch">
 		SELECT 
 			 NO
 			,BUSINESSMAN_ID
@@ -32,7 +46,7 @@
 		</where>
 	</select>
 	
-	<select id="select" parameterType="int" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<select id="select" parameterType="int" resultType="Branch">
 		SELECT 
 			 NO
 			,BUSINESSMAN_ID
@@ -42,13 +56,14 @@
 			,ADDRESS
 			,DETAIL_ADDRESS
 			,ZIP_NO
+			,BUSINESS_L_PATH
 			,STATE
 			,APPROVAL_STATUS
 		FROM BRANCH
 		WHERE NO = #{no}
 	</select>
 	
-	<update id="update" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<update id="update" parameterType="Branch">
 		UPDATE BRANCH
 		<set>
 			<if test="name != null and name != ''">
@@ -72,8 +87,8 @@
 			<if test="state != null">
 				state = #{state},
 			</if>
-			<if test="businessLicensePath != null and businessLicensePath != ''">
-				BUSINESS_LICENSE_PATH = #{businessLicensePath}
+			<if test="businessLPath != null and businessLPath != ''">
+				BUSINESS_L_PATH = #{businessLPath}
 			</if>
 		</set>
 		WHERE NO = #{no}

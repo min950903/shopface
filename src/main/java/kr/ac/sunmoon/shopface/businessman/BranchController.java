@@ -1,5 +1,6 @@
 package kr.ac.sunmoon.shopface.businessman;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +70,9 @@ public class BranchController {
 	 * */
 	@GetMapping(value = "/branch", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Branch> getBranchList(Branch branch) {
-		log.info("들어갔음!");
-		return this.branchService.getBranchList(branch);
+		List<Branch> branches = this.branchService.getBranchList(branch);
+		
+		return branches;
 	}
 	
 	/**
@@ -83,7 +85,7 @@ public class BranchController {
 			Branch branch = this.branchService.getBranch(no);
 			mav.addObject("branch", branch);
 		} catch (Exception e) {
-			log.info("지점 조회 controller 예외 발생");
+			mav.addObject("branch", new Branch());
 		} finally {
 			return mav;
 		}
