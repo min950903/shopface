@@ -69,6 +69,7 @@ public class BranchController {
 	 * */
 	@GetMapping(value = "/branch", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Branch> getBranchList(Branch branch) {
+		log.info("들어갔음!");
 		return this.branchService.getBranchList(branch);
 	}
 	

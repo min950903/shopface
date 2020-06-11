@@ -59,9 +59,7 @@ public class BranchServiceImple implements BranchService {
 		List<Branch> branches = new ArrayList<Branch>();
 		try {
 			//1. 입력 값 조회 - 사업자 id, 승인 여부 
-			if (branch.getBusinessmanId() != null
-					&& !"".equals(branch.getBusinessmanId())
-					&& !"".equals(branch.getApprovalStatus())) {
+			if (branch != null) {
 				branches = this.branchMapper.selectAll(branch);	
 				return branches;				
 			}
