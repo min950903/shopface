@@ -19,6 +19,8 @@ public class Branch {
 	private String phone;
 	private Date registerDate;
 	private String address;
+	private String detailAddress;
+	private String zipNo;
 	private String businessLicensePath;
 	private char state;
 	private char approvalStatus;

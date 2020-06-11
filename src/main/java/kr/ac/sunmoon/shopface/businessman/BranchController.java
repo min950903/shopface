@@ -91,20 +91,19 @@ public class BranchController {
 	 * 지점 수정
 	 * */
 	@PutMapping("/branch/{no}")
-	public ModelAndView editBranch(Branch branch) {
-		ModelAndView mav = new ModelAndView(new RedirectView("/branch/" + branch.getNo()));
+	public ModelAndView editBranch(RedirectAttributes redirect, Branch branch) {
 		try {
 			boolean result = this.branchService.editBranch(branch);
 			if (result == true) {
-				mav.addObject("result", "editSuccess");
+				redirect.addAttribute("result", "editSuccess");
 			} else {
-				mav.addObject("result", "editFail");
+				redirect.addAttribute("result", "editFail");
 			}
 		} catch (Exception e) {
-			mav.addObject("result", "editFail");
+			redirect.addAttribute("result", "editFail");
 		}
 		
-		return mav;
+		return new ModelAndView(new RedirectView("/branch/" + branch.getNo()));
 	}
 	
 	/**

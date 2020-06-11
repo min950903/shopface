@@ -33,7 +33,11 @@ public class BranchServiceImple implements BranchService {
 					&& branch.getPhone() != null
 					&& !"".equals(branch.getPhone())
 					&& branch.getAddress() != null
-					&& !"".equals(branch.getAddress())) {
+					&& !"".equals(branch.getAddress())
+					&& branch.getDetailAddress() != null
+					&& !"".equals(branch.getDetailAddress())
+					&& branch.getZipNo() != null
+					&& !"".equals(branch.getZipNo())) {
 				//2. 존재하면 정보 등록
 				this.branchMapper.insert(branch);
 				return true;
@@ -101,11 +105,7 @@ public class BranchServiceImple implements BranchService {
 					&& branch.getBusinessmanId() != null
 					&& !"".equals(branch.getBusinessmanId())
 					&& branch.getName() != null
-					&& !"".equals(branch.getName())
-					&& branch.getPhone() != null
-					&& !"".equals(branch.getPhone())
-					&& branch.getAddress() != null
-					&& !"".equals(branch.getAddress())) {
+					&& !"".equals(branch.getName())) {
 				//2. 존재 시 지점 정보 수정 후 true값 밪환
 				this.branchMapper.update(branch);
 				return true;

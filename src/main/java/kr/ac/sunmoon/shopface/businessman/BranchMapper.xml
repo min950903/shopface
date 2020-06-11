@@ -5,8 +5,8 @@
 
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.BranchMapper">
 	<insert id="insert" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
-		INSERT INTO BRANCH(NO, BUSINESSMAN_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, STATE, APPROVAL_STATUS)
-		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, 'A', 'W')
+		INSERT INTO BRANCH(NO, BUSINESSMAN_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_NO, STATE, APPROVAL_STATUS)
+		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipNo}, 'A', 'W')
 	</insert>
 	
 	<select id="selectAll" parameterType="kr.ac.sunmoon.shopface.businessman.Branch" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
@@ -17,6 +17,8 @@
 			,PHONE
 			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
 			,ADDRESS
+			,DETAIL_ADDRESS
+			,ZIP_NO
 			,STATE
 			,APPROVAL_STATUS
 		FROM BRANCH
@@ -38,6 +40,8 @@
 			,PHONE
 			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
 			,ADDRESS
+			,DETAIL_ADDRESS
+			,ZIP_NO
 			,STATE
 			,APPROVAL_STATUS
 		FROM BRANCH
@@ -53,6 +57,12 @@
 			<if test="address != null and address != ''">
 				ADDRESS = #{address},
 			</if>
+			<if test="detailAddress != null and detailAddress != ''">
+				DETAIL_ADDRESS = #{detailAddress},
+			</if>
+			<if test="zipNo != null and zipNo != ''">
+				ZIP_NO = #{zipNo},
+			</if>
 			<if test="phone != null and phone != ''">
 				PHONE = #{phone},
 			</if>
@@ -62,7 +72,9 @@
 			<if test="state != null">
 				state = #{state},
 			</if>
-			BUSINESS_LICENSE_PATH = #{businessLicensePath}
+			<if test="businessLicensePath != null and businessLicensePath != ''">
+				BUSINESS_LICENSE_PATH = #{businessLicensePath}
+			</if>
 		</set>
 		WHERE NO = #{no}
 	</update>
