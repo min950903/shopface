@@ -4,7 +4,6 @@
 	layout:decorator="layout/template">
 	<head th:include="layout/template :: scriptHeader"></head>
 	<body>
-		<
 		<table>
  			<thead>
  				<span id="businessmanId" value="sofksh">
@@ -20,23 +19,21 @@
       				<td>검색 결과가 없습니다.</td>
     			</tr>
     			<tr>
-					<td><a th:href='@{/branch/form}'>등록</td>
+					<td><a th:href="@{/branch/form}">등록</td>
 				</tr>
   			</tbody>
 		</table>
 	</body>
 	<script> 
-		var branchData;
-		var result = [[$,{result}]] != null ? [[$,{result}]] : nothing;
-		$(document).ready(function() {
-			alert(result);
-		});
+		var id = businessmanId != null ? businessmanId : "sofksh";
 		
 			function drawTable() {
 				$.ajax({
 					url : "/branch",
 					type : "get",
-					data : branchData,
+					data : {
+						businessmanId : "sofksh"
+					},
 					headers : {
 						"Content-Type" : "application/json;charset=UTF-8"
 					},
