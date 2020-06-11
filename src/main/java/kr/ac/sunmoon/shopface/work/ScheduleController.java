@@ -47,21 +47,16 @@ public class ScheduleController {
 	   return mav;
 	}
 	
-	
-	@GetMapping("/schedule/edit/{no}")
+
+	@PutMapping("/schedule/edit/{no}")
 	public ModelAndView editSchedule(@PathVariable("no") int no, Schedule schedule) {
 		
-		ModelAndView mav = new ModelAndView("schedule/edit");
-		return mav;
-	}
-	@PutMapping("/schedule/edit")
-	public ModelAndView editSchedule(Schedule schedule) {
-		
+
 		this.scheduleService.editSchedule(schedule);
-		return new ModelAndView(new RedirectView("schedule/list"));
+		return new ModelAndView(new RedirectView("/schedule"));
 	}
 	
-	@GetMapping("/schedule/delete/{no}")
+	@DeleteMapping("/schedule/delete/{no}")
 	public ModelAndView removeSchedule(@PathVariable("no") int no) {
 		Schedule schedule = new Schedule();
 		schedule.setNo(no);
