@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import kr.ac.sunmoon.shopface.member.MemberService;
@@ -33,27 +34,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/css/**", "/img/**", "/js/**");
+		web.ignoring().antMatchers("/css/**", "/img/**", "/js/**", "/templates/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//추후에 관리자 추가
 		http.authorizeRequests()
-//			.antMatchers("/login", "/member/form").permitAll()
-//			.antMatchers(HttpMethod.POST, "/member").permitAll()
-//			.antMatchers("/**").hasRole("MEMBER")
-			.antMatchers("/**").permitAll()
+			.antMatchers("/login", "/member/form").permitAll()
+			.antMatchers(HttpMethod.POST, "/member").permitAll()
+			.antMatchers("/**").hasRole("MEMBER")
 		.and()
 			.formLogin()
 			.loginPage("/login")
-			.defaultSuccessUrl("/member")
+			.defaultSuccessUrl("/member", true)
 			.usernameParameter("id")
+			.failureUrl("/login?error")
 			.permitAll()
 		.and()
 			.logout()
 			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 			.logoutSuccessUrl("/login")
+			.deleteCookies("JSESSIONID")
 			.invalidateHttpSession(true)
 		.and()
 			.exceptionHandling().accessDeniedPage("/login");

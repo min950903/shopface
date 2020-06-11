@@ -2,9 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorator="layout/template">
-<head th:include="layout/template :: scriptHeader"></head>
+<head th:include="layout/template :: scriptHeader">
+<link rel="stylesheet" th:href="@{/styles/css/classic.css}">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+</head>
 <body>
-	<table>
+	<form th:action="@{/logout}" method="post">
+		<span th:text="${loginUser.getUsername()}"></span>
+		<button type="submit">로그아웃</button>
+	</form>
+	<table id="datatables-ajax" class="table table-striped dataTable">
 		<thead>
 			<tr>
 				<th>이름</th>
@@ -60,7 +67,7 @@ layout:decorator="layout/template">
 				if (data.length > 0) {
 					for(var i = 0; i < data.length; i++) {
 						html+= "	<tr>";
-						html+= "	<td>" + data[i].name + "</td>";
+						html+= "	<td>" + "<a href='/member/" + data[i].id+"'>" + data[i].name + "</a>" + "</td>";
 						html+= "	<td>" + data[i].phone + "</td>";
 						html+= "	<td>" + data[i].email + "</td>";
 						html+= "	<td>" + data[i].state + "</td>";

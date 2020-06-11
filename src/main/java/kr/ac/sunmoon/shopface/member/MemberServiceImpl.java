@@ -48,6 +48,10 @@ public class MemberServiceImpl implements MemberService {
 	public boolean editMember(Member member) {
 		Member existMember = memberMapper.select(member);
 		if (existMember != null) {
+			if (member.getPassword() != null) {
+				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+				member.setPassword(passwordEncoder.encode(member.getPassword()));
+			}
 			memberMapper.update(member);
 			
 			return true;

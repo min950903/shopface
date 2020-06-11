@@ -3,6 +3,8 @@ package kr.ac.sunmoon.shopface.member;
 import java.util.List;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +33,13 @@ public class MemberController {
 	public ModelAndView addMember(Member member, RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView();
 		
+		log.info(member.getId());
+		log.info(member.getName());
+		log.info(member.getPassword());
+		log.info(member.getPhone());
+		
 		if (memberService.addMember(member)) {
-			modelAndView.setView(new RedirectView("/"));
+			modelAndView.setView(new RedirectView("/login"));
 			
 			return modelAndView;
 		} else {
@@ -44,8 +51,11 @@ public class MemberController {
 	}
 	
 	@GetMapping("/member")
-	public ModelAndView getMemberList() {
-		return new ModelAndView("member/list");
+	public ModelAndView getMemberList(@AuthenticationPrincipal User user) {
+		ModelAndView modelAndView = new ModelAndView("member/_list");
+		modelAndView.addObject("loginUser", user);
+		
+		return modelAndView;
 	}
 	
 	@GetMapping(value = "/member", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +65,7 @@ public class MemberController {
 	
 	@GetMapping("/member/{id}")
 	public ModelAndView getMember(@PathVariable String id) {
-		ModelAndView modelAndView = new ModelAndView("member/detail");
+		ModelAndView modelAndView = new ModelAndView("member/_detail");
 		
 		Member member = new Member();
 		member.setId(id);
