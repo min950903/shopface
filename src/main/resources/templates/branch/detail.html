@@ -6,7 +6,7 @@
 	<body>
 		<form id="branch" th:action="@{/branch/{no}(no=${branch.no})}" method="post">
 			<input type="hidden" name="_method">
-			
+			<input type="hidden" name="businessmanId" value="sofksh">
 			<label for="name">지점 명 : </label>
 			<input type="text" name="name" th:value="${branch.name}"><br>
 			

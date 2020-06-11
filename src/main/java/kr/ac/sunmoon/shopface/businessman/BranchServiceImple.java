@@ -111,7 +111,6 @@ public class BranchServiceImple implements BranchService {
 				this.branchMapper.update(branch);
 				return true;
 			}
-			
 		} catch(Exception e) {
 			//3. 존재 안할 시 false값 반환
 			return false;

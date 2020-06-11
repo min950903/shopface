@@ -40,10 +40,11 @@
 			<if test="businessmanId != null and businessmanId != ''">
 				AND BUSINESSMAN_ID = #{businessmanId}
 			</if>
-			<if test="APPROVAL_STATUS != null">
+			<if test="approvalStatus != null and approvalStatus != ''">
 				AND APPROBVAL_STATUS = #{approvalStatus}
 			</if>
 		</where>
+		ORDER BY NO DESC
 	</select>
 	
 	<select id="select" parameterType="int" resultType="Branch">
@@ -81,10 +82,10 @@
 			<if test="phone != null and phone != ''">
 				PHONE = #{phone},
 			</if>
-			<if test="approvalStatus != null">
+			<if test="approvalStatus != null and approvalStatus != ''">
 				APPROVAL_STATUS = #{approvalStatus},
 			</if>
-			<if test="state != null">
+			<if test="state != null and state != ''">
 				state = #{state},
 			</if>
 			<if test="businessLPath != null and businessLPath != ''">

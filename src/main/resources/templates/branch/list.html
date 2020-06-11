@@ -6,7 +6,6 @@
 	<body>
 		<table>
  			<thead>
- 				<!-- <span id="approvalStatus" value="">  -->
     			<tr>
       				<th>지점 명</th>
       				<th>전화 번호</th>
@@ -18,12 +17,16 @@
       				<td>검색 결과가 없습니다.</td>
     			</tr>
     			<tr>
-					<td><a th:href="@{/branch/form}">등록</a></td>
+					<td><a href="/branch/form">등록</a></td>
 				</tr>
   			</tbody>
 		</table>
 	</body>
 	<script> 
+		$(document).ready(function(){
+			drawTable();	
+		});
+		
 		function drawTable() {
 			$.ajax({
 				url : "/branch",
@@ -36,21 +39,13 @@
 				},
 				success : function(data) {
 					var html = "";
-					var approvalStatus_result =  "";
-					if (data[i].approvalStatus == 'W') {
-						approvalStatus_result = "승인 대기";
-					} else if (data[i].approvalStatus == 'A') {
-						approvalStatus_result = "승인";
-					} else if (data[i].approvalStatus == 'N') {
-						approvalStatus_result = "거절";
-					}
 					
 					if (data.length > 0) {
 						for(var i = 0; i < data.length; i++) {
 							html+= "	<tr>";
-							html+= "		<td><a th:href='@{/branch/" + data[i].no + "}'>" + data[i].name + "</td>";
+							html+= "		<td><a href='/branch/" + data[i].no + "'>" + data[i].name + "</a></td>";
 							html+= "		<td>" + data[i].phone + "</td>";
-							html+= "		<td>" + approvalStatus_result + "</td>";
+							html+= "		<td>" + data[i].approvalStatus + "</td>";
 							html+= "	</tr>";
 						}
 					} else {
@@ -58,7 +53,7 @@
 					}
 	
 					html += "<tr>";
-					html += "	<td><a th:href='@{/branch/form}'>등록</td>";
+					html += "	<td><a href='/branch/form'>등록</a></td>";
 					html += "</tr>";
 					
 					$('#table').html(html);

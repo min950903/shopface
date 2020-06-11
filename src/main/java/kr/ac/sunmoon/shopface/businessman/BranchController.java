@@ -71,7 +71,6 @@ public class BranchController {
 	@GetMapping(value = "/branch", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Branch> getBranchList(Branch branch) {
 		List<Branch> branches = this.branchService.getBranchList(branch);
-		
 		return branches;
 	}
 	
