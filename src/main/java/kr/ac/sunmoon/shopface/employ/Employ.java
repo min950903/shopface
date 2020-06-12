@@ -5,26 +5,30 @@ import java.util.Date;
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
-@Alias("employee")
+@Alias("employ")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Employ {
     private int no;
+    private String memberId;
     private String name;
     private int branchNo;
-    private String memberId;
     private int salary;
     private String cretiCode;
     private Date employeeDate;
     private Date closeDate;
-    private char state;
+    private String state;
+    private String email;
+    private String phone;
+    private String bankName;
+    private long accountNum;
+    
 }

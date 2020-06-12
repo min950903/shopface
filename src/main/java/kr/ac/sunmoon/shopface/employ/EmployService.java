@@ -7,7 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 public interface EmployService {
     public boolean addEmploy(Employ employ);
     public List<Employ> getEmployList(Employ employ);
-    public boolean getEmploy(Employ employ);
+    public Employ getEmploy(Employ employ);
     public boolean editEmploy(Employ employ);
     public boolean deleteEmploy(Employ employ);
     public String createAuthCode();

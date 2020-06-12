@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+	<head th:include="layout/template :: scriptHeader"></head>
+	<body>
+		<table>
+ 			<thead>
+    			<tr>
+      				<th>지점 명</th>
+      				<th>전화 번호</th>
+      				<th>승인 현황</th>
+    			</tr>
+  			</thead>
+  			<tbody id="table">
+    			<tr>
+      				<td>검색 결과가 없습니다.</td>
+    			</tr>
+    			<tr>
+					<td><a href="/branch/form">등록</a></td>
+				</tr>
+  			</tbody>
+		</table>
+	</body>
+	<script> 
+		$(document).ready(function(){
+			drawTable();	
+		});
+		
+		function drawTable() {
+			$.ajax({
+				url : "/branch",
+				type : "get",
+				data : {
+					businessmanId : "sofksh"
+				},
+				headers : {
+					"Content-Type" : "application/json;charset=UTF-8"
+				},
+				success : function(data) {
+					var html = "";
+					
+					if (data.length > 0) {
+						for(var i = 0; i < data.length; i++) {
+							html+= "	<tr>";
+							html+= "		<td><a href='/branch/" + data[i].no + "'>" + data[i].name + "</a></td>";
+							html+= "		<td>" + data[i].phone + "</td>";
+							html+= "		<td>" + data[i].approvalStatus + "</td>";
+							html+= "		<td>" + data[i].state + "</td>";
+							html+= "	</tr>";
+						}
+					} else {
+						html += "<tr><td>검색 결과가 없습니다!!!</td></tr>";
+					}
+	
+					html += "<tr>";
+					html += "	<td><a href='/branch/form'>등록</a></td>";
+					html += "</tr>";
+					
+					$('#table').html(html);
+				}, error : function(request, status, error) {
+					console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			})
+		}
+	</script>
+</html>
