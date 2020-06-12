@@ -36,6 +36,7 @@
 			<if test="password != null">PASSWORD = #{password},</if>
 			<if test="email != null">EMAIL = #{email},</if>
 			<if test="bankName != null">BANK_NAME = #{bankName},</if>
+			<if test="phone != null">PHONE = #{phone},</if>
 			<if test="accountNum != null">ACCOUNT_NUM = #{accountNum},</if>
 			<if test="address != null">ADDRESS = #{address},</if>
 			<if test="detailAddress != null">DETAIL_ADDRESS = #{detailAddress},</if>

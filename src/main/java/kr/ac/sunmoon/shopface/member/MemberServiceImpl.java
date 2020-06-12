@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,11 +19,13 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 	private final MemberMapper memberMapper;
 	
+	@Transactional
 	@Override
 	public boolean addMember(Member member) {
-		if (member.getId() != null 
-				&& member.getPassword() != null
-				&& member.getPhone() != null) {
+		if (!member.getId().equals("") 
+				&& !member.getName().equals("")
+				&& !member.getPassword().equals("")
+				&& !member.getPhone().equals("")) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			member.setPassword(passwordEncoder.encode(member.getPassword()));
 			memberMapper.insert(member);
@@ -32,17 +35,36 @@ public class MemberServiceImpl implements MemberService {
 			return false;			
 		}
 	}
-
+	
+	@Transactional
+	@Override
+	public boolean checkIdDuplicate(String id) {
+		boolean isDuplicate = false;
+		
+		Member member = new Member();
+		member.setId(id);
+		
+		Member existMember = memberMapper.select(member);
+		if (existMember != null) {
+			isDuplicate = true;
+		} 
+		
+		return isDuplicate;
+	}
+	
+	@Transactional
 	@Override
 	public List<Member> getMemberList(Member member) {
 		return memberMapper.selectAll(member);
 	}
 
+	@Transactional
 	@Override
 	public Member getMember(Member member) {
 		return memberMapper.select(member);
 	}
 
+	@Transactional
 	@Override
 	public boolean editMember(Member member, String oldPassword) {
 		Member existMember = memberMapper.select(member);
@@ -68,6 +90,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public boolean removeMember(Member member) {
 		if (member.getId() != null 
@@ -80,6 +103,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		Member member = new Member();
