@@ -11,7 +11,8 @@ public interface EmployService {
     public boolean editEmploy(Employ employ);
     public boolean deleteEmploy(Employ employ);
     public String createAuthCode();
-    public boolean verificationAuthCode(Employ employ);
-    public SimpleMailMessage createInviteMessage(Employ employ);
+    public String verificationAuthCode(Employ employ);
+    public SimpleMailMessage createMessage(Employ employ);
     public boolean sendInviteMessage(Employ employ);
+    public boolean resendInviteMessage(Employ employ);
 }

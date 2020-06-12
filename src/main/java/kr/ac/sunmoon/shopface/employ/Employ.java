@@ -22,10 +22,10 @@ public class Employ {
     private String name;
     private int branchNo;
     private int salary;
-    private String cretiCode;
-    private Date employeeDate;
+    private String certiCode;
+    private Date employDate;
     private Date closeDate;
-    private String state;
+    private char state;
     private String email;
     private String phone;
     private String bankName;
