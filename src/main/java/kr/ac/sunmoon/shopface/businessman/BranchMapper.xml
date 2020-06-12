@@ -4,12 +4,26 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.BranchMapper">
-	<insert id="insert" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
-		INSERT INTO BRANCH(NO, BUSINESSMAN_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, STATE, APPROVAL_STATUS)
-		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, 'A', 'W')
+	<resultMap id="Branch" type="kr.ac.sunmoon.shopface.businessman.Branch">
+        <id column="NO" property="no"/>
+        <result column="BUSINESSMAN_ID" property="businessmanId"/>
+        <result column="NAME" property="name"/>
+        <result column="PHONE" property="phone"/>
+        <result column="REGISTER_DATE" property="registerDate"/>
+        <result column="ADDRESS" property="address"/>
+        <result column="DETAIL_ADDRESS" property="detailAddress"/>
+        <result column="ZIP_NO" property="zipNo"/>
+        <result column="BUSINESS_L_PATH" property="businessLPath"/>
+        <result column="STATE" property="state"/>
+        <result column="APPROVAL_STATUS" property="approvalStatus"/>
+    </resultMap>
+
+	<insert id="insert" parameterType="Branch">
+		INSERT INTO BRANCH(NO, BUSINESSMAN_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_NO, STATE, APPROVAL_STATUS)
+		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipNo}, 'A', 'W')
 	</insert>
 	
-	<select id="select" parameterType="kr.ac.sunmoon.shopface.businessman.Branch" resultType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<select id="selectAll" parameterType="Branch" resultType="Branch">
 		SELECT 
 			 NO
 			,BUSINESSMAN_ID
@@ -17,40 +31,66 @@
 			,PHONE
 			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
 			,ADDRESS
+			,DETAIL_ADDRESS
+			,ZIP_NO
 			,STATE
 			,APPROVAL_STATUS
 		FROM BRANCH
 		<where>
-			<if test="businessmanId != null">
+			<if test="businessmanId != null and businessmanId != ''">
 				AND BUSINESSMAN_ID = #{businessmanId}
 			</if>
-			<if test="APPROVAL_STATUS != null">
+			<if test="approvalStatus != null and approvalStatus != ''">
 				AND APPROBVAL_STATUS = #{approvalStatus}
 			</if>
 		</where>
-			
-		 <!--  public List<Branch> select(String businessmanId, char approvalStatus);	 -->
+		ORDER BY NO DESC
 	</select>
 	
-	<update id="update" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
+	<select id="select" parameterType="int" resultType="Branch">
+		SELECT 
+			 NO
+			,BUSINESSMAN_ID
+			,NAME
+			,PHONE
+			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
+			,ADDRESS
+			,DETAIL_ADDRESS
+			,ZIP_NO
+			,BUSINESS_L_PATH
+			,STATE
+			,APPROVAL_STATUS
+		FROM BRANCH
+		WHERE NO = #{no}
+	</select>
+	
+	<update id="update" parameterType="Branch">
 		UPDATE BRANCH
 		<set>
-			<if test="name != null">
+			<if test="name != null and name != ''">
 				NAME = #{name},
 			</if> 
-			<if test="address != null">
+			<if test="address != null and address != ''">
 				ADDRESS = #{address},
 			</if>
-			<if test="phone != null">
+			<if test="detailAddress != null and detailAddress != ''">
+				DETAIL_ADDRESS = #{detailAddress},
+			</if>
+			<if test="zipNo != null and zipNo != ''">
+				ZIP_NO = #{zipNo},
+			</if>
+			<if test="phone != null and phone != ''">
 				PHONE = #{phone},
 			</if>
-			<if test="approvalStatus != null">
+			<if test="approvalStatus != null and approvalStatus != ''">
 				APPROVAL_STATUS = #{approvalStatus},
 			</if>
-			<if test="state != null">
+			<if test="state != null and state != ''">
 				state = #{state},
 			</if>
-			BUSINESS_LICENSE_PATH = #{businessLicensePath}
+			<if test="businessLPath != null and businessLPath != ''">
+				BUSINESS_L_PATH = #{businessLPath}
+			</if>
 		</set>
 		WHERE NO = #{no}
 	</update>

@@ -17,9 +17,11 @@ public class Branch {
 	private String businessmanId;
 	private String name;
 	private String phone;
-	private Date registerDate;
+	private String registerDate;
 	private String address;
-	private String businessLicensePath;
+	private String detailAddress;
+	private String zipNo;
+	private String businessLPath;
 	private char state;
 	private char approvalStatus;
 }

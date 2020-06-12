@@ -1,8 +1,10 @@
 package kr.ac.sunmoon.shopface.businessman;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,20 +17,21 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j 
+@RequiredArgsConstructor
 @RestController
 public class BranchController {
-	@Autowired
-	private BranchService branchService;
+	private final BranchService branchService;
 	
 	/**
 	 * 지점 등록 폼
 	 * */
 	@GetMapping("/branch/form")
 	public ModelAndView addBranchForm() {
-		ModelAndView mav = new ModelAndView("/branch/add.html");
+		ModelAndView mav = new ModelAndView("branch/add");
 		return mav;
 	}
 	
@@ -42,13 +45,12 @@ public class BranchController {
 			boolean result = this.branchService.addBranch(branch);
 			if (result == true) {
 				redirect.addAttribute("result", "addSuccess");
-				return mav;				
 			} else {
 				redirect.addAttribute("result", "addFail");
-				return mav;
 			}
 		} catch(Exception e) {
 			redirect.addAttribute("result", "addFail");
+		} finally {
 			return mav;
 		}
 	}
@@ -56,9 +58,9 @@ public class BranchController {
 	/**
 	 * 지점 목록 조회 폼 
 	 **/
-	@GetMapping(value = "/branch", consumes="application/json")
+	@GetMapping(value = "/branch")
 	public ModelAndView getBranchList(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
-		ModelAndView mav = new ModelAndView("/branch/list.html");
+		ModelAndView mav = new ModelAndView("branch/list");
 		mav.addObject("result", result);
 		return mav;
 	}
@@ -66,18 +68,45 @@ public class BranchController {
 	/**
 	 * 지점 목록 조회
 	 * */
-	@GetMapping("/branch/{businessmanId}")
-	public ModelAndView getBranch(@PathVariable("businessmanId") String businessmanId, char approvalStatus) {
-		return null;
+	@GetMapping(value = "/branch", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<Branch> getBranchList(Branch branch) {
+		List<Branch> branches = this.branchService.getBranchList(branch);
+		return branches;
+	}
+	
+	/**
+	 * 지점 조회
+	 * */
+	@GetMapping(value = "/branch/{no}")
+	public ModelAndView getBranch(@RequestParam(value = "result", required = false, defaultValue = "none") String result, @PathVariable(value = "no") int no) {
+		ModelAndView mav = new ModelAndView("branch/detail");
+		try {
+			Branch branch = this.branchService.getBranch(no);
+			mav.addObject("branch", branch);
+		} catch (Exception e) {
+			mav.addObject("branch", new Branch());
+		} finally {
+			return mav;
+		}
 	}
 	
 	/**
 	 * 지점 수정
 	 * */
 	@PutMapping("/branch/{no}")
-	public ModelAndView editBranch(Branch branch) {
-		return null;
+	public ModelAndView editBranch(RedirectAttributes redirect, Branch branch) {
+		try {
+			boolean result = this.branchService.editBranch(branch);
+			if (result == true) {
+				redirect.addAttribute("result", "editSuccess");
+			} else {
+				redirect.addAttribute("result", "editFail");
+			}
+		} catch (Exception e) {
+			redirect.addAttribute("result", "editFail");
+		}
 		
+		return new ModelAndView(new RedirectView("/branch/" + branch.getNo()));
 	}
 	
 	/**
@@ -87,12 +116,17 @@ public class BranchController {
 	public ModelAndView removeBranch(Branch branch) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/branch"));
 		try {
-			
 			boolean result = this.branchService.removeBranch(branch);
+			if (result == true) {
+				mav.addObject("result", "deleteSuccess");
+			} else {
+				mav.addObject("result", "deleteFail");
+			}
 			
 		} catch(Exception e) {
-			
+			mav.addObject("result", "deleteFail");
 		}
-		return null;
+		
+		return mav;
 	}
 }

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form th:action="@{/schedule/edit}" method="post">
+		<input type="hidden" name="_method" value="put">
+		<label>상태 :</label>
+		<input type="text" name="state" th:value="${schedule.state}"> <br>
+		<input type="submit" value="수정" >
+	
+	</form>
+</body>
+</html>
