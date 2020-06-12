@@ -21,20 +21,17 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleController {
 	private final ScheduleService scheduleService;
 
-	/*목록 조회 폼
+	//목록 조회 폼
 	@GetMapping("/schedule")
 	public ModelAndView getScheduleList() {
 		return new ModelAndView("schedule/list");
-	}*/
+	}
 
 	
 	//목록 조회
-	@GetMapping("/schedule")
-	public ModelAndView getScheduleList(Schedule schedule) {
-		ModelAndView mav = new ModelAndView("schedule/list");
-		List<Schedule> list = scheduleService.getScheduleList(schedule);
-		mav.addObject("list",list);
-		return mav;
+	@GetMapping(value = "/schedule", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<Schedule> getScheduleList(Schedule schedule) {
+		return scheduleService.getScheduleList(schedule);
 	}
 
 

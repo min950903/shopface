@@ -1,26 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
+</head>
 <head>
 <meta charset="UTF-8">
-<title>스케줄 목록</title>
 </head>
 <body th:align="center">
-	<h1>사업자 목록</h1>
-		<table th:algin="center" border="1">
+	<h1>스케줄 목록</h1>
+	<table th:algin="center" border="1">
+		<thead>
 			<tr>
-
 				<th>no</th>
 				<th>시간표 no</th>
 				<th>회원 ID</th>
 				<th>상태</th>
-
-				<tr th:each="schedule : ${list}">
-				<td th:text="${schedule.no}">
-				<td th:text="${schedule.timetableNo}">
-				<td th:text="${schedule.memberId}">
-				<td th:text="${schedule.state}">
 			</tr>
-		</table>
-	<br>
+		</thead>
+		<tbody id="table_body">
+			<tr>
+				<td>검색 결과가 없습니다.</td>
+		</tbody>
+	</table>
+
+	<form action="/member" method="get">
+		<select id="condition" name="condition">
+			<option value="state">상태</option>
+			<option value="memberId">회원아이디</option>
+		</select> 
+		<input type="text" id="searchQuery" name="searchQuery"> 
+		<input type="button" id="searchButton" name="searchButton" value="검색">
+	</form>
 </body>
 </html>
+
+<script>  
+		var dataObj;
+		
+		${document}.ready(function() {
+			$('#searchButton').click(function(){
+				if($('condition').val() == 'state') {
+				dataObj = {
+						"state" : ${'#searchQuery'}.val()
+				} 
+			} else {
+				dataObj = {
+						"memberId" : ${'#searchQuery'}.val()
+				}
+			}
+
+			drawTable();
+		
+			})
+		});
+		
+		function drawTable(){
+			$.ajax({
+					url : "/schedule",
+					type : "get",
+					data : dataObj,
+					headers : {
+							"Content-Type" : "applicaion/json;charset=UTF-8"
+					},
+					success : function(data) {
+						var html = "";
+						if(data.length > 0){
+							for(var i = 0; i < data.length; i++){
+								html+=  "     <tr>";
+								html+=  "     <td>" + data[i].no + "</td>";
+								html+=  "     <td>" + data[i].timetableNo + "</td>";
+								html+=  "     <td>" + data[i].memberId + "</td>";
+								html+=  "     <td>" + data[i].state + "</td>";
+								html+=  "     </tr>"
+							}
+						
+						} else {
+							html += " <tr><td>검색 결과가 없습니다.</td></tr>";
+						}
+						${'#table_body'}.html(html);
+					},
+					error : function(request,status,error) {
+						console.log(""Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+					}
+			})					
+		}
+</script>
+
