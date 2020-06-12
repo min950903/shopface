@@ -20,22 +20,27 @@
 								<form th:action="@{/member}" method="post">
 									<input type="hidden" name="type" value="B" />
 									<label for="id">아이디 : </label>
-									<input type="text" class="form-control form-control-lg" name="id"/>
+									<input type="text" id="id" class="form-control form-control-lg" name="id"/>
+									<div class="text-center-mt-3" id="checkIdDiv"></div>
 									<br>
 									<label for="password">비밀번호 : </label>
-									<input type="password" class="form-control form-control-lg" name="password"/>
+									<input type="password" id="password" class="form-control form-control-lg" name="password"/>
+									<div class="text-center-mt-3" id="checkPasswordDiv"></div>
 									<br>
 									<label for="name">이름 : </label>
-									<input type="text" class="form-control form-control-lg" name="name"/>
+									<input type="text" id="name" class="form-control form-control-lg" name="name"/>
+									<div class="text-center-mt-3" id="checkNameDiv"></div>
 									<br>
 									<label for="phone">전화번호 : </label>
-									<input type="text" class="form-control form-control-lg" name="phone"/>
+									<input type="text" id="phone" class="form-control form-control-lg" name="phone"/>
+									<div class="text-center-mt-3" id="checkPhoneDiv"></div>
 									<br>
 									<label for="email">이메일 : </label>
-									<input type="text" class="form-control form-control-lg" name="email"/>
+									<input type="text" id="email" class="form-control form-control-lg" name="email"/>
+									<div class="text-center-mt-3" id="checkEmailDiv"></div>
 									<br>
 									<div class="text-center mt-3">
-										<input type="submit" class="btn btn-primary" value="가입하기"/>
+										<input type="submit" id="signupBtn" class="btn btn-primary" value="가입하기"/>
 									</div>
 								</form>
 							</div>
@@ -47,3 +52,75 @@
 	</main>
 </body>
 </html>
+
+<script>
+	$("#id").focusout(function() {
+		var id = $('#id').val();
+		if (id == null || id == '') {
+			$('#checkIdDiv').html('아이디를 입력해주세요.');
+			$('#checkIdDiv').css("color", "red");
+		} else {
+			$.ajax({
+				url: '/member/check?id=' + id,
+				type:'get',
+				dataType: 'JSON',
+				headers: {
+					"Content-Type" : 'application/json;charset=UTF-8'
+				},
+				success: function(response) {
+					if (response.duplicate == true) {
+						$('#checkIdDiv').html("입력한 아이디가 사용 중 입니다.");
+						$('#checkIdDiv').css("color", "red");
+					} else {
+						$('#checkIdDiv').html("사용가능한 아이디 입니다.");
+						$('#checkIdDiv').css("color", "green");
+					}
+				},
+				error: function() {
+				}
+			});
+		}
+	});
+	
+	$(document).ready(function() {
+		$("#password").focusout(function() {
+			var password = $('#password').val();
+			if (password == '') {
+				$('#checkPasswordDiv').html("비밀번호를 입력해주세요.");
+				$('#checkPasswordDiv').css("color", "red");
+			} else {
+				$('#checkPasswordDiv').hide();
+			}
+		});
+		
+		$("#name").focusout(function() {
+			var name = $('#name').val();
+			if (name == '') {
+				$('#checkNameDiv').html("이름을 입력해주세요.");
+				$('#checkNameDiv').css("color", "red");
+			} else {
+				$('#checkNameDiv').hide();
+			}
+		});
+	
+		$("#phone").focusout(function() {
+			var phone = $('#phone').val();
+			if (phone == '') {
+				$('#checkPhoneDiv').html("전화번호를 입력해주세요.");
+				$('#checkPhoneDiv').css("color", "red");
+			} else {
+				$('#checkPhoneDiv').hide();
+			}
+		});
+		
+		$("#email").focusout(function() {
+			var email = $('#email').val();
+			if (email == '') {
+				$('#checkEmailDiv').html("이메일을 입력해주세요.");
+				$('#checkEmailDiv').css("color", "red");
+			} else {
+				$('#checkEmailDiv').hide();
+			}
+		});
+	});
+</script>

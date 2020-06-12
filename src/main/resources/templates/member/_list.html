@@ -13,7 +13,7 @@
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<div class="sidebar-content ">
-				<a class="sidebar-brand" href="index.html">
+				<a class="sidebar-brand" href="#">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
 						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 						class="feather feather-box align-middle">
@@ -385,7 +385,11 @@
 						} else {
 							html += "<td></td>";
 						}
-						html += "	<td>" + data[i].state + "</td>";
+						if (data[i].state == 'A') {
+							html += "	<td>" + "활성화" + "</td>";
+						} else {
+							html += "	<td>" + "비활성화" + "</td>";
+						}
 						html += "	</tr>";
 					}
 				} else {
