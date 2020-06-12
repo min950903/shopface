@@ -22,4 +22,8 @@ public class Member {
 	private Long accountNum;
 	private LocalDateTime registerDate;
 	private char state;
+	private char type;
+	private String address;
+	private String detailAddress;
+	private String zipCode;
 }
