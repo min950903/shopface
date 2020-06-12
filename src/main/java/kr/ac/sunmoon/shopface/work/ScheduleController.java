@@ -24,7 +24,9 @@ public class ScheduleController {
 	//목록 조회 폼
 	@GetMapping("/schedule")
 	public ModelAndView getScheduleList() {
-		return new ModelAndView("schedule/list");
+		ModelAndView mav = new ModelAndView("schedule/list");
+		//mav.addObject("",);
+		return mav;
 	}
 
 	
@@ -34,30 +36,29 @@ public class ScheduleController {
 		return scheduleService.getScheduleList(schedule);
 	}
 
-
+	//스케줄 조회
 	@GetMapping("/schedule/{no}")
 	public ModelAndView getSchedule(@PathVariable("no") int no) {
-		ModelAndView mav = new ModelAndView("schedule/view");
+		ModelAndView mav = new ModelAndView("schedule/detail");
 		Schedule schedule = new Schedule();
 		schedule.setNo(no);
 		mav.addObject("schedule",scheduleService.getSchedule(schedule));
 	   return mav;
 	}
 	
-
+	//스케줄 수정
 	@PutMapping("/schedule/edit/{no}")
 	public ModelAndView editSchedule(@PathVariable("no") int no, Schedule schedule) {
-		
-
-		this.scheduleService.editSchedule(schedule);
+		scheduleService.editSchedule(schedule);
 		return new ModelAndView(new RedirectView("/schedule"));
 	}
 	
+	//스케줄 삭제
 	@DeleteMapping("/schedule/delete/{no}")
 	public ModelAndView removeSchedule(@PathVariable("no") int no) {
 		Schedule schedule = new Schedule();
 		schedule.setNo(no);
-		this.scheduleService.removeSchedule(schedule);
+		scheduleService.removeSchedule(schedule);
 		return new ModelAndView(new RedirectView("/schedule"));
 	}
 	

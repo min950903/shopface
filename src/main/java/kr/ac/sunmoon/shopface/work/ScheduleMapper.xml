@@ -8,8 +8,8 @@
 
 
 	<select id="select"
-		parameterType="kr.ac.sunmoon.shopface.work.Schedule"
-		resultType="kr.ac.sunmoon.shopface.work.Schedule">
+		parameterType="schedule"
+		resultType="schedule">
 		SELECT
 		NO
 		,TIMETABLE_NO
@@ -20,14 +20,19 @@
 	</select>
 
 	<select id="selectAll"
-		parameterType="kr.ac.sunmoon.shopface.work.Schedule"
-		resultType="kr.ac.sunmoon.shopface.work.Schedule">
+		parameterType="schedule"
+		resultType="schedule">
 		SELECT
 		NO
 		,TIMETABLE_NO
 		,MEMBER_ID
 		,STATE
 		FROM SCHEDULE
+		
+		<where>
+				<if test = " no !=null and !no.equals('')"> AND NO = #{no}</if>
+				<if test = "state !=null and !state.equals('')">AND STATE = #{state}</if>
+		</where>
 	</select>
 <!-- 
 	<insert id="insert"
@@ -39,18 +44,16 @@
 
 -->
 	<update id="update"
-		parameterType="kr.ac.sunmoon.shopface.work.Schedule">
+		parameterType="schedule">
 		UPDATE SCHEDULE
 		<set>
-			<if test="state != null">
-				STATE = #{state}
-			</if>
+			<if test="state != null"> STATE = #{state} </if>
 		</set>
 		WHERE NO = #{no}
 	</update>
 
 	<delete id="delete"
-		parameterType="kr.ac.sunmoon.shopface.work.Schedule">
+		parameterType="schedule">
 		DELETE
 		FROM SCHEDULE
 		WHERE NO = #{no}

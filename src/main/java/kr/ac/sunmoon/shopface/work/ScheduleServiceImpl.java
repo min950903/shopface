@@ -14,6 +14,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public List<Schedule> getScheduleList(Schedule schedule) {
+
 		return scheduleMapper.selectAll(schedule);
 	}
 
@@ -23,13 +24,23 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public void editSchedule(Schedule schedule) {
-		scheduleMapper.update(schedule);
-	}
-
-	@Override
-	public void removeSchedule(Schedule schedule) {
-		scheduleMapper.delete(schedule);
+	public boolean editSchedule(Schedule schedule) {
+		//수정 시 상태 정보 바뀜
+		Schedule checkSchedule = scheduleMapper.select(schedule);
+		if (checkSchedule != null ) {
+				scheduleMapper.update(checkSchedule);
+				return true;
+		} else {
+				return false;
+			}
 	}
 	
+	@Override
+	public boolean removeSchedule(Schedule schedule) {
+		scheduleMapper.delete(schedule);
+		//근무중인 근무자가 있을 경우 삭제 못함
+		
+		return false;
+	}
+
 }
