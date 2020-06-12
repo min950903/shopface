@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorator="layout/template">
+<head th:include="layout/template :: scriptHeader"></head>
+<body>
+<form id="member_form" th:action="@{/member/{id}(id=${member.id})}" method="post">
+	<input type="hidden" name="_method">
+	
+	<label for="name">이름 : </label>
+	<input type="text" name="name" th:value="${member.name}"><br>
+	
+	<label>비밀번호 : </label>
+	<button type="button" id="password_edit_button">비밀번호 수정</button><br>
+	<div id="password_edit_div"></div>
+	
+	<label for="phone">전화번호 : </label>
+	<input type="text" name="phone" th:value="${member.phone}"><br>
+	
+	<label for="email">이메일 : </label>
+	<input type="text" name="email" th:value="${member.email}" ><br>
+	
+	<label for="bankName">은행 명 : </label>
+	<input type="text" name="bankName" th:value="${member.bankName}"><br>
+	
+	<label for="accountNum">계좌번호 : </label>
+	<input type="text" name="accountNum" th:value="${member.accountNum}"><br>
+	
+	<div id="message_div"></div>
+	<a id="edit_button">수정</a>
+	<a id="delete_button">삭제</a>
+</form>
+</body>
+</html>
+
+<script>
+	$(document).ready(function(){
+		$('#edit_button').click(function() {
+			$('input[name=_method]').val('put');
+			$('#member_form').submit();
+		});
+		
+		$('#delete_button').click(function(){
+			$('input[name=_method]').val('delete');
+			$('#member_form').submit();
+		});
+		$('#password_edit_button').click(function() {
+			var html = "";
+			html += "<label for='old_password'>기존 비밀번호</label>";
+			html += "<input type='password' id='old_password' name='old_password'><br>";
+			html += "<label for='new_password'>변경 비밀번호</label>";
+			html += "<input type='password' id='password' name='password'><br>";
+			html += "<label for='check_password'>변경 비밀번호 확인</label>";
+			html += "<input type='password' id='check_password' name='check_password'>";
+			html += "<button type='button' id='password_edit_submit'>수정하기</button>";
+			
+			$('#password_edit_div').html(html);
+		}); 
+	});
+	
+	$(document).on('click', "#password_edit_submit", function() {
+		if($('#password').val() != $('#check_password').val()) {
+			$('#message_div').text("변경 비밀번호와 확인이 일치하지 않습니다.");
+			$('#message_div').css('color', 'red');
+		} else {
+			$('input[name=_method]').val('put');
+			$('#member_form').submit();
+		}
+	});
+</script>

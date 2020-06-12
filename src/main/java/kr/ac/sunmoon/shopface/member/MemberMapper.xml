@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.sunmoon.shopface.member.MemberMapper">
+	<select id="selectAll" parameterType="member"
+		resultType="member">
+		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
+		FROM NEW_MEMBER
+		<where>
+			<if test="name != null and !name.equals('')">AND NAME = #{name}</if>
+			<if test="state != null and state != ''">AND STATE = #{state}</if>
+			<if test="type != null and type != ''">AND TYPE = #{type}</if>
+		</where>
+	</select>
+	<select id="select" parameterType="member" resultType="member">
+		SELECT ID, NAME, PASSWORD, PHONE, EMAIL, BANK_NAME, ACCOUNT_NUM, STATE, TYPE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE 
+		FROM NEW_MEMBER
+		WHERE ID = #{id}
+	</select>
+	<insert id="insert" parameterType="member">
+		INSERT INTO NEW_MEMBER
+		(ID, PASSWORD, NAME, PHONE, EMAIL, TYPE)
+		VALUES(
+			#{id}, 
+			#{password},
+			#{name},
+			#{phone}, 
+			#{email}, 
+			#{type}
+		)
+	</insert>
+	<update id="update" parameterType="member">
+		UPDATE NEW_MEMBER
+		<set> 
+			<if test="name != null">NAME = #{name},</if>
+			<if test="password != null">PASSWORD = #{password},</if>
+			<if test="email != null">EMAIL = #{email},</if>
+			<if test="bankName != null">BANK_NAME = #{bankName},</if>
+			<if test="phone != null">PHONE = #{phone},</if>
+			<if test="accountNum != null">ACCOUNT_NUM = #{accountNum},</if>
+			<if test="address != null">ADDRESS = #{address},</if>
+			<if test="detailAddress != null">DETAIL_ADDRESS = #{detailAddress},</if>
+			<if test="zipCode != null">ZIP_CODE = #{zipCode}</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	<delete id="delete" parameterType="member">
+		DELETE FROM NEW_MEMBER
+		WHERE ID = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>이름</th>
+				<th>휴대폰 번호</th>
+				<th>이메일</th>
+				<th>급여</th>
+				<th>상태</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="employ : ${employList}">
+				<td th:text="${employ.name}"></td>
+				<td th:if="${employ.phone}">
+					<a th:href="@{/employ/employee/{no}(no = ${employ.no})}">
+				 	<span th:text="${employ.phone}"></span></a>
+				</td>
+				<td th:if="!${employ.phone}"></td>
+				<td th:if="${employ.email}" th:text="${employ.email}"></td>
+				<td th:if="!${employ.email}"></td>
+				<td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
+				<td th:text="${employ.state}">state</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
