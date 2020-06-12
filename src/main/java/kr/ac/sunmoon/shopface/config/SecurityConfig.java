@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		//추후에 관리자 추가
 		http.authorizeRequests()
-			.antMatchers("/login", "/member/form").permitAll()
+			.antMatchers("/login", "/member/form", "/member/check").permitAll()
 			.antMatchers(HttpMethod.POST, "/member").permitAll()
 			.antMatchers("/**").hasRole("MEMBER")
 		.and()
