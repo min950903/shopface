@@ -18,11 +18,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return scheduleMapper.selectAll(schedule);
 	}
 
+	
+	/*
 	@Override
 	public Schedule getSchedule(Schedule schedule) {
 		return scheduleMapper.select(schedule);
 	}
 
+	
+	
+	
 	@Override
 	public boolean editSchedule(Schedule schedule) {
 		//수정 시 상태 정보 바뀜
@@ -42,5 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		
 		return false;
 	}
+	
+	*/
 
 }

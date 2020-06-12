@@ -36,6 +36,8 @@ public class ScheduleController {
 		return scheduleService.getScheduleList(schedule);
 	}
 
+	
+	/*
 	//스케줄 조회
 	@GetMapping("/schedule/{no}")
 	public ModelAndView getSchedule(@PathVariable("no") int no) {
@@ -61,6 +63,6 @@ public class ScheduleController {
 		scheduleService.removeSchedule(schedule);
 		return new ModelAndView(new RedirectView("/schedule"));
 	}
-	
+	*/
 	
 }
