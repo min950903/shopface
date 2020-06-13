@@ -75,6 +75,9 @@ public class MemberController {
 	
 	@GetMapping(value = "/member", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Member> getMemberList(Member member) {
+		log.info(String.valueOf(member.getState()));
+		log.info(member.getName());
+		
 		return memberService.getMemberList(member);
 	}
 	

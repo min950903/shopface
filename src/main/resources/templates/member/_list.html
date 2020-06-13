@@ -154,8 +154,8 @@
 								<div class="dropdown-menu-header">
 									읽지 않은 알람 카운트
 								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
+								<div id="alarmSpace" class="list-group">
+									<!-- <a href="#" class="list-group-item">
 										<div class="row no-gutters align-items-center">
 											<div class="col-2">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -173,7 +173,7 @@
 												<div class="text-muted small mt-1">등록 일자</div>
 											</div>
 										</div>
-									</a>
+									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
 									<a href="#" class="text-muted">Show all notifications</a>
@@ -196,7 +196,7 @@
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
 								data-toggle="dropdown">
 								<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle mr-1"
-									alt="Chris Wood"> <span class="text-dark" sec:authentication="name"></span>
+									alt="Chris Wood"> <span id="user" class="text-dark" sec:authentication="name"></span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-right">
 								<a class="dropdown-item" href="#"><svg
@@ -229,21 +229,19 @@
 											</div>
 											<div class="col-sm-12 col-md-6">
 												<div id="datatables-buttons_filter" class="dataTables_filter">
-													<form class="form-inline d-none d-sm-inline-block" action="/member"
-														method="GET">
-														<div class="form-inline">
-															<select id="condition" name="condition"
-																class="form-control">
-																<option value="name">이름</option>
-																<option value="state">상태</option>
-															</select>
-															<input type="search" name="searchQuery"
-																	class="form-control form-control-sm" placeholder=""
-																	aria-controls="datatables-buttons"></label>
-															<input type="button" class="btn btn-primary" id="searchButton" name="searchButton"
-																value="검색">
-														</div>
-													</form>
+												<!-- form 태그 있던 자리  -->
+													<div class="form-inline">
+														<select id="condition" name="condition"
+															class="form-control">
+															<option value="name">이름</option>
+															<option value="state">상태</option>
+														</select>
+														<input type="text" id="searchQuery" name="searchQuery"
+																class="form-control form-control-sm" placeholder=""
+																aria-controls="datatables-buttons">
+														<input type="button" class="btn btn-primary" id="searchButton" name="searchButton"
+															value="검색">
+													</div>
 												</div>
 											</div>
 										</div>
@@ -351,24 +349,30 @@
 	var dataObj;
 	$(document).ready(function () {
 		$('#searchButton').click(function () {
-			if ($('#condition').val() == 'name') {
-				dataObj = {
-					"name": $('#searchQuery').val()
-				}
-			} else {
-				dataObj = {
-					"state": $('#searchQuery').val()
-				}
-			}
 			drawTable();
 		})
+		
+		$('#alertsDropdown').click(function() {
+			drawAlarmList();
+		})
+		$('#searchQuery').keyup(function(e) {
+		if (e.keyCode == 13) {
+			drawTable();
+		}
+	})
 	});
 
 	function drawTable() {
+		var url = "/member?";
+		if ($('#condition').val() == 'name') {
+			url += "name=" + $('#searchQuery').val();
+		} else {
+			url += "state=" +  $('#searchQuery').val();
+		}
+		
 		$.ajax({
-			url: "/member",
+			url: url,
 			type: "get",
-			data: dataObj,
 			headers: {
 				"Content-Type": "application/json;charset=UTF-8"
 			},
@@ -381,7 +385,7 @@
 							"</td>";
 						html += "	<td>" + data[i].phone + "</td>";
 						if (data[i].email != null) {
-							html += "	<td>" + data[i].email + "</td>";						
+							html += "	<td>" + data[i].email + "</td>";
 						} else {
 							html += "<td></td>";
 						}
@@ -393,9 +397,46 @@
 						html += "	</tr>";
 					}
 				} else {
-					html += "<tr><td>검색 결과가 없습니다.</td></tr>";
+					html += "<tr><td colspan='6'>검색 결과가 없습니다.</td></tr>";
 				}
 				$('#table_body').html(html);
+			},
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
+			}
+		})
+	}
+	
+	function drawAlarmList() {
+		var url = "/alarm?addresseeId=" + $('#user').html();
+		
+		$.ajax({
+			url: url,
+			type: "get",
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			success: function(data) {
+				var html = "";
+				if (data.length > 0) {
+					for(var i = 0; i < data.length; i++) {
+						html += "<a href='#' class='list-group-item'>";
+						html += "<div class='row no-gutters align-items-center'>";
+						html += "<div class='col-2'></div>";
+						//추후 그림 추가
+						html += "<div class='col-10'>";
+						html += "<div class='text-dark'>" + data[i].type  +"</div>";
+						html += "<div class='text-muted small mt-1'>"+ data[i].contents +"</div>";
+						html += "<div class='text-muted small mt-1'>"+ data[i].registerDate +"</div>";
+						html += "</div>";
+						html += "</div>";
+						html += "</a>";
+					}
+				} else {
+					html += "<div class='row no-gutters align-items-center'><div class='col-10'>알람이 없습니다.</div></div>";
+				}
+				$('#alarmSpace').html(html);
 			},
 			error: function (request, status, error) {
 				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
