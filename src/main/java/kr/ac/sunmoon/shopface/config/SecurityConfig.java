@@ -42,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//추후에 관리자 추가
 		http.authorizeRequests()
 			.antMatchers("/login", "/member/form", "/member/check").permitAll()
-			.antMatchers(HttpMethod.POST, "/member").permitAll()
+			.antMatchers(HttpMethod.POST, "/member", "employ").permitAll()
+			.antMatchers(HttpMethod.PUT, "/employ").permitAll()
 			.antMatchers("/**").hasRole("MEMBER")
 		.and()
 			.formLogin()

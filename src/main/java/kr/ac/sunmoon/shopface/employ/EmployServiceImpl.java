@@ -64,7 +64,7 @@ public class EmployServiceImpl implements EmployService {
     
     @Override
     public boolean sendInviteMessage(Employ employ) {
-        SimpleMailMessage message = createMessage(employ);
+        SimpleMailMessage message = createInviteMessage(employ);
         try {
             mailSender.send(message);
 
@@ -75,7 +75,7 @@ public class EmployServiceImpl implements EmployService {
         }
     }
 
-    public SimpleMailMessage createMessage(Employ employ) {
+    public SimpleMailMessage createInviteMessage(Employ employ) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = simpleDateFormat.format(new Date());
         CryptogramImpl cryptogramImpl = new CryptogramImpl(secretKey);

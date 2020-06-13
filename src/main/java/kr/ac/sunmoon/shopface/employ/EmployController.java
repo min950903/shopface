@@ -1,4 +1,4 @@
-package kr.ac.sunmoon.shopface.employ;
+    package kr.ac.sunmoon.shopface.employ;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,12 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class EmployController {
     private final EmployService employService;
-    
-    @GetMapping("/employ/form")
-    public ModelAndView addEmploy() {
-        return new ModelAndView("/employ/list.html");
-    }
-    
+        
     @PostMapping("/employ/{branchNo}")
     public Map<String, Object> addEmploy(@PathVariable int branchNo, Employ employ) {
         boolean isSucess = employService.addEmploy(employ);
@@ -78,7 +73,7 @@ public class EmployController {
         return modelAndView;
     }
     
-    @DeleteMapping("/employ/{no}")
+    @DeleteMapping("/employ/{branchNo}/{no}")
     public ModelAndView removeEmploy(@PathVariable("no") int no, Employ employ) {
         employService.deleteEmploy(employ);
         return new ModelAndView("/employ/list.html");
