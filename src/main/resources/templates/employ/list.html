@@ -1,22 +1,209 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-  <table id="userTable">
-     <thead>
-    <tr>
-         <th>이름</th>
-         <th>휴대폰 번호</th>
-         <th>이메일</th>
-         <th>급여</th>
-         <th>상태</th>
-     </tr>
-     </thead>
-     <tbody>
-     <tr th:each="employ : ${employList}">
-         <td th:text="${employ.name}"></td>    
-         <td th:if="${employ.phone != null}" th:text="${employ.phone}"></td>
-         <td th:if="${employ.email != null}" th:text="${employ.email}"></td>
-         <td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
-         <td th:text="${employ.state}">state</td>
-     </tr>
-     </tbody>
-     </table>
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+	<head th:include="layout/template :: scriptHeader"></head>
+<body>
+<form id="searchForm">
+	<label for="name">이름:</label>
+	<input type="text" id="searchName" name="searchName">
+	
+	 <label for="state">상태:</label>
+	 <select id="searchState" name="searchState">
+	 	<option value="B" selected>합류 전</option>
+	 	<option value="C">합류 완료</option>
+	 	<option value="D">비활성화</option>
+	 </select>
+	 <button type="button" id="searchBtn">검색</button>
+</form>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal">근무자 초대하기</button>
+<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="inviteModalLabel">근무자 초대하기</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="inviteForm">
+	      <div class="modal-body">
+	          <div class="form-group">
+	            <label for="name" class="col-form-label">이름:</label>
+	            <input type="text" class="form-control" id="inviteName" name="inviteName">
+	          </div>
+	          <div class="form-group">
+	           <label for="email" class="col-form-label">이메일:</label>
+	            <input type="text" class="form-control" id="inviteEmail" name="inviteEmail">
+	          </div>
+	      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" id="inviteBtn">초대하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<table>
+	<thead>
+		<tr>
+			<th>이름</th>
+			<th>휴대폰 번호</th>
+			<th>이메일</th>
+			<th>급여</th>
+			<th>상태</th>
+			<th></th>
+		</tr>
+	</thead>
+		<tbody id="table_body">
+		<tr th:each="employ : ${employList}">
+			<td th:text="${employ.name}"></td>
+			<td th:if="${employ.phone}">
+				<a th:href="@{/employ/{branchNo}/{no}(branchNo = ${employ.branchNo}, no = ${employ.no})}"><span th:text="${employ.phone}"></span></a>
+			</td>
+			<td th:if="!${employ.phone}"></td>
+			<td th:if="${employ.email}" th:text="${employ.email}"></td>
+			<td th:if="!${employ.email}"></td>
+			<td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
+			<td th:if="${employ.state} == 'B'" >합류전</td>
+			<td th:if="${employ.state} == 'C'">합류 완료</td>
+			<td th:if="${employ.state} == 'D'" >비활성화</td>
+			<td th:if="${employ.state} != 'C'">
+				<span data-toggle="modal" data-target="#resendInviteModal" style="color:blue;" 
+					th:onclick="|javascript:resendSpan('${employ.No}')|">다시 초대하기</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div class="modal fade" id="resendInviteModal" tabindex="-1" role="dialog" aria-labelledby="resendInviteModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resendInvite">근무자 초대하기</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+	      <div class="modal-body">
+	          <div class="form-group">
+	           <label for="email" class="col-form-label">이메일:</label>
+	            <input type="text" class="form-control" name="reInviteEmail">
+	          </div>
+	      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" 
+        	id="resendInviteBtn" th:onclick="resendInvite()" >다시 초대하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+$(document).ready(function() {
+	$('#searchBtn').click(function() {
+		var searchData = {
+			name : $('#searchName').val(),
+			state:  $('#searchState').val()
+		}
+		var searchUrl = "/employ/21?name=" + $('#searchName').val() + "&state=" + $('#searchState').val()  
+				
+		searchEmploy(searchData);
+	});
+		
+	
+	$('#inviteModal').on('show.bs.modal')
+	$('#inviteModal').on('hide.bs.modal', function() {
+			$(this).find('form')[0].reset();
+		})
+		
+	$('#inviteBtn').click(function() {
+		var formData = {
+			name: $('input[name=inviteName]').val(),
+			email: $('input[name=inviteEmail]').val()	
+		}
+		$('#inviteModal').modal('hide')
+		$('#inviteModal').on('hide.bs.modal', function() {
+			$(this).find('form')[0].reset();
+		})
+		$.ajax({
+			url: location.pathname,
+			method: 'POST',
+			data: formData,
+			datatype: 'json',
+			success: function(response) {
+				alert("초대 메시지 전송을 완료하였습니다.");
+				location.reload();
+			},
+			error: function(error) {
+				alert("오류가 발생했습니다.");
+			}
+		})
+	});
+	
+	$('#resendInviteModal').on('show.bs.modal')
+	$('#resendInviteModal').on('hide.bs.modal', function() {
+		$(this).find('form')[0].reset();
+	})
+});
+
+var employNo
+function resendSpan(no) {
+	employNo = no
+}
+
+function resendInvite() {
+	var email = { email: $('input[name=reInviteEmail]').val() };
+	var resendUrl = "/employ/invite/" + employNo;
+	
+	$('#resendInviteModal').modal('hide')
+	$('#resendInviteModal').on('hide.bs.modal', function() {
+		$(this).find('form')[0].reset();
+	})
+	$.ajax({
+		url: resendUrl,
+		method: 'PUT',
+		data: email,
+		
+		datatype: 'json',
+		success: function(response) {
+			alert("초대 메시지 전송을 완료하였습니다.")
+			location.reload();	
+		},
+		error: function(error) {
+			alert("오류가 발생했습니다.");
+		}
+	})
+ };
+ function searchEmploy(searchData) {
+	 $.ajax({
+			url: '/employ/21',
+			method:"GET",
+			data: searchData,
+			datatype: 'json',
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			success: function(data) {
+				console.log(data)
+				var html = "";
+				if(data.length > 0) {
+					for(var i = 0; i < data.length; i++) {
+					}
+				} else {
+					html += "검색 결과가 없습니다."
+				}
+				$('#table_body').html(html);
+			},
+			error: function(error) {
+				console.log(error)
+			}
+		});
+ }
+ 
+</script>
