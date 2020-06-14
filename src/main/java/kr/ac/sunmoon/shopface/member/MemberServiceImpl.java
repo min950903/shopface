@@ -109,11 +109,16 @@ public class MemberServiceImpl implements MemberService {
 		Member member = new Member();
 		member.setId(id);
 		
-		Member existMember = memberMapper.select(member);
-		
-		//TODO-관리자/유저 별 권한 부여 로직 
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+		
+		Member existMember = memberMapper.select(member);
+		if ("admin".equals(existMember.getId())) {
+			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
+		} else if ("E".equals(existMember.getType())) {
+			authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+		} else if ("B".equals(existMember.getType())) {
+			authorities.add(new SimpleGrantedAuthority(Role.BUSINESSMAN.getValue()));
+		}
 		
 		return new User(existMember.getId(), existMember.getPassword(), authorities);
 	}

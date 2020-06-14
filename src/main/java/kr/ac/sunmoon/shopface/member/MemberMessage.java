@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Message {
+public class MemberMessage {
 	private boolean isDuplicate;
 	private String message;
 }

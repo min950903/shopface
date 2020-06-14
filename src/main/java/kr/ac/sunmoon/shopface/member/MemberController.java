@@ -51,8 +51,8 @@ public class MemberController {
 	}
 	
 	@GetMapping(value = "/member/check", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Message> checkId(@RequestParam("id") String id) {
-		Message message = new Message();
+	public ResponseEntity<MemberMessage> checkId(@RequestParam("id") String id) {
+		MemberMessage message = new MemberMessage();
 		
 		if (memberService.checkIdDuplicate(id)) {
 			message.setDuplicate(true);
