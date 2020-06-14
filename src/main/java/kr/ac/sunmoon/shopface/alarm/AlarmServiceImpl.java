@@ -15,8 +15,17 @@ public class AlarmServiceImpl implements AlarmService {
 	@Transactional
 	@Override
 	public boolean addAlarm(Alarm alarm) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isSuccess = false;
+		
+		if (!"".equals(alarm.getAddresseeID()) 
+				&& !"".equals(alarm.getType()) 
+				&& !"".equals(alarm.getContents())) {
+			alarmMapper.insert(alarm);
+			
+			isSuccess = true;
+		}
+		
+		return isSuccess;
 	}
 
 	@Transactional
@@ -41,7 +50,17 @@ public class AlarmServiceImpl implements AlarmService {
 	@Transactional
 	@Override
 	public boolean removeAlarm(Alarm alarm) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isSuccess = false;
+		
+		Alarm existAlarm = alarmMapper.select(alarm);
+		if (existAlarm != null) {
+			alarmMapper.delete(alarm);
+			
+			isSuccess = true;
+		} else {
+			isSuccess = false;
+		}
+		
+		return isSuccess;
 	}
 }
