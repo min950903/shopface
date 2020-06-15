@@ -27,14 +27,16 @@ public class EmployServiceImpl implements EmployService {
     @Transactional
     @Override
     public boolean addEmploy(Employ employ) {
+        boolean isSuccess = false;
+        
         if (employ.getEmail() != null && employ.getName() != null && employ.getBranchNo() != 0) {
             employ.setCertiCode(verificationAuthCode(employ));
             employMapper.insert(employ);
 
-            return sendInviteMessage(employ);
+            isSuccess = sendInviteMessage(employ);
         }
 
-        return false;
+        return isSuccess;
     }
 
     @Override
@@ -64,14 +66,18 @@ public class EmployServiceImpl implements EmployService {
     
     @Override
     public boolean sendInviteMessage(Employ employ) {
+        boolean isSuccess = false;
+        
         SimpleMailMessage message = createInviteMessage(employ);
         try {
             mailSender.send(message);
 
-            return true;
+            isSuccess = true;
         } catch (MailException e) {
             e.printStackTrace();
             throw new IllegalArgumentException();
+        } finally {
+            return isSuccess;
         }
     }
 
@@ -110,12 +116,14 @@ public class EmployServiceImpl implements EmployService {
     @Transactional
     @Override
     public boolean editEmploy(Employ employ) {
+        boolean isSuccess = false;
+        
         if (null != employ) {
             employMapper.update(employ);
-            return true;
-        } else {
-            return false;
+            isSuccess = true;
         }
+        
+        return isSuccess;
     }
 
     @Transactional
@@ -130,6 +138,8 @@ public class EmployServiceImpl implements EmployService {
     @Transactional
     @Override
     public boolean resendInviteMessage(Employ employ) {
+        boolean isSuccess = false;
+        
         if (employ.getEmail() != null) {
             Employ savedEmploy = employMapper.select(employ);
             savedEmploy.setEmail(employ.getEmail());
@@ -147,8 +157,9 @@ public class EmployServiceImpl implements EmployService {
             sendInviteMessage(savedEmploy);
             
             // 알람을 등록한다.
-            return true;
+            isSuccess = true;
         }
-        return false;
+        
+        return isSuccess;
     }
 }

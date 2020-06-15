@@ -41,17 +41,15 @@ public class EmployController {
         
         List<Employ> employList = employService.getEmployList(employ);
         
-        ModelAndView modelAndView = new ModelAndView("employ/list.html");
+        ModelAndView modelAndView = new ModelAndView("employ/_list.html");
         modelAndView.addObject("employList", employList);
         
         return modelAndView;
     }
     
-    @GetMapping(value = "/employ/{branchNo}}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<Employ> getEmployList(@PathVariable  Employ employ) {
-        
-        return null;
-        //return  employService.getEmployList(employ);
+    @GetMapping(value = "/employ/{branchNo}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Employ> getEmployList(Employ employ) {
+        return employService.getEmployList(employ);
     }
     
     @GetMapping("/employ/{branchNo}/{no}")
@@ -59,7 +57,7 @@ public class EmployController {
         Employ employ = new Employ();
         employ.setNo(no);
         
-        ModelAndView modelAndView = new ModelAndView("/employ/detail.html");
+        ModelAndView modelAndView = new ModelAndView("/employ/_detail.html");
         modelAndView.addObject("employ", employService.getEmploy(employ));
         
         return modelAndView;
@@ -67,8 +65,9 @@ public class EmployController {
     
     @PutMapping("/employ/{branchNo}/{no}")
     public ModelAndView editEmploy(@PathVariable int branchNo, @PathVariable int no, Employ employ) {
+        log.info(employ.toString());
         employService.editEmploy(employ);
-        ModelAndView modelAndView = new ModelAndView("redirect:/employ/" + employ.getBranchNo());
+        ModelAndView modelAndView = new ModelAndView("/employ/_detail.html");
         
         return modelAndView;
     }
@@ -76,11 +75,10 @@ public class EmployController {
     @DeleteMapping("/employ/{branchNo}/{no}")
     public ModelAndView removeEmploy(@PathVariable("no") int no, Employ employ) {
         employService.deleteEmploy(employ);
-        return new ModelAndView("/employ/list.html");
+        return new ModelAndView("/employ/_list.html");
     }
     
     @PutMapping("/employ/invite/{no}")
-    @ResponseBody
     public Map<String, Object> resendInviteMessage( @PathVariable int no, Employ employ) {
         boolean isSuccess = employService.resendInviteMessage(employ);
         Map<String, Object> responseMap = new HashMap<String, Object>();

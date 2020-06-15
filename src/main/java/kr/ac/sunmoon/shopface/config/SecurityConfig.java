@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers("/login", "/member/form", "/member/check").permitAll()
 			.antMatchers(HttpMethod.POST, "/member", "employ").permitAll()
-			.antMatchers(HttpMethod.PUT, "/employ").permitAll()
+			.antMatchers(HttpMethod.PUT, "/employ", "/employ/invite/").permitAll()
 			.antMatchers("/**").hasRole("MEMBER")
 		.and()
 			.formLogin()
@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID")
 			.invalidateHttpSession(true)
 		.and()
-			.exceptionHandling().accessDeniedPage("/login");
+			.exceptionHandling().accessDeniedPage("/login")
+		.and()
+		    .csrf().ignoringAntMatchers("/employ/**");
 	}
 }
