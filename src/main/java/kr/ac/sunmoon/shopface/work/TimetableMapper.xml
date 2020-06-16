@@ -43,6 +43,7 @@
 			<if test="occupColor != null and occupColor != ''">
 				AND OCCUP_COLOR = #(occupColor),
 			</if>
+			
 		</where>
 	</select>
 	

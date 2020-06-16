@@ -27,6 +27,7 @@ public class TimetableController {
 	@PostMapping("/timetable")
 	public ModelAndView addTimetable(Timetable timetable, Schedule schedule) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
+		
 		return mav;
 	}
 	

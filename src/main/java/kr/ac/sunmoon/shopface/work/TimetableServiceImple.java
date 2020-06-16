@@ -40,6 +40,7 @@ public class TimetableServiceImple implements TimetableService {
 					this.scheduleMapper.insert(schedule);
 					return true;
 					//알람 등록
+					
 				} else {
 					//중복한 시간표의 스케줄 조회
 					if (timetables.size() == 1) {
