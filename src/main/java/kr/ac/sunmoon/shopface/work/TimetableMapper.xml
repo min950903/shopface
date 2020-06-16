@@ -37,6 +37,12 @@
 			<if test="workEndTime != null and workEndTime != ''">
 				AND WORK_END_TIME = #(workEndTime),
 			</if>
+			<if test="occupName != null and occupName != ''">
+				AND OCCUP_NAME = #(occupName),
+			</if>
+			<if test="occupColor != null and occupColor != ''">
+				AND OCCUP_COLOR = #(occupColor),
+			</if>
 		</where>
 	</select>
 	
