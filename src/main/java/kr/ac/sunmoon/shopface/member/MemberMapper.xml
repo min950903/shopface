@@ -7,7 +7,7 @@
 		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
 		FROM NEW_MEMBER
 		<where>
-			<if test="name != null and !name.equals('')">AND NAME = #{name}</if>
+			<if test="name != null and !name.equals('')">AND NAME LIKE '%'||#{name}||'%'</if>
 			<if test="state != null and state != ''">AND STATE = #{state}</if>
 			<if test="type != null and type != ''">AND TYPE = #{type}</if>
 		</where>
@@ -48,4 +48,16 @@
 		DELETE FROM NEW_MEMBER
 		WHERE ID = #{id}
 	</delete>
+	
+	<select id="countActiveMember" resultType="Integer">
+		SELECT COUNT(*) FROM NEW_MEMBER WHERE STATE = 'A';
+	</select>
+	
+	<select id="pageList" parameterType="criteria" resultType="member">
+		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
+		FROM (  SELECT ROW_NUMBER() OVER (ORDER BY ID) NUM, M.*
+        		FROM NEW_MEMBER M
+        		ORDER BY ID )
+		WHERE ROWNUM BETWEEN #{pageStart} AND #{perPageNum}
+	</select>
 </mapper>

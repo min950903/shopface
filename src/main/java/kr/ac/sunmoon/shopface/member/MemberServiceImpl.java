@@ -112,13 +112,15 @@ public class MemberServiceImpl implements MemberService {
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		
 		Member existMember = memberMapper.select(member);
-		if ("admin".equals(existMember.getId())) {
-			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-		} else if ("E".equals(existMember.getType())) {
-			authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
-		} else if ("B".equals(existMember.getType())) {
-			authorities.add(new SimpleGrantedAuthority(Role.BUSINESSMAN.getValue()));
-		}
+		
+		authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+//		if ("admin".equals(existMember.getId())) {
+//			authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
+//		} else if ("E".equals(existMember.getType())) {
+//			authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
+//		} else if ("B".equals(existMember.getType())) {
+//			authorities.add(new SimpleGrantedAuthority(Role.BUSINESSMAN.getValue()));
+//		}
 		
 		return new User(existMember.getId(), existMember.getPassword(), authorities);
 	}

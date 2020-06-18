@@ -90,7 +90,7 @@
 							</svg> <span class="align-middle">근태 관리</span>
 						</a>
 						<ul id="documentation" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">근무 기록</a></li>
+							<li class="sidebar-item"><a class="sidebar-link" href="/record">근무 기록</a></li>
 							<li class="sidebar-item"><a class="sidebar-link" href="#">급여 계산</a></li>
 						</ul>
 					</li>
@@ -256,6 +256,7 @@
 															<th>이름</th>
 															<th>휴대폰 번호</th>
 															<th>이메일</th>
+															<th>구분</th>
 															<th>상태</th>
 														</tr>
 													</thead>
@@ -348,6 +349,8 @@
 <script>
 	var dataObj;
 	$(document).ready(function () {
+		drawTable();
+		
 		$('#searchButton').click(function () {
 			drawTable();
 		})
@@ -388,6 +391,11 @@
 							html += "	<td>" + data[i].email + "</td>";
 						} else {
 							html += "<td></td>";
+						}
+						if (data[i].type == 'B') {
+							html += "	<td>" + "사업자" + "</td>";
+						} else {
+							html += "	<td>" + "회원" + "</td>";
 						}
 						if (data[i].state == 'A') {
 							html += "	<td>" + "활성화" + "</td>";
