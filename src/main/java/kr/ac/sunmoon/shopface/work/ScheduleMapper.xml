@@ -4,11 +4,12 @@
 
 <mapper namespace="kr.ac.sunmoon.shopface.work.ScheduleMapper">
 
+	<!-- <select id="select" parameterType="schedule" resultType="schedule"> 
+		SELECT NO ,TIMETABLE_NO ,MEMBER_ID ,STATE FROM SCHEDULE WHERE NO= #{no} </select> -->
 
 
 
-	<select id="select"
-		parameterType="schedule"
+	<select id="selectAll" parameterType="schedule"
 		resultType="schedule">
 		SELECT
 		NO
@@ -16,48 +17,16 @@
 		,MEMBER_ID
 		,STATE
 		FROM SCHEDULE
-		WHERE NO= #{no}
-	</select>
 
-	<select id="selectAll"
-		parameterType="schedule"
-		resultType="schedule">
-		SELECT
-		NO
-		,TIMETABLE_NO
-		,MEMBER_ID
-		,STATE
-		FROM SCHEDULE
-		
 		<where>
-				<if test = " no !=null and !no.equals('')"> AND NO = #{no}</if>
-				<if test = "state !=null and !state.equals('')">AND STATE = #{state}</if>
+			<if test="memberId !=null and !memberId.equals('')">AND MEMBER_ID= #{memberId}</if>
 		</where>
 	</select>
-<!-- 
-	<insert id="insert"
-		parameterType="kr.ac.sunmoon.shopface.businessman.Businessman">
-		INSERT INTO SCHEDULE
-		VALUES
-		(#{no},#{timetableNo},#{memberId},#{state})
-	</insert>
-
--->
-	<update id="update"
-		parameterType="schedule">
-		UPDATE SCHEDULE
-		<set>
-			<if test="state != null"> STATE = #{state} </if>
-		</set>
-		WHERE NO = #{no}
-	</update>
-
-	<delete id="delete"
-		parameterType="schedule">
-		DELETE
-		FROM SCHEDULE
-		WHERE NO = #{no}
-	</delete>
-
+	<!-- <insert id="insert" parameterType="kr.ac.sunmoon.shopface.businessman.Businessman"> 
+		INSERT INTO SCHEDULE VALUES (#{no},#{timetableNo},#{memberId},#{state}) </insert> 
+		<update id="update" parameterType="schedule"> UPDATE SCHEDULE <set> <if test="state 
+		!= null"> STATE = #{state} </if> </set> WHERE NO = #{no} </update> <delete 
+		id="delete" parameterType="schedule"> DELETE FROM SCHEDULE WHERE NO = #{no} 
+		</delete> -->
 
 </mapper>
