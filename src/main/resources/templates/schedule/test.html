@@ -271,7 +271,7 @@ body {
 											</div>
 										</div>
 										<div id="fullcalendar"></div>
-									 		<div class="row">
+									 <!-- 		<div class="row">
 												<div class="col-sm-12">
 													<table id="datatables-buttons"
 														class="table table-striped dataTable no-footer dtr-inline"
@@ -290,7 +290,7 @@ body {
 													</tbody>
 												</table>
 											</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -307,16 +307,16 @@ body {
 
 
 <script>
-	var dataObj;
+/*  var dataObj;
 	$(document).ready(function() {
-/* 		$('#searchButton').click(function() {
+		$('#searchButton').click(function() {
 			if ($('#condition').val() == 'branch.name') {
 				dataObj = {
 					"branch.name" : $('input[name=searchQuery]').val()
 				}
 			}
 			drawTable(dataObj);
-		}) */
+		}) 
 		drawTable(dataObj);
 	});
 
@@ -351,19 +351,14 @@ body {
 						+ request.responseText + "\n" + "error:" + error);
 			}
 		})
-	}
-</script>
+	} 
+	
+	*/
+</script> 
 
 <script>
-		$(document).ready(function)(){
-			
-			fc_get_events();
-		});
-		
-		//뿌리는 부분
-	function fc_set_calendar(events){
+	$(function() {
 		$("#fullcalendar").fullCalendar({
-			events : events	
 			header : {
 				left : "prev,next today",
 				center : "title", 
@@ -371,22 +366,26 @@ body {
 			},
 			weekNumbers : true,
 			eventLimit : true,
-			editable : true
+			editable : false,
+			events :[               
+	               {
+	                   title: 'All Day Event',
+	                   start: '2020-06-01',
+	                    },
+	                    {
+	                   title: 'Long Event',
+	                   start: '2020-06-07',
+	                   end: '2020-06-10'
+	                    },
+	                        {
+	                   title: 'Meeting',
+	                   start: '2020-06-12T10:30:00',
+	                   end: '2020-06-12T12:30:00'
+	                   
+	                 }
+	                    ]
+
 		});
-	}
-	//ajax가져오는 부분
-	function fn_get_events()
-	{
-		$.ajax({
-			url: "/test", 
-			dataType: "json", 
-			success: function(data) {
-				fc_set_calendar(data);
-			}
-		}); 
-	}
+	});
 </script>
-
-
-
 
