@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import kr.ac.sunmoon.shopface.member.MemberService;
@@ -42,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//추후에 관리자 추가
 		http.authorizeRequests()
 			.antMatchers("/login", "/member/form", "/member/check").permitAll()
-			.antMatchers(HttpMethod.POST, "/member", "employ").permitAll()
+			.antMatchers(HttpMethod.POST, "/member", "/employ", "/login").permitAll()
 			.antMatchers(HttpMethod.PUT, "/employ", "/employ/invite/").permitAll()
 			.antMatchers("/**").hasRole("MEMBER")
 		.and()

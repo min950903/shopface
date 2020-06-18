@@ -21,8 +21,8 @@ public class Member {
 	private String bankName;
 	private Long accountNum;
 	private LocalDateTime registerDate;
-	private char state;
-	private char type;
+	private String state;
+	private String type;
 	private String address;
 	private String detailAddress;
 	private String zipCode;

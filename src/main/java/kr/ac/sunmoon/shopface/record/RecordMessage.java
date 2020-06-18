@@ -1,4 +1,4 @@
-package kr.ac.sunmoon.shopface.member;
+package kr.ac.sunmoon.shopface.record;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Message {
-	private boolean isDuplicate;
+public class RecordMessage {
 	private String message;
+	private boolean isSuccess;
 }

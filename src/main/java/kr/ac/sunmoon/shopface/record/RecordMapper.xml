@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.sunmoon.shopface.record.RecordMapper">
+	<select id="select" parameterType="record" resultType="record">
+	SELECT NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NAME, BRANCH_PHONE, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE,
+	WORK_START_TIME, WORK_END_TIME, WORKING_TIME, QUITTING_TIME, SALARY_PLAN, SALARY_PAY, EVALUATION, NOTE
+	FROM RECORD
+	WHERE MEMBER_ID = #{memberId}
+	</select>
+	<insert id="insert" parameterType="record">
+	INSERT INTO RECORD
+	(NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NAME,
+	BRANCH_PHONE, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE,
+	WORK_START_TIME, WORK_END_TIME, WORKING_TIME,SALARY_PLAN) 
+	VALUES
+	(1, 'business1', '사업자1', '선문대', '01012345678',
+	'employee1', '직원1', '01043782389',
+	TO_DATE('20200615110000','YYYYMMDDHH24MISS'),
+	TO_DATE('20200615140000','YYYYMMDDHH24MISS'),
+	TO_DATE('20200615105833','YYYYMMDDHH24MISS'),30000)
+	</insert>
+	<update id="update" parameterType="record">
+	UPDATE RECORD
+	SET WORKING_TIME = #{workingTime}, QUITTING_TIME = #{quittingTime}, SALARY_PAY = #{salaryPay}, EVALUATION = #{evaluation}, NOTE = #{note}
+	WHERE NO = #{no}
+	</update>
+	<delete id="delete" parameterType="record">
+	DELETE FROM RECORD
+	WHERE NO = #{no};
+	</delete>
+</mapper>
