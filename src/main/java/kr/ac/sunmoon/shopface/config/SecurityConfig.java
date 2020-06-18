@@ -61,6 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 			.exceptionHandling().accessDeniedPage("/login")
 		.and()
-		    .csrf().ignoringAntMatchers("/employ/**");
+		    .csrf().ignoringAntMatchers("/employ/**","/occupation/**");
 	}
 }

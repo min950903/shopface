@@ -59,7 +59,7 @@
             <if test="state != null and state != ''">
                 STATE = #{state}, 
             </if>
-           <if test="state =='D' and employDate == null">
+            <if test="state =='D' and employDate == null">
                 EMPLOY_DATE = NULL, 
             </if>
             <if test="state =='D' and closeDate == null">

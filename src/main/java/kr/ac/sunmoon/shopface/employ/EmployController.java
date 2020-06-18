@@ -41,7 +41,7 @@ public class EmployController {
         
         List<Employ> employList = employService.getEmployList(employ);
         
-        ModelAndView modelAndView = new ModelAndView("employ/_list.html");
+        ModelAndView modelAndView = new ModelAndView("employ/_test.html");
         modelAndView.addObject("employList", employList);
         
         return modelAndView;
@@ -63,7 +63,7 @@ public class EmployController {
         return modelAndView;
     }
     
-    @PutMapping("/employ/{branchNo}/{no}")
+    @PutMapping(value = "/employ/{branchNo}/{no}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView editEmploy(@PathVariable int branchNo, @PathVariable int no, Employ employ) {
         log.info(employ.toString());
         employService.editEmploy(employ);
@@ -73,13 +73,13 @@ public class EmployController {
     }
     
     @DeleteMapping("/employ/{branchNo}/{no}")
-    public ModelAndView removeEmploy(@PathVariable("no") int no, Employ employ) {
+    public ModelAndView removeEmploy(@PathVariable int no, Employ employ) {
         employService.deleteEmploy(employ);
         return new ModelAndView("/employ/_list.html");
     }
     
     @PutMapping("/employ/invite/{no}")
-    public Map<String, Object> resendInviteMessage( @PathVariable int no, Employ employ) {
+    public Map<String, Object> resendInviteMessage(@PathVariable int no, Employ employ) {
         boolean isSuccess = employService.resendInviteMessage(employ);
         Map<String, Object> responseMap = new HashMap<String, Object>();
         responseMap.put("isSuccess", isSuccess);

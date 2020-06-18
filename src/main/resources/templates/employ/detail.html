@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout/template">
-	<head th:include="layout/template :: scriptHeader"></head>
 	<body>
 	<form id="employ_form" th:action="@{/employ/{branchNo}/{no}(branchNo = *{branchNo}, no = *{no})}" method="post" th:object="${employ}">
 		<input type="hidden" name="_method">
@@ -24,11 +23,6 @@
 		
 		<button type="button" id="edit_btn">수정</button>
 		<button th:if="*{state} == 'C'" type="button" id="disable_btn">비활성화</button>
-		<script  th:inline="javascript">
-			/*<![CDATA[*/
-			var employNo = "[[*{no}]]";
-			/*]]>*/
-		</script>
 	</form>
 	</body>
 	</html>
