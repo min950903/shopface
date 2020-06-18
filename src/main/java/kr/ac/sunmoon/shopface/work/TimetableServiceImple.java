@@ -1,6 +1,8 @@
 package kr.ac.sunmoon.shopface.work;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TimetableServiceImple implements TimetableService {
 	private final TimetableMapper timetableMapper;
+	private final ScheduleMapper scheduleMapper;
 	
 	/**
 	 * 시간표 등록
@@ -33,15 +36,27 @@ public class TimetableServiceImple implements TimetableService {
 				if (timetables == null) {
 					this.timetableMapper.insert(timetable);//시간표 등록
 					// 스케줄 등록
+					schedule.setTimetableNo(timetable.getNo());
+					this.scheduleMapper.insert(schedule);
+					return true;
 					//알람 등록
+					
 				} else {
 					//중복한 시간표의 스케줄 조회
-					//중복하는 스케줄이 존재하는가?
-					//존재 시 스케줄 등록
-					//알람 등록
-				}
-				
-				return true;
+					if (timetables.size() == 1) {
+						Schedule parameter = new Schedule();
+						parameter.setTimetableNo(timetables.get(1).getNo());
+						
+						List<Schedule> schedules = this.scheduleMapper.selectAll(parameter);
+						//중복하는 스케줄이 존재하는가?
+						if (schedules == null) {
+							//존재 하지 않을 시 스케줄 등록
+							this.scheduleMapper.insert(schedule);
+							return true;
+						}
+						return false;
+					}
+				} return true;
 			}
 		} catch (Exception e) {
 			return false;
@@ -53,13 +68,16 @@ public class TimetableServiceImple implements TimetableService {
 	 * 시간표 목록 조회
 	 * */
 	@Override
-	public List<TimetableSchedule> selectTimetableList(Timetable timetable, Schedule schedule) {
+	public List<TimetableSchedule> selectTimetableList(int branchNo) {
 		List<TimetableSchedule> timetableSchedules = new ArrayList<TimetableSchedule>();
 		try {
 			//1. 지점 일련 번호를 받았느니 확인
-			if (timetable.getBranchNo() > 0 
-					&& "".equals(timetable.getBranchNo())) {
+			if (branchNo > 0 
+					&& !"".equals(branchNo)) {
 				//2. 지점 일련 번호가 있으면 시간표 조회 
+				Timetable timetable = new Timetable();
+				timetable.setBranchNo(branchNo);
+				
 				List<Timetable> timetables = this.timetableMapper.selectAll(timetable);
 				//3. 한 시간표와 연관된 스케줄 존재 시 list에 저장
 				if (timetables.size() > 0) {
@@ -69,10 +87,10 @@ public class TimetableServiceImple implements TimetableService {
 						Schedule parameterSchedule = new Schedule();
 						parameterSchedule.setTimetableNo(no);
 						
-//						List<Schedule> schedules = this.ScheduleMapper.selectAll(parameterSchedule);
-//						for (int j = 1; j <= schedules.size(); j++) {
-//							timetableSchedules.add(new TimetableSchedule(timetables.get(i), schedules.get(j)));
-//						}
+						List<Schedule> schedules = this.scheduleMapper.selectAll(parameterSchedule);
+						for (int j = 1; j <= schedules.size(); j++) {
+							timetableSchedules.add(new TimetableSchedule(timetables.get(i), schedules.get(j)));
+						}
 					}
 					return timetableSchedules;
 				} else {
@@ -90,18 +108,51 @@ public class TimetableServiceImple implements TimetableService {
 	 * 시간표 수정
 	 * */
 	@Override
-	public boolean editTimetable(Timetable timetable, Schedule scheduel) {
+	public boolean editTimetable(Timetable timetable, Schedule schedule) {
 		//1. 현재 시간보다 근무 시작 시간이 지났는지 확인
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("YY-MM-DD-HH24:MI:SS");
+			
+			Date currentTime = new Date();
+			String current = dateFormat.format(currentTime);
+			
+			Date today = dateFormat.parse(current);
+			
+			String startTime = dateFormat.format(timetable.getWorkStartTime());
+			Date workStartTime = dateFormat.parse(startTime);
+			
+			int compare = today.compareTo(workStartTime);
+			if (compare < 0) {
+				//2. 근무 시작 시간이 안지났으면 스케줄 목록 조회
+				List<Schedule> schedules = this.scheduleMapper.selectAll(schedule);
+				//3. 수정하려는 스케줄 이외에 연관된 스케줄이 존재하는지 확인 (스케줄 목록 조회 결과가 개수가 1보다 크면 존재하는것)
+				if (schedules != null && schedules.size() == 1) {
+					//4. 존재하지 않으면 시간표 수정
+					this.timetableMapper.update(timetable);
+					//5. 알람 등록
+					return true;
+				} else if (schedules != null && schedules.size() > 1) {
+					//6. 연관된 스케줄 존재하면 수정하려는 시간표를 등록
+					this.timetableMapper.insert(timetable);
 		
-		//2. 근무 시작 시간이 안지났으면 스케줄 목록 조회
-		//3. 수정하려는 스케줄 이외에 연관된 스케줄이 존재하는지 확인 (스케줄 목록 조회 결과가 개수가 1보다 크면 존재하는것)
-		//4. 존재하지 않으면 시간표 수정
-		//5. 알람 등록
-		
-		//6. 연관된 스케줄 존재하면 수정하려는 시간표를 등록
-		//7. 새로 등록한 시간표의 일련번호를 전달받은 스케줄에 수정반영
-		//8. 알람 등록
-		return false;
+					//7. 새로 등록한 시간표의 일련번호를 조회
+					List<Timetable> result = this.timetableMapper.selectAll(timetable);
+					if (result != null && result.size() == 1) {
+						//8. 새로 등록한 시간표의 일련번호를 전달받은 스케줄에 수정반영
+						schedule.setTimetableNo(result.get(1).getNo());
+						this.scheduleMapper.update(schedule);
+						return true;
+						//8. 알람 등록 
+					}
+					return false;
+				}
+				return false;
+			}
+			return false;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	/**
@@ -114,39 +165,38 @@ public class TimetableServiceImple implements TimetableService {
 			if (schedule.getNo() > 0
 					&& schedule.getTimetableNo() > 0) {
 				List<Schedule> schedules = new ArrayList<Schedule>();
-				//scheduels = this.scheduleMapper.selectAll(schedule);
+				schedules = this.scheduleMapper.selectAll(schedule);
 				//2. 조회한 스케줄(1개)의 상태값이 등록, 결론인지 확인
 				if (schedules != null) {
-					//if (schedules != null && schedules.size() == 1) {
-					//	if (schedules.get(1).getState() == 'R' || schedules.get(1).getState() == 'B') {
+					if (schedules != null && schedules.size() == 1) {
+						if (schedules.get(1).getState() == 'R' || schedules.get(1).getState() == 'B') {
 					//3. 등록이나 결론이면 해당 스케줄을 삭제한다.
-					//		this.scheduleMapper.delete(schedule);
+							this.scheduleMapper.delete(schedule);
 					//		4. 해당 스케줄과 같은 시간표에 연관된 스케줄이 존재하는지 확인하기 위해 전달받은 시간표 일련번호로 스케줄 목록 조회
-//							Schedule parameter = new Schedule();
-//							parameter.setTimetableNo(schedule.getTimetableNo());
-//							
-//							List<Schedule> resultSchedules = this.scheduleMapper.selectAll(parameter);
+							Schedule parameter = new Schedule();
+							parameter.setTimetableNo(schedule.getTimetableNo());
+							
+							List<Schedule> resultSchedules = this.scheduleMapper.selectAll(parameter);
 					//		5. 존재하는 경우 연관된 시간표를 삭제하지 않는다.
-//							if (resultSchedules != null) {
-//								if (resultSchedules.size() > 0) {
-//									return true;
-//								}
-//							} else {
+							if (resultSchedules != null) {
+								if (resultSchedules.size() > 0) {
+									return true;
+								}
+							} else {
 //								//		6. 존재하지 않는 경우 연관된 시간표를 삭제한다.
-//								this.timetableMapper.delete(new Timetable(schedule.getTimetableNo()));
-//								return true;
-//							}
+								this.timetableMapper.delete(new Timetable(schedule.getTimetableNo()));
+								return true;
+							}
 					//이후 알람 등록
-					//	} else {
-					//		
-					//	}
-					//} else {//전달받은 스케줄이 존재하는지 확인하는데 1개 보다 많거나 없으면 
-					//	return false;
-					//}					
+						} else {
+							//3-1. 삭제하려는 스케줄의 상태값이 등록이나 결론이 아닐 경우 삭제 불가
+							return false;
+						}
+					} else {//전달받은 스케줄이 존재하는지 확인하는데 1개 보다 많거나 없으면 
+						return false;
+					}					
 				}
 			}
-				
-						
 		} catch (Exception e) {
 			return false;
 		}
