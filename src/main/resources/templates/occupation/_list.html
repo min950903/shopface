@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
-	<link rel="stylesheet" th:href="@{css/classic.css}">
-	<script th:src="@{js/app.js}"></script>
+	<link rel="stylesheet" href="/css/classic.css">
+	<script src="/js/app.js"></script>
 </head>
 
 <body>
@@ -90,7 +89,7 @@
 							</svg> <span class="align-middle">근태 관리</span>
 						</a>
 						<ul id="documentation" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="/record">근무 기록</a></li>
+							<li class="sidebar-item"><a class="sidebar-link" href="#">근무 기록</a></li>
 							<li class="sidebar-item"><a class="sidebar-link" href="#">급여 계산</a></li>
 						</ul>
 					</li>
@@ -154,8 +153,8 @@
 								<div class="dropdown-menu-header">
 									읽지 않은 알람 카운트
 								</div>
-								<div id="alarmSpace" class="list-group">
-									<!-- <a href="#" class="list-group-item">
+								<div class="list-group">
+									<a href="#" class="list-group-item">
 										<div class="row no-gutters align-items-center">
 											<div class="col-2">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -173,7 +172,7 @@
 												<div class="text-muted small mt-1">등록 일자</div>
 											</div>
 										</div>
-									</a> -->
+									</a>
 								</div>
 								<div class="dropdown-menu-footer">
 									<a href="#" class="text-muted">Show all notifications</a>
@@ -196,7 +195,7 @@
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
 								data-toggle="dropdown">
 								<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle mr-1"
-									alt="Chris Wood"> <span id="user" class="text-dark" sec:authentication="name"></span>
+									alt="Chris Wood"> <span class="text-dark" sec:authentication="name"></span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-right">
 								<a class="dropdown-item" href="#"><svg
@@ -214,93 +213,98 @@
 				</div>
 			</nav>
 
-			<main class="content">
-				<div class="container-fluid p-0">
-					<h1 class="h3 mb-3">회원 목록</h1>
-					<div class="row">
-						<div class="col-12">
-							<div class="card">
-								<div class="card-body">
-									<div id="datatables-buttons_wrapper"
-										class="dataTables_wrapper dt-bootstrap4 no-footer">
-										<div class="row">
-											<div class="col-sm-12 col-md-6">
-
-											</div>
-											<div class="col-sm-12 col-md-6">
-												<div id="datatables-buttons_filter" class="dataTables_filter">
-												<!-- form 태그 있던 자리  -->
-													<div class="form-inline">
-														<select id="condition" name="condition"
-															class="form-control">
-															<option value="name">이름</option>
-															<option value="state">상태</option>
-														</select>
-														<input type="text" id="searchQuery" name="searchQuery"
-																class="form-control form-control-sm" placeholder=""
-																aria-controls="datatables-buttons">
-														<input type="button" class="btn btn-primary" id="searchButton" name="searchButton"
-															value="검색">
-													</div>
+			<div layout:fragment="content">
+				<main class="content">
+					<div class="container-fluid p-0">
+						<h1 class="h3 mb-3">업무 관리</h1>
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-body">
+										<div class="col-sm-6">
+											<form class="form-row" action="/occupation" method="post">
+												<div class="form-group col-md-6">
+													<label for="occupationLabel">업무 명</label>
+													<input type="text" class="form-control" id="occupation-input" name="name">
+												</div>
+												<div class="form-group col-md-4">
+													<label for="inputState">색상</label>
+													<select id="inputState" name="color" class="form-control">
+										                <option style="background-color: #0070C0" value="#0070C0" selected="selected"></option>
+										                <option style="background-color: #00B050" value="#00B050"></option>
+										                <option style="background-color: #FFC000" value="#FFC000"></option>
+										                <option style="background-color: #7030A0" value="#7030A0"></option>
+										                <option style="background-color: #C00000" value="#C00000"></option>
+										                <option style="background-color: #4BACC6" value="#4BACC6"></option>
+										                <option style="background-color: #9BBB59" value="#9BBB59"></option>
+										                <option style="background-color: #F79646" value="#F79646"></option>
+										                <option style="background-color: #C0504D" value="#C0504D"></option>
+										                <option style="background-color: #7F7F7F" value="#7F7F7F"></option>
+										            </select>
+												</div>
+												<div class="form-group col-md-4">
+										        	<button type="submit" class="btn btn-primary" id="searchBtn" name="searchButton">등록</button>
+										        </div>
+									        </form>
+										</div>
+										<div id="datatables-buttons_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12">
+													<table id="datatables-buttons"
+														class="table table-striped dataTable no-footer dtr-inline"
+														style="width: 100%;" role="grid"
+														aria-describedby="datatables-buttons_info">
+														<thead>
+															<tr role="row">
+																<th></th>
+																<th>업무</th>
+																<th>색상</th>
+																<th>관리</th>
+															</tr>
+														</thead>
+														<tbody id="table-body">
+														</tbody>
+													</table>
 												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<table id="datatables-buttons"
-													class="table table-striped dataTable no-footer dtr-inline"
-													style="width: 100%;" role="grid"
-													aria-describedby="datatables-buttons_info">
-													<thead>
-														<tr role="row">
-															<th>이름</th>
-															<th>휴대폰 번호</th>
-															<th>이메일</th>
-															<th>구분</th>
-															<th>상태</th>
-														</tr>
-													</thead>
-													<tbody id="table_body">
-													</tbody>
-												</table>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12 col-md-5">
-												<div class="dataTables_info" id="datatables-buttons_info" role="status"
-													aria-live="polite">Showing 1 to 10 of XX entries</div>
-											</div>
-											<div class="col-sm-12 col-md-7">
-												<div class="dataTables_paginate paging_simple_numbers"
-													id="datatables-buttons_paginate">
-													<ul class="pagination">
-														<li class="paginate_button page-item previous disabled"
-															id="datatables-buttons_previous"><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="0"
-																tabindex="0" class="page-link">Previous</a></li>
-														<li class="paginate_button page-item active"><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="1"
-																tabindex="0" class="page-link">1</a></li>
-														<li class="paginate_button page-item "><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="2"
-																tabindex="0" class="page-link">2</a></li>
-														<li class="paginate_button page-item "><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="3"
-																tabindex="0" class="page-link">3</a></li>
-														<li class="paginate_button page-item "><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="4"
-																tabindex="0" class="page-link">4</a></li>
-														<li class="paginate_button page-item "><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="5"
-																tabindex="0" class="page-link">5</a></li>
-														<li class="paginate_button page-item "><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="6"
-																tabindex="0" class="page-link">6</a></li>
-														<li class="paginate_button page-item next"
-															id="datatables-buttons_next"><a href="#"
-																aria-controls="datatables-buttons" data-dt-idx="7"
-																tabindex="0" class="page-link">Next</a></li>
-													</ul>
+											<div class="row">
+												<div class="col-sm-12 col-md-5">
+													<div class="dataTables_info" id="datatables-buttons_info" role="status"
+														aria-live="polite">Showing 1 to 10 of XX entries</div>
+												</div>
+												<div class="col-sm-12 col-md-7">
+													<div class="dataTables_paginate paging_simple_numbers"
+														id="datatables-buttons_paginate">
+														<ul class="pagination">
+															<li class="paginate_button page-item previous disabled"
+																id="datatables-buttons_previous"><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="0"
+																	tabindex="0" class="page-link">Previous</a></li>
+															<li class="paginate_button page-item active"><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="1"
+																	tabindex="0" class="page-link">1</a></li>
+															<li class="paginate_button page-item "><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="2"
+																	tabindex="0" class="page-link">2</a></li>
+															<li class="paginate_button page-item "><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="3"
+																	tabindex="0" class="page-link">3</a></li>
+															<li class="paginate_button page-item "><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="4"
+																	tabindex="0" class="page-link">4</a></li>
+															<li class="paginate_button page-item "><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="5"
+																	tabindex="0" class="page-link">5</a></li>
+															<li class="paginate_button page-item "><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="6"
+																	tabindex="0" class="page-link">6</a></li>
+															<li class="paginate_button page-item next"
+																id="datatables-buttons_next"><a href="#"
+																	aria-controls="datatables-buttons" data-dt-idx="7"
+																	tabindex="0" class="page-link">Next</a></li>
+														</ul>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -309,147 +313,127 @@
 							</div>
 						</div>
 					</div>
-
-				</div>
-			</main>
-
-			<footer class="footer">
-				<div class="container-fluid">
-					<div class="row text-muted">
-						<div class="col-6 text-left">
-							<ul class="list-inline">
-								<li class="list-inline-item">
-									<a class="text-muted" href="#">Support</a>
-								</li>
-								<li class="list-inline-item">
-									<a class="text-muted" href="#">Help Center</a>
-								</li>
-								<li class="list-inline-item">
-									<a class="text-muted" href="#">Privacy</a>
-								</li>
-								<li class="list-inline-item">
-									<a class="text-muted" href="#">Terms of Service</a>
-								</li>
-							</ul>
-						</div>
-						<div class="col-6 text-right">
-							<p class="mb-0">
-								© 2020 - <a href="/" class="text-muted">ShopFace</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+				</main>
+			</div>
 		</div>
 	</div>
-</body>
-
-</html>
-
 <script>
-	var dataObj;
-	$(document).ready(function () {
+	$('document').ready(function() {
 		drawTable();
 		
-		$('#searchButton').click(function () {
-			drawTable();
-		})
-		
-		$('#alertsDropdown').click(function() {
-			drawAlarmList();
-		})
-		$('#searchQuery').keyup(function(e) {
-		if (e.keyCode == 13) {
-			drawTable();
+		function drawTable() {
+			$.ajax({
+				url: '/occupation',
+				type: 'GET',
+				contentType: "application/json;charset=UTF-8",
+				success: function(data) {
+					var colorArr = ["#0070C0", "#00B050", "#FFC000", "#7030A0", "#C00000"
+								   ,"#4BACC6", "#9BBB59", "#F79646", "#C0504D", "#7F7F7F"];
+					var html = "";
+					
+					if(data.length != 0) {
+						for(var i = 0; i < data.length; i++) {
+							html += "<tr>";
+							html += 	"<td>";
+							html +=  		"<input type='hidden' name='occupationNo' value=" + data[i].no + ">";
+							html +=  	"</td>";
+							html +=  	"<td>";
+							html += 		"<input type='text' name='occupationName' value=" + data[i].name + ">";
+							html +=  	"</td>";
+							html +=  	"<td>";
+							html +=			"<select name='occupationColor'>";
+							
+							for(var j = 0; j < colorArr.length; j++) {
+								if(data[i].color == colorArr[j]) {
+									html += "<option style='background-color:" + colorArr[j] 
+										    + "' value=" + colorArr[j] + " selected></option>";
+								} else {
+									html += "<option style='background-color:" + colorArr[j] 
+								    		+ "' value=" + colorArr[j] + "></option>";
+								}
+							}
+							html +=  		"</select>";
+							html +=  	"</td>";
+							html +=  	"<td>";
+							html +=			"<button type='button' class='btn btn-primary' name='editBtn'>수정</button>";
+							html +=			"<button type='button' class='btn btn-primary' name='removeBtn'>삭제</button>";
+							html +=  	"</td>";
+							html += "<tr>";
+							
+						}
+					} else {
+						html += "<td>업무 목록이 존재하지 않습니다.</td>";
+					}
+					
+					$('#table-body').html(html);
+				},
+				error: function(error) {
+					console.log("error: " + error);
+				}
+			})
 		}
-	})
+		
+		$('#table-body').on("click", "button[name='editBtn']", function() {
+			var currentRow = $(this).closest("tr");
+			var occupationData = {
+				no: currentRow.find("td:eq(0) input[name='occupationNo']").val(),
+				name: currentRow.find('td:eq(1) input[name="occupationName"]').val(),
+				color: currentRow.find('td:eq(2) select[name="occupationColor"]').val()
+			};
+			
+			$.ajax({
+				url: '/occupation',
+				type: 'PUT',
+				data: JSON.stringify(occupationData),
+				dataType: 'json',
+				headers: {
+					"Content-Type": "application/json;charset=UTF-8"
+				},
+				success: function(response) {
+					if (response.isSuccess) {
+						alert("수정하였습니다");
+						drawTable();
+					} else {
+						alert("수정에 실패 했습니다.");
+					}
+				},
+				error: function(error) {
+					console.log(error);
+					alert("오류가 발생했습니다.")
+				}
+			});		
+		});
+		
+		$('#table-body').on("click", "button[name='removeBtn']", function() {
+			var currentRow = $(this).closest("tr");
+			var no = {
+					no: currentRow.find("td:eq(0) input[name='occupationNo']").val()
+			};
+			
+			$.ajax({
+				url: '/occupation',
+				type: 'DELETE',
+				data: JSON.stringify(no),
+				dataType: 'json',
+				headers: {
+					"Content-Type": "application/json;charset=UTF-8"
+				},
+				success: function(response) {
+					if (response.isSuccess) {
+						alert("삭제 하였습니다.");
+						drawTable();
+					} else {
+						alert("삭제에 실패 했습니다.");
+						
+					}
+				},
+				error: function(error) {
+					console.log(error);
+					alert("오류가 발생했습니다.");
+				}
+			});		
+		});
 	});
-
-	function drawTable() {
-		var url = "/member?";
-		if ($('#condition').val() == 'name') {
-			url += "name=" + $('#searchQuery').val();
-		} else {
-			url += "state=" +  $('#searchQuery').val();
-		}
-		
-		$.ajax({
-			url: url,
-			type: "get",
-			headers: {
-				"Content-Type": "application/json;charset=UTF-8"
-			},
-			success: function (data) {
-				var html = "";
-				if (data.length > 0) {
-					for (var i = 0; i < data.length; i++) {
-						html += "	<tr>";
-						html += "	<td>" + "<a href='/member/" + data[i].id + "'>" + data[i].name + "</a>" +
-							"</td>";
-						html += "	<td>" + data[i].phone + "</td>";
-						if (data[i].email != null) {
-							html += "	<td>" + data[i].email + "</td>";
-						} else {
-							html += "<td></td>";
-						}
-						if (data[i].type == 'B') {
-							html += "	<td>" + "사업자" + "</td>";
-						} else {
-							html += "	<td>" + "회원" + "</td>";
-						}
-						if (data[i].state == 'A') {
-							html += "	<td>" + "활성화" + "</td>";
-						} else {
-							html += "	<td>" + "비활성화" + "</td>";
-						}
-						html += "	</tr>";
-					}
-				} else {
-					html += "<tr><td colspan='6'>검색 결과가 없습니다.</td></tr>";
-				}
-				$('#table_body').html(html);
-			},
-			error: function (request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
-					"error:" + error);
-			}
-		})
-	}
-	
-	function drawAlarmList() {
-		var url = "/alarm?addresseeId=" + $('#user').html();
-		
-		$.ajax({
-			url: url,
-			type: "get",
-			headers: {
-				"Content-Type": "application/json;charset=UTF-8"
-			},
-			success: function(data) {
-				var html = "";
-				if (data.length > 0) {
-					for(var i = 0; i < data.length; i++) {
-						html += "<a href='#' class='list-group-item'>";
-						html += "<div class='row no-gutters align-items-center'>";
-						html += "<div class='col-2'></div>";
-						//추후 그림 추가
-						html += "<div class='col-10'>";
-						html += "<div class='text-dark'>" + data[i].type  +"</div>";
-						html += "<div class='text-muted small mt-1'>"+ data[i].contents +"</div>";
-						html += "<div class='text-muted small mt-1'>"+ data[i].registerDate +"</div>";
-						html += "</div>";
-						html += "</div>";
-						html += "</a>";
-					}
-				} else {
-					html += "<div class='row no-gutters align-items-center'><div class='col-10'>알람이 없습니다.</div></div>";
-				}
-				$('#alarmSpace').html(html);
-			},
-			error: function (request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
-					"error:" + error);
-			}
-		})
-	}
 </script>
+</body>
+</html>

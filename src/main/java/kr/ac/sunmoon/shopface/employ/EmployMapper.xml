@@ -3,37 +3,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.ac.sunmoon.shopface.employ.EmployMapper">
-    <select id="selectAll" parameterType="employ" resultMap="employResultMap">
+    <select id="selectAll" parameterType="employ" resultType="employ">
         SELECT E.NO, E.NAME, E.BRANCH_NO, M.PHONE, M.EMAIL, E.STATE, E.SALARY 
         FROM EMPLOY E LEFT OUTER JOIN MEMBER M
         ON E.MEMBER_ID = M.ID
         <where>
         <if test="branchNo != null and branchNo !=''">
-               AND BRANCH_NO = #{branchNo}
+               AND E.BRANCH_NO = #{branchNo}
             </if>
-            <if test="state != null and state !=''">
-                AND STATE = #{state}
+            <if test="state == null and state ==''">
+                AND E.STATE IN('B', 'C')
             </if>
             <if test="name != null and name !=''">
-                AND NAME = #{name}
+                AND E.NAME = #{name}
             </if>
         </where>
         ORDER BY E.NAME 
     </select>
-    
-    <resultMap id="employResultMap" type="employ">
-        <id column="NO" property="no"/>
-        <result column="NAME" property="name"/>
-        <result column="BRANCH_NO" property="branchNo"/>
-        <result column="PHONE" property="phone"/>
-        <result column="EMAIL" property="email"/>
-        <result column="SALARY" property="salary"/>
-        <result column="STATE" property="state"/>
-    </resultMap>
    
     <select id="select" parameterType="employ" resultType="employ">
         SELECT E.NO, E.NAME, E.BRANCH_NO, M.PHONE, M.EMAIL, M.BANK_NAME, M.ACCOUNT_NUM 
-               ,E.STATE, E.SALARY , E.EMPLOY_DATE, E.CLOSE_DATE 
+               ,E.STATE, E.SALARY, E.CERTI_CODE, E.EMPLOY_DATE, E.CLOSE_DATE 
         FROM EMPLOY E LEFT OUTER JOIN MEMBER M
         ON E.MEMBER_ID = M.ID
         <where>
@@ -44,7 +34,7 @@
             AND E.NO = #{no}
         </if>
         <if test="certiCode != null and certiCode != ''">
-            AND CERTI_CODE = #{certiCode}
+            AND E.CERTI_CODE = #{certiCode}
         </if>
         </where>
     </select>
@@ -57,6 +47,9 @@
     <update id="update" parameterType="employ">
         UPDATE EMPLOY 
         <set> 
+            <if test="name != null and name != ''">
+                NAME = #{name}, 
+            </if>
             <if test="salary != null and salary != ''">
                 SALARY = #{salary}, 
             </if>
@@ -66,7 +59,7 @@
             <if test="state != null and state != ''">
                 STATE = #{state}, 
             </if>
-           <if test="state =='D' and employDate == null">
+            <if test="state =='D' and employDate == null">
                 EMPLOY_DATE = NULL, 
             </if>
             <if test="state =='D' and closeDate == null">

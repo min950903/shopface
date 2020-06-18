@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.sunmoon.shopface.work.TimetableMapper">
+	<resultMap id="Timetable" type="kr.ac.sunmoon.shopface.work.Timetable">
+        <id column="NO" property="no"/>
+        <result column="BRANCH_NO" property="branchNo"/>
+        <result column="WORK_START_TIME" property="workStartTime"/>
+        <result column="WORK_END_TIME" property="workEndTime"/>
+        <result column="OCCUP_NAME" property="occupName"/>
+        <result column="OCCUP_COLOR" property="occupColor"/>
+        <result column="REGISTER_DATE" property="RegisterDate"/>
+    </resultMap>
+    
+	<insert id="insert" parameterType="Timetable">
+		INSERT INTO TIMETABLE(NO, BRANCH_NO, WORK_START_TIME, WORK_END_TIME, OCCUP_NAME, OCCUP_COLOR, REGISTER_DATE)
+		VALUES(TIMETABLE_NO_SEQ.NEXTVAL, #(branchNo), #(workStartTime), #(workEndTime), #(occupName), #(occupColor), SYSDATE)
+	</insert>
+		<select id="select" parameterType="Timetable" resultType="TimeTable">
+		SELECT 
+			,NO
+			,BRANCH_NO
+			,WORK_START_TIME
+			,WORK_END_TIME
+			,OCCUP_NAME
+			,OCCUP_COLOR
+			,REGISTER_DATE
+		FROM TIMETABLE
+		WHERE NO = #{no}
+	</select>
+	
+	
+	<select id="selectAll" parameterType="Timetable" resultType="TimeTable">
+		SELECT 
+			,NO
+			,BRANCH_NO
+			,WORK_START_TIME
+			,WORK_END_TIME
+			,OCCUP_NAME
+			,OCCUP_COLOR
+			,REGISTER_DATE
+		FROM TIMETABLE
+		<where>
+			BRANCH_NO = #(branchNo),
+			<if test="workStartTime != null and workStartTime != ''">
+				AND WORK_START_TIME = #(workStartTime),
+			</if>
+			<if test="workEndTime != null and workEndTime != ''">
+				AND WORK_END_TIME = #(workEndTime),
+			</if>
+			<if test="occupName != null and occupName != ''">
+				AND OCCUP_NAME = #(occupName),
+			</if>
+			<if test="occupColor != null and occupColor != ''">
+				AND OCCUP_COLOR = #(occupColor),
+			</if>
+			
+		</where>
+	</select>
+	
+	<update id="update" parameterType="Timetable">
+		UPDATE TIMETABLE
+		<set>
+			<if test="workStartTime != null and workStartTime != ''">
+				AND WORK_START_TIME = #(workStartTime),
+			</if>
+			<if test="workEndTime != null and workEndTime != ''">
+				AND WORK_END_TIME = #(workEndTime),
+			</if>
+			<if test="occupName != null and occupName != ''">
+				AND OCCUP_NAME = #(occupName),
+			</if>
+			<if test="occupColor != null and occupColor != ''">
+				AND OCCUP_COLOR = #(occupColor),
+			</if>
+		</set>
+	</update>
+
+	<delete id="delete" parameterType="Timetable">
+		DELETE FROM TIMETABLE
+		WHERE NO = #{no}
+	</delete>
+</mapper>

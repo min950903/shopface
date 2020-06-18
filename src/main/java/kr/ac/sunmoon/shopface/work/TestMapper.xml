@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.sunmoon.shopface.work.TestMapper">
+
+	<resultMap type="kr.ac.sunmoon.shopface.work.Timetable" id="timetableMap">
+		<id column="NO" property="no" />
+		<result column="BRANCH_NO" property="branchNo" />
+		<result column="WORK_START_TIME" property="workStartTime" />
+		<result column="WORK_END_TIME" property="workEndTime" />
+		<result column="OCCUP_NAME" property="occupName" />
+		<result column="OCCUP_COLOR" property="occupColor" />
+		<result column="REGISTER_DATE" property="registerDate" />
+	</resultMap>
+
+	 <resultMap type="kr.ac.sunmoon.shopface.work.Schedule" id="scheduleMap">
+		<id column="NO" property="no" />
+		<result column="TIMETABLE_NO" property="timetableNo" />
+		<result column="MEMBER_ID" property="memberId" />
+		<result column="STATE" property="state" />
+	</resultMap> 
+
+
+	<resultMap type="kr.ac.sunmoon.shopface.businessman.Branch" id="branchMap">
+		<id column="NO" property="no" />
+		<result column="BUSINESSMAN_ID" property="businessmanId" />
+		<result column="NAME" property="name" />
+		<result column="PHONE" property="phone" />
+		<result column="REGISTER_DATE" property="registerDate" />
+		<result column="ADDRESS" property="address" />
+		<result column="DETAIL_ADDRESS" property="detailAddress" />
+		<result column="ZIP_NO" property="zipNo" />
+		<result column="BUSINESS_PATH" property="businessPath" />
+		<result column="STATE" property="state" />
+		<result column="APPROVAL_STATUS" property="approvalStatus" />
+	</resultMap>
+ 
+
+	<resultMap type="kr.ac.sunmoon.shopface.work.Test" id="TestMap">
+		<collection property="timetable" resultMap="timetableMap"></collection>
+		<collection property="schedule" resultMap="scheduleMap"></collection>
+		<collection property="branch" resultMap="branchMap"></collection> 
+	</resultMap>
+	
+	<select id ="select" resultMap="TestMap">
+		SELECT * 
+		FROM TIMETABLE, BRANCH, SCHEDULE
+		WHERE TIMETABLE.BRANCH_NO = BRANCH.NO
+		AND TIMETABLE.NO = SCHEDULE.TIMETABLE_NO 
+	</select>
+
+</mapper>

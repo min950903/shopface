@@ -6,39 +6,39 @@
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.BranchMapper">
 	<resultMap id="Branch" type="kr.ac.sunmoon.shopface.businessman.Branch">
         <id column="NO" property="no"/>
-        <result column="BUSINESSMAN_ID" property="businessmanId"/>
+        <result column="MEMBER_ID" property="memberId"/>
         <result column="NAME" property="name"/>
         <result column="PHONE" property="phone"/>
         <result column="REGISTER_DATE" property="registerDate"/>
         <result column="ADDRESS" property="address"/>
         <result column="DETAIL_ADDRESS" property="detailAddress"/>
-        <result column="ZIP_NO" property="zipNo"/>
+        <result column="ZIP_CODE" property="zipCode"/>
         <result column="BUSINESS_L_PATH" property="businessLPath"/>
         <result column="STATE" property="state"/>
         <result column="APPROVAL_STATUS" property="approvalStatus"/>
     </resultMap>
 
 	<insert id="insert" parameterType="Branch">
-		INSERT INTO BRANCH(NO, BUSINESSMAN_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_NO, STATE, APPROVAL_STATUS)
-		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{businessmanId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipNo}, 'A', 'W')
+		INSERT INTO BRANCH_NEW(NO, MEMBER_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, STATE, APPROVAL_STATUS)
+		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{memberId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipCode}, 'A', 'W')
 	</insert>
 	
 	<select id="selectAll" parameterType="Branch" resultType="Branch">
 		SELECT 
 			 NO
-			,BUSINESSMAN_ID
+			,MEMBER_ID
 			,NAME
 			,PHONE
 			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
 			,ADDRESS
 			,DETAIL_ADDRESS
-			,ZIP_NO
+			,ZIP_CODE
 			,STATE
 			,APPROVAL_STATUS
-		FROM BRANCH
+		FROM BRANCH_NEW
 		<where>
-			<if test="businessmanId != null and businessmanId != ''">
-				AND BUSINESSMAN_ID = #{businessmanId}
+			<if test="memberId != null and memberId != ''">
+				AND MEMBER_ID = #{memberId}
 			</if>
 			<if test="approvalStatus != null and approvalStatus != ''">
 				AND APPROBVAL_STATUS = #{approvalStatus}
@@ -50,22 +50,22 @@
 	<select id="select" parameterType="int" resultType="Branch">
 		SELECT 
 			 NO
-			,BUSINESSMAN_ID
+			,MEMBER_ID
 			,NAME
 			,PHONE
 			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
 			,ADDRESS
 			,DETAIL_ADDRESS
-			,ZIP_NO
+			,ZIP_CODE
 			,BUSINESS_L_PATH
 			,STATE
 			,APPROVAL_STATUS
-		FROM BRANCH
+		FROM BRANCH_NEW
 		WHERE NO = #{no}
 	</select>
 	
 	<update id="update" parameterType="Branch">
-		UPDATE BRANCH
+		UPDATE BRANCH_NEW
 		<set>
 			<if test="name != null and name != ''">
 				NAME = #{name},
@@ -76,8 +76,8 @@
 			<if test="detailAddress != null and detailAddress != ''">
 				DETAIL_ADDRESS = #{detailAddress},
 			</if>
-			<if test="zipNo != null and zipNo != ''">
-				ZIP_NO = #{zipNo},
+			<if test="zipCode != null and zipCode != ''">
+				ZIP_CODE = #{zipCode},
 			</if>
 			<if test="phone != null and phone != ''">
 				PHONE = #{phone},
@@ -96,7 +96,7 @@
 	</update>
 	
 	<delete id="delete" parameterType="kr.ac.sunmoon.shopface.businessman.Branch">
-		DELETE FROM BRANCH
+		DELETE FROM BRANCH_NEW
 		WHERE NO = #{no}
 	</delete>
 </mapper>
