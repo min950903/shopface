@@ -42,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//추후에 관리자 추가
 		http.authorizeRequests()
 			.antMatchers("/login", "/member/form", "/member/check").permitAll()
-			.antMatchers(HttpMethod.POST, "/member").permitAll()
+			.antMatchers(HttpMethod.POST, "/member", "employ").permitAll()
+			.antMatchers(HttpMethod.PUT, "/employ", "/employ/invite/").permitAll()
 			.antMatchers("/**").hasRole("MEMBER")
 		.and()
 			.formLogin()
@@ -58,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID")
 			.invalidateHttpSession(true)
 		.and()
-			.exceptionHandling().accessDeniedPage("/login");
+			.exceptionHandling().accessDeniedPage("/login")
+		.and()
+		    .csrf().ignoringAntMatchers("/employ/**","/occupation/**");
 	}
 }

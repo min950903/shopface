@@ -12,7 +12,7 @@ public interface EmployService {
     public boolean deleteEmploy(Employ employ);
     public String createAuthCode();
     public String verificationAuthCode(Employ employ);
-    public SimpleMailMessage createMessage(Employ employ);
+    public SimpleMailMessage createInviteMessage(Employ employ);
     public boolean sendInviteMessage(Employ employ);
     public boolean resendInviteMessage(Employ employ);
 }
