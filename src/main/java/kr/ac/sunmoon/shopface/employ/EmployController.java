@@ -41,7 +41,7 @@ public class EmployController {
         
         List<Employ> employList = employService.getEmployList(employ);
         
-        ModelAndView modelAndView = new ModelAndView("employ/_test.html");
+        ModelAndView modelAndView = new ModelAndView("employ/_list.html");
         modelAndView.addObject("employList", employList);
         
         return modelAndView;
