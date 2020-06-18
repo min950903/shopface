@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,8 +38,9 @@ public class TimetableController {
 	 * 시간표 화면 출력
 	 * */
 	@GetMapping("/timetable")
-	public ModelAndView getTimetable() {
+	public ModelAndView getTimetable(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
 		ModelAndView mav = new ModelAndView("timetable/list");
+		log.info("-----------------------------------------------------------------------------");
 		return mav;
 	}
 	
@@ -46,8 +48,9 @@ public class TimetableController {
 	 * 시간표 목록 조회
 	 * */
 	@GetMapping(value = "/timetable", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<TimetableSchedule> getTimetable(Timetable timetable, Schedule schedule) {
-		List<TimetableSchedule> timetableSchedule = this.timetableService.selectTimetableList(timetable, schedule);
+	public List<TimetableSchedule> getTimetable(int branchNo) {
+		List<TimetableSchedule> timetableSchedule = this.timetableService.selectTimetableList(branchNo);
+		log.info("-------------------------------------시간표 목록 조회---------------------------------------");
 		return timetableSchedule;
 	}
 	

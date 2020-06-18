@@ -68,13 +68,16 @@ public class TimetableServiceImple implements TimetableService {
 	 * 시간표 목록 조회
 	 * */
 	@Override
-	public List<TimetableSchedule> selectTimetableList(Timetable timetable, Schedule schedule) {
+	public List<TimetableSchedule> selectTimetableList(int branchNo) {
 		List<TimetableSchedule> timetableSchedules = new ArrayList<TimetableSchedule>();
 		try {
 			//1. 지점 일련 번호를 받았느니 확인
-			if (timetable.getBranchNo() > 0 
-					&& "".equals(timetable.getBranchNo())) {
+			if (branchNo > 0 
+					&& !"".equals(branchNo)) {
 				//2. 지점 일련 번호가 있으면 시간표 조회 
+				Timetable timetable = new Timetable();
+				timetable.setBranchNo(branchNo);
+				
 				List<Timetable> timetables = this.timetableMapper.selectAll(timetable);
 				//3. 한 시간표와 연관된 스케줄 존재 시 list에 저장
 				if (timetables.size() > 0) {

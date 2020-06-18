@@ -26,8 +26,8 @@ public class BranchServiceImple implements BranchService {
 		//1. 입력 값이 존재하는가?
 		try {
 			System.out.println(branch);
-			if (branch.getBusinessmanId() != null
-					&& !"".equals(branch.getBusinessmanId())
+			if (branch.getMemberId() != null
+					&& !"".equals(branch.getMemberId())
 					&& branch.getName() != null
 					&& !"".equals(branch.getName())
 					&& branch.getPhone() != null
@@ -36,9 +36,11 @@ public class BranchServiceImple implements BranchService {
 					&& !"".equals(branch.getAddress())
 					&& branch.getDetailAddress() != null
 					&& !"".equals(branch.getDetailAddress())
-					&& branch.getZipNo() != null
-					&& !"".equals(branch.getZipNo())) {
+					&& branch.getZipCode() != null
+					&& !"".equals(branch.getZipCode())) {
 				//2. 존재하면 정보 등록
+				String logs = branch.toString();
+				log.info("-------------------" + logs);
 				this.branchMapper.insert(branch);
 				return true;
 			}
@@ -67,6 +69,8 @@ public class BranchServiceImple implements BranchService {
 			return null;
 		} catch (Exception e) {
 			//2. 조회 중 오류 발생 시 널값 반환
+			e.printStackTrace();
+			log.info("--------------------------------------아닙니다 그냥 오류 발생함 ..");
 			return null;
 		}
 	}
@@ -103,8 +107,8 @@ public class BranchServiceImple implements BranchService {
 		//1. 입력값 검증
 		try {
 			if (branch.getNo() != 0
-					&& branch.getBusinessmanId() != null
-					&& !"".equals(branch.getBusinessmanId())
+					&& branch.getMemberId() != null
+					&& !"".equals(branch.getMemberId())
 					&& branch.getName() != null
 					&& !"".equals(branch.getName())) {
 				//2. 존재 시 지점 정보 수정 후 true값 밪환
@@ -126,14 +130,14 @@ public class BranchServiceImple implements BranchService {
 		try{
 			//1. 입력 값 검증
 			if (branch.getNo() > 0
-					&& branch.getBusinessmanId() != null
-					&& !"".equals(branch.getBusinessmanId())){
+					&& branch.getMemberId() != null
+					&& !"".equals(branch.getMemberId())){
 				//2. 입력 값 검증 완료 시 지점 조회
 				Branch result = this.branchMapper.select(branch.getNo());
 				//3. 사업자 본인이 등록한 지점인지 확인 (전달받은 사업자id와 조회한 지점의 사업자id가 같은지 비교)
 				if (result != null) { //지점 조회 시 결과가 있는지 검사
-					String resultId = result.getBusinessmanId();
-					if (resultId.equals(branch.getBusinessmanId())) {
+					String resultId = result.getMemberId();
+					if (resultId.equals(branch.getMemberId())) {
 						//4. 같을 시 고용 목록 조회 (지점의 일련번호로 조회)
 						//5. 연관된 고용관계가 있는지 확인(지점 일련 번호와 고용정보의 지점 일련번호 일치 여부 확인)
 						Employ employ = new Employ();
