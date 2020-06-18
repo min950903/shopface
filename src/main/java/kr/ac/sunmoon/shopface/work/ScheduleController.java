@@ -22,16 +22,16 @@ public class ScheduleController {
 	private final ScheduleService scheduleService;
 
 	//목록 조회 폼
-	@GetMapping("/schedule")
+	@GetMapping( "/schedule" )
 	public ModelAndView getScheduleList() {
-		ModelAndView mav = new ModelAndView("schedule/list");
+		ModelAndView mav = new ModelAndView("schedule/_list");
 		//mav.addObject("",);
 		return mav;
 	}
 
 	
 	//목록 조회
-	@GetMapping(value = "/schedule", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping( value = "/schedule", consumes = MediaType.APPLICATION_JSON_VALUE )
 	public List<Schedule> getScheduleList(Schedule schedule) {
 		return scheduleService.getScheduleList(schedule);
 	}

@@ -14,13 +14,13 @@ import lombok.ToString;
 @ToString
 public class Branch {
 	private int no;
-	private String businessmanId;
+	private String memberId;
 	private String name;
 	private String phone;
 	private String registerDate;
 	private String address;
 	private String detailAddress;
-	private String zipNo;
+	private String zipCode;
 	private String businessLPath;
 	private char state;
 	private char approvalStatus;

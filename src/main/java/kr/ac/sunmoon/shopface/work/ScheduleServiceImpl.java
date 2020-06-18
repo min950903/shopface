@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import kr.ac.sunmoon.shopface.businessman.BranchMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -11,10 +12,15 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleServiceImpl implements ScheduleService {
 
 	private final ScheduleMapper scheduleMapper;
-
+	private final TimetableMapper timetableMapper;
+	private final BranchMapper branchMapper;
 	@Override
 	public List<Schedule> getScheduleList(Schedule schedule) {
 
+		/*
+		 * timetableMapper.selectAll(timetable)(no); branchMapper.selectAll(branch)
+		 * branchMapper.select(no);
+		 */
 		return scheduleMapper.selectAll(schedule);
 	}
 
