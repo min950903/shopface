@@ -18,6 +18,19 @@
 		INSERT INTO TIMETABLE(NO, BRANCH_NO, WORK_START_TIME, WORK_END_TIME, OCCUP_NAME, OCCUP_COLOR, REGISTER_DATE)
 		VALUES(TIMETABLE_NO_SEQ.NEXTVAL, #(branchNo), #(workStartTime), #(workEndTime), #(occupName), #(occupColor), SYSDATE)
 	</insert>
+		<select id="select" parameterType="Timetable" resultType="TimeTable">
+		SELECT 
+			,NO
+			,BRANCH_NO
+			,WORK_START_TIME
+			,WORK_END_TIME
+			,OCCUP_NAME
+			,OCCUP_COLOR
+			,REGISTER_DATE
+		FROM TIMETABLE
+		WHERE NO = #{no}
+	</select>
+	
 	
 	<select id="selectAll" parameterType="Timetable" resultType="TimeTable">
 		SELECT 
