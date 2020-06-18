@@ -18,7 +18,7 @@
 		</where>
 	</select>
 
-	<insert id="insert" parameterType="kr.ac.sunmoon.shopface.businessman.Businessman"> 
+	<insert id="insert" parameterType="schedule"> 
 		INSERT INTO SCHEDULE VALUES (#{no},#{timetableNo},#{memberId},#{state}) </insert> 
   
 		<update id="update" parameterType="schedule"> UPDATE SCHEDULE <set> <if test="state 
