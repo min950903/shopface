@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class AlarmController {
 	private final AlarmService alarmService;
-	
+	//내부적으로 persistance만 사용하는 것을 고려중
 	@GetMapping(value = "/alarm", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Alarm> getAlarmList(@RequestParam("addresseeId") String addresseeId) {
 		Alarm alarm = new Alarm();
