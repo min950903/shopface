@@ -11,7 +11,6 @@ import lombok.ToString;
 @Alias("occupation")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Occupation {

@@ -11,14 +11,14 @@
         <if test="branchNo != null and branchNo !=''">
                AND E.BRANCH_NO = #{branchNo}
             </if>
-            <if test="state == null and state ==''">
+            <if test="state == ''">
                 AND E.STATE IN('B', 'C')
             </if>
             <if test="name != null and name !=''">
-                AND E.NAME = #{name}
+                AND E.NAME LIKE '%'||#{name}||'%'
             </if>
         </where>
-        ORDER BY E.NAME 
+        ORDER BY E.STATE, E.NAME 
     </select>
    
     <select id="select" parameterType="employ" resultType="employ">

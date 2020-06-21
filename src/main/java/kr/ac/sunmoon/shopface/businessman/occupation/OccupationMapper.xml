@@ -19,4 +19,4 @@
         DELETE FROM OCCUPATION
         WHERE NO= #{no}
     </delete>
-</mapper>
+</mapper> 

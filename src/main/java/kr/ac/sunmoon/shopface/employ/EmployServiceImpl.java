@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +30,7 @@ public class EmployServiceImpl implements EmployService {
         
         if (employ.getEmail() != null && employ.getName() != null && employ.getBranchNo() != 0) {
             employ.setCertiCode(verificationAuthCode(employ));
+            
             employMapper.insert(employ);
 
             isSuccess = sendInviteMessage(employ);
@@ -48,7 +48,6 @@ public class EmployServiceImpl implements EmployService {
 
             if (employMapper.select(employ) == null) {
                 return certiCode;
-
             }
         }
     }
@@ -61,6 +60,7 @@ public class EmployServiceImpl implements EmployService {
         for (int i = 0; i < 6; i++) {
             certiCode += String.valueOf((char) ((int) (random.nextInt(26)) + 65));
         }
+        
         return certiCode;
     }
     
@@ -75,7 +75,6 @@ public class EmployServiceImpl implements EmployService {
             isSuccess = true;
         } catch (MailException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException();
         } finally {
             return isSuccess;
         }
@@ -84,16 +83,17 @@ public class EmployServiceImpl implements EmployService {
     public SimpleMailMessage createInviteMessage(Employ employ) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = simpleDateFormat.format(new Date());
-        CryptogramImpl cryptogramImpl = new CryptogramImpl(secretKey);
         String encryptDate = null;
+
         try {
+            CryptogramImpl cryptogramImpl = new CryptogramImpl(secretKey);
             encryptDate = cryptogramImpl.encrypt(currentDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         String contents = "안녕하세요" + employ.getName() + "님 \r\n" + "초대경로와 인증코드 첨부드립니다. \r\n" + "초대경로 : "
-                + "http://nabar/check/date?" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
+                            + "http://nabar/check/date?" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(employ.getEmail());
@@ -132,7 +132,6 @@ public class EmployServiceImpl implements EmployService {
         employMapper.delete(employ);
         
         return true;
-        
     }
 
     @Transactional

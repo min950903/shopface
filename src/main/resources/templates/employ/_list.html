@@ -1,416 +1,186 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
 <head>
-	<meta charset="UTF-8">
-	<title>Insert title here</title>
-	<link rel="stylesheet" href="/css/classic.css">
-	<script src="/js/app.js"></script>
+<meta charset="UTF-8">
+<title>근무자 목록</title>
 </head>
-
 <body>
-	<div class="wrapper">
-		<nav id="sidebar" class="sidebar">
-			<div class="sidebar-content ">
-				<a class="sidebar-brand" href="#">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-						class="feather feather-box align-middle">
-						<path
-							d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-						</path>
-						<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-						<line x1="12" y1="22.08" x2="12" y2="12"></line>
-					</svg>
-					<span class="align-middle">ShopFace</span>
-				</a>
-
-				<ul class="sidebar-nav">
-					<li class="sidebar-header">
-						Pages
-					</li>
-					<li class="sidebar-item">
-						<a href="#dashboards" data-toggle="collapse" class="sidebar-link collapsed">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-sliders align-middle">
-								<line x1="4" y1="21" x2="4" y2="14"></line>
-								<line x1="4" y1="10" x2="4" y2="3"></line>
-								<line x1="12" y1="21" x2="12" y2="12"></line>
-								<line x1="12" y1="8" x2="12" y2="3"></line>
-								<line x1="20" y1="21" x2="20" y2="16"></line>
-								<line x1="20" y1="12" x2="20" y2="3"></line>
-								<line x1="1" y1="14" x2="7" y2="14"></line>
-								<line x1="9" y1="8" x2="15" y2="8"></line>
-								<line x1="17" y1="16" x2="23" y2="16"></line>
-							</svg> <span class="align-middle">회원 관리</span>
-						</a>
-						<ul id="dashboards" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">회원 목록</a>
-							</li>
-						</ul>
-					</li>
-					<li class="sidebar-item">
-						<a href="#pages" data-toggle="collapse" class="sidebar-link collapsed">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-layout align-middle">
-								<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-								<line x1="3" y1="9" x2="21" y2="9"></line>
-								<line x1="9" y1="21" x2="9" y2="9"></line>
-							</svg> <span class="align-middle">시간표 관리</span>
-						</a>
-						<ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">전체 시간표</a></li>
-						</ul>
-					</li>
-					<li class="sidebar-item">
-						<a href="#auth" data-toggle="collapse" class="sidebar-link collapsed">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-users align-middle">
-								<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-								<circle cx="9" cy="7" r="4"></circle>
-								<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-								<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-							</svg> <span class="align-middle">스케줄 관리</span>
-						</a>
-						<ul id="auth" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">나의 스케줄 관리</a></li>
-						</ul>
-					</li>
-					<li class="sidebar-item">
-						<a href="#documentation" data-toggle="collapse" class="sidebar-link collapsed">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-book-open align-middle">
-								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-							</svg> <span class="align-middle">근태 관리</span>
-						</a>
-						<ul id="documentation" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">근무 기록</a></li>
-							<li class="sidebar-item"><a class="sidebar-link" href="#">급여 계산</a></li>
-						</ul>
-					</li>
-					<li class="sidebar-item">
-						<a href="#ui" data-toggle="collapse" class="sidebar-link collapsed">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-grid align-middle">
-								<rect x="3" y="3" width="7" height="7"></rect>
-								<rect x="14" y="3" width="7" height="7"></rect>
-								<rect x="14" y="14" width="7" height="7"></rect>
-								<rect x="3" y="14" width="7" height="7"></rect>
-							</svg> <span class="align-middle">회사 관리</span>
-						</a>
-						<ul id="ui" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">사업장 관리</a></li>
-							<li class="sidebar-item"><a class="sidebar-link" href="/employ/21">근무자 관리</a></li>
-						</ul>
-					</li>
-					<li class="sidebar-item">
-						<a href="#icons" data-toggle="collapse" class="sidebar-link collapsed">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-heart align-middle">
-								<path
-									d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-								</path>
-							</svg> <span class="align-middle">설정</span>
-						</a>
-						<ul id="icons" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item"><a class="sidebar-link" href="#">나의 정보 관리</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</nav>
-
-		<div class="main">
-			<nav class="navbar navbar-expand navbar-light bg-white">
-				<a class="sidebar-toggle d-flex mr-2">
-					<i class="hamburger align-self-center"></i>
-				</a>
-				<div class="navbar-collapse collapse">
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
-								<div class="position-relative">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-										stroke-linejoin="round" class="feather feather-bell-off align-middle">
-										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-										<path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path>
-										<path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path>
-										<path d="M18 8a6 6 0 0 0-9.33-5"></path>
-										<line x1="1" y1="1" x2="23" y2="23"></line>
-									</svg>
-								</div>
-							</a>
-							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0"
-								aria-labelledby="alertsDropdown">
-								<div class="dropdown-menu-header">
-									읽지 않은 알람 카운트
-								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<div class="row no-gutters align-items-center">
-											<div class="col-2">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-													viewBox="0 0 24 24" fill="none" stroke="currentColor"
-													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-													class="feather feather-alert-circle text-danger">
-													<circle cx="12" cy="12" r="10"></circle>
-													<line x1="12" y1="8" x2="12" y2="12"></line>
-													<line x1="12" y1="16" x2="12.01" y2="16"></line>
-												</svg>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">알람 유형</div>
-												<div class="text-muted small mt-1">내용</div>
-												<div class="text-muted small mt-1">등록 일자</div>
+<th:block layout:fragment="content">
+	<main class="content">
+		<div class="container-fluid p-0">
+			<h1 class="h3 mb-3">근무자 관리</h1>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<div id="datatables-buttons_wrapper"
+								class="dataTables_wrapper dt-bootstrap4 no-footer">
+								<div class="row">
+									<div class="col-sm-12 col-md-6">
+										<div class="form-group">
+							              <input type="checkbox" id="disableCheck">
+							              <label for="checkDisabel">비활성화 근무자</label>
+								        </div>
+									</div>
+									<div class="col-sm-12 col-md-6">
+										<div id="datatables-buttons_filter" class="dataTables_filter">
+											<div class="form-inline">
+												<label for="name">이름:</label>
+												<input type="search" id="search-name"
+														class="form-control form-control-sm" placeholder=""
+														aria-controls="datatables-buttons"></label>
+												<input type="button" class="btn btn-primary" id="searchBtn" name="searchButton" value="검색">
+												<input type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal" value="초대하기">
 											</div>
 										</div>
-									</a>
+									</div>
+									<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">근무자 초대하기</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								                      <span aria-hidden="true">&times;</span>
+								                    </button>
+												</div>
+												<div class="modal-body m-3">
+													<form id="validation-form">
+														<div class="form-group">
+															<label class="form-label">이름</label>
+															<input type="text" class="form-control"  id="inviteName" name="inviteName" placeholder="이름을 입력해주세요">
+															<br>
+															<label class="form-label">이메일</label>
+															<input type="text" class="form-control" id="inviteEmail" name="inviteEmail"  placeholder="이메일을 입력해주세요">
+														</div>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+													<button type="button" class="btn btn-success" id="inviteBtn">초대하기</button>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all notifications</a>
-								</div>
-							</div>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
-								data-toggle="dropdown">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-									fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-									stroke-linejoin="round" class="feather feather-settings align-middle">
-									<circle cx="12" cy="12" r="3"></circle>
-									<path
-										d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-									</path>
-								</svg>
-							</a>
-
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
-								data-toggle="dropdown">
-								<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle mr-1"
-									alt="Chris Wood"> <span class="text-dark" sec:authentication="name"></span>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<a class="dropdown-item" href="#"><svg
-										xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-										stroke-linejoin="round" class="feather feather-user align-middle mr-1">
-										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-										<circle cx="12" cy="7" r="4"></circle>
-									</svg> Profile</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="/logout">Sign out</a>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</nav>
-
-			<div layout:fragment="content">
-						<main class="content">
-							<div class="container-fluid p-0">
-								<h1 class="h3 mb-3">근무자 관리</h1>
 								<div class="row">
-									<div class="col-12">
-										<div class="card">
-											<div class="card-body">
-												<div id="datatables-buttons_wrapper"
-													class="dataTables_wrapper dt-bootstrap4 no-footer">
-													<div class="row">
-														<div class="col-sm-12 col-md-6">
+									<div class="col-sm-12">
+									<!-- branchNo select 박스에서 값 가져오기 -->
+									<form id="detail-form" th:action="@{/employ/21}" method="get">
+										<table id="datatables-buttons"
+											class="table table-striped dataTable no-footer dtr-inline"
+											style="width: 100%;" role="grid"
+											aria-describedby="datatables-buttons_info">
+											<thead>
+												<tr role="row">
+													<th>이름</th>
+													<th>휴대폰 번호</th>
+													<th>이메일</th>
+													<th>급여</th>
+													<th>상태</th>
+													<th>관리</th>
+													<th></th>
+													
+												</tr>
+											</thead>
+											<tbody id="table_body">
+												<tr th:each="employ : ${employList}">
+													<td th:text="${employ.name}"></td>
+													<td th:if="${employ.phone}" th:text="${employ.phone}"></td>
+													<td th:if="!${employ.phone}"></td>
+													<td th:if="${employ.email}" th:text="${employ.email}"></td>
+													<td th:if="!${employ.email}"></td>
+													<td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
+													<td th:if="${employ.state} == 'B'" >합류전</td>
+													<td th:if="${employ.state} == 'C'">합류 완료</td>
+													<td th:if="${employ.state} == 'D'" >비활성화</td>
+													<td th:if="${employ.phone}">
+														<button type="button" class="btn btn-primary" name="detailBtn" th:value="${employ.no}">조회</button>
+													</td>
+													<td th:if="!${employ.phone}"></td>
+													<td th:if="${employ.state} != 'C'">
+														<span data-toggle="modal" data-target="#resendInviteModal" style="color:blue;" 
+															th:onclick="|javascript:sendEmployNo('${employ.no}')|">다시 초대하기</span>
+													</td>
+													<td th:if="${employ.state} == 'C'"></td>
+												</tr>
+											</tbody>
+										</table>
+									</form>
+										<div class="modal fade" id="resendInviteModal" tabindex="-1" role="dialog" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title">Centered modal</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									                      <span aria-hidden="true">&times;</span>
+									                    </button>
+													</div>
+													<div class="modal-body m-3">
+														<form id="validation-form">
 															<div class="form-group">
-												              <input type="checkbox" id="disableCheck">
-												              <label for="checkDisabel">비활성화 근무자</label>
-													        </div>
-														</div>
-														<div class="col-sm-12 col-md-6">
-															<div id="datatables-buttons_filter" class="dataTables_filter">
-																<form class="form-inline d-none d-sm-inline-block">
-																	<div class="form-inline">
-																		<label for="name">이름:</label>
-																		<input type="search" name="searchQuery" id="searchName"
-																				class="form-control form-control-sm" placeholder=""
-																				aria-controls="datatables-buttons"></label>
-																		<input type="button" class="btn btn-primary" id="searchBtn" name="searchButton" value="검색">
-																		<input type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal" value="초대하기">
-																	</div>
-																</form>
+																<label class="form-label">이메일</label>
+																<input type="text" class="form-control" id="resendInviteEmail" name="reInviteEmail"  placeholder="이메일을 입력해주세요">
 															</div>
-														</div>
-														<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
-															<div class="modal-dialog modal-dialog-centered" role="document">
-																<div class="modal-content">
-																	<div class="modal-header">
-																		<h5 class="modal-title">근무자 초대하기</h5>
-																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-													                      <span aria-hidden="true">&times;</span>
-													                    </button>
-																	</div>
-																	<div class="modal-body m-3">
-																		<form id="validation-form">
-																			<div class="form-group">
-																				<label class="form-label">이름</label>
-																				<input type="text" class="form-control"  id="inviteName" name="inviteName" placeholder="이름을 입력해주세요">
-																				<br>
-																				<label class="form-label">이메일</label>
-																				<input type="text" class="form-control" id="inviteEmail" name="inviteEmail"  placeholder="이메일을 입력해주세요">
-																			</div>
-																		</form>
-																	</div>
-																	<div class="modal-footer">
-																		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-																		<button type="button" class="btn btn-success" id="inviteBtn">초대하기</button>
-																	</div>
-																</div>
-															</div>
-														</div>
+														</form>
 													</div>
-													<div class="row">
-														<div class="col-sm-12">
-															<table id="datatables-buttons"
-																class="table table-striped dataTable no-footer dtr-inline"
-																style="width: 100%;" role="grid"
-																aria-describedby="datatables-buttons_info">
-																<thead>
-																	<tr role="row">
-																		<th>이름</th>
-																		<th>휴대폰 번호</th>
-																		<th>이메일</th>
-																		<th>급여</th>
-																		<th>상태</th>
-																		<th></th>
-																	</tr>
-																</thead>
-																<tbody id="table_body">
-																	<tr th:each="employ : ${employList}">
-																		<td th:text="${employ.name}"></td>
-																		<td th:if="${employ.phone}">
-																			<a th:href="@{/employ/{branchNo}/{no}(branchNo = ${employ.branchNo}, no = ${employ.no})}"><span th:text="${employ.phone}"></span></a>
-																		</td>
-																		<td th:if="!${employ.phone}"></td>
-																		<td th:if="${employ.email}" th:text="${employ.email}"></td>
-																		<td th:if="!${employ.email}"></td>
-																		<td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
-																		<td th:if="${employ.state} == 'B'" >합류전</td>
-																		<td th:if="${employ.state} == 'C'">합류 완료</td>
-																		<td th:if="${employ.state} == 'D'" >비활성화</td>
-																		<td th:if="${employ.state} != 'C'">
-																			<span data-toggle="modal" data-target="#resendInviteModal" style="color:blue;" 
-																				th:onclick="|javascript:resendSpan('${employ.No}')|">다시 초대하기</span>
-																		</td>
-																		<td th:if="${employ.state} == 'C'"></td>
-																	</tr>
-																</tbody>
-															</table>
-															<div class="modal fade" id="resendInviteModal" tabindex="-1" role="dialog" aria-hidden="true">
-																<div class="modal-dialog modal-dialog-centered" role="document">
-																	<div class="modal-content">
-																		<div class="modal-header">
-																			<h5 class="modal-title">Centered modal</h5>
-																			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														                      <span aria-hidden="true">&times;</span>
-														                    </button>
-																		</div>
-																		<div class="modal-body m-3">
-																			<form id="validation-form">
-																				<div class="form-group">
-																					<label class="form-label">이메일</label>
-																					<input type="text" class="form-control" id="resendInviteEmail" name="reInviteEmail"  placeholder="이메일을 입력해주세요">
-																				</div>
-																			</form>
-																		</div>
-																		<div class="modal-footer">
-																			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-																			<button type="button" class="btn btn-success" id="resendInviteBtn" th:onclick="resendInvite()" >초대하기</button>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-12 col-md-5">
-															<div class="dataTables_info" id="datatables-buttons_info" role="status"
-																aria-live="polite">Showing 1 to 10 of XX entries</div>
-														</div>
-														<div class="col-sm-12 col-md-7">
-															<div class="dataTables_paginate paging_simple_numbers"
-																id="datatables-buttons_paginate">
-																<ul class="pagination">
-																	<li class="paginate_button page-item previous disabled"
-																		id="datatables-buttons_previous"><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="0"
-																			tabindex="0" class="page-link">Previous</a></li>
-																	<li class="paginate_button page-item active"><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="1"
-																			tabindex="0" class="page-link">1</a></li>
-																	<li class="paginate_button page-item "><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="2"
-																			tabindex="0" class="page-link">2</a></li>
-																	<li class="paginate_button page-item "><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="3"
-																			tabindex="0" class="page-link">3</a></li>
-																	<li class="paginate_button page-item "><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="4"
-																			tabindex="0" class="page-link">4</a></li>
-																	<li class="paginate_button page-item "><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="5"
-																			tabindex="0" class="page-link">5</a></li>
-																	<li class="paginate_button page-item "><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="6"
-																			tabindex="0" class="page-link">6</a></li>
-																	<li class="paginate_button page-item next"
-																		id="datatables-buttons_next"><a href="#"
-																			aria-controls="datatables-buttons" data-dt-idx="7"
-																			tabindex="0" class="page-link">Next</a></li>
-																</ul>
-															</div>
-														</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+														<button type="button" class="btn btn-success" id="resendInviteBtn" >초대하기</button>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-			
 							</div>
-						</main>
+						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+	</main>
+</th:block>
 </body>
-
+</html>
 <script>
+var employNo
+function sendEmployNo(no) {
+	employNo = no
+}
+
 $(document).ready(function() {
 	$('#disableCheck').click(function() {
-		searchEmploy()
-	})
+		searchEmploy();
+	});
+	
+	$('#table_body').on('click','button[name=detailBtn]', function() {
+		var currentRow =$ (this).closest('tr');
+		var no = currentRow.find('td:eq(5) button[name="detailBtn"]').val()
+		
+		$('#detail-form').attr('action','/employ/21/' + no);
+		$('#detail-form').submit();
+	});
 	
 	$('#searchBtn').click(function() {
-		searchEmploy()
+		searchEmploy();
+	});
+	
+	$('#search-name').keyup(function(e) {
+		if (e.keyCode == 13) {searchEmploy();}
 	});
 	
 	function searchEmploy() {
-		var state
+		searchData= {name: $('#search-name').val()};
 		if($("#disableCheck").prop('checked') == true) {
-			state = 'D'
+			searchData.state='D';
 		} 
-		var searchData = $('#searchName').val()
 					
 		 $.ajax({
 				url: location.pathname,
 				type:"GET",
-				data: {
-					'name' : searchData,
-					'state': state
-				},
+				data: searchData,
 				contentType: "application/json;charset=UTF-8",
 				success: function(data) {
 					var html = "";
@@ -419,31 +189,42 @@ $(document).ready(function() {
 							html += "<tr>";
 							html += "<td>" + data[i].name + "</td>";
 							if(data[i].phone != null) {
-								html += "<td><a href=\'/employ/" + data[i].branchNo + "/" 
-								+ data[i].no + "\'>" + data[i].phone + "</a></td>";
+								html += "<td>" + data[i].phone + "</td>";
 							} else {
 								html += "<td></td>";
 							}
+							
 							if(data[i].email != null) {
 								html += "<td>" + data[i].email + "</td>"
 							} else {
 								html += "<td></td>";
 							}
+							
 							if(data[i].salary != null) {
 								html += "<td>" + data[i].salary + "</td>"
 							} else {
 								html += "<td></td>";
 							}
 							if('C' == data[i].state) {
-								html += "<td>합류 완료</td><td></td>";
+								html += "<td>합류 완료</td>";
+								html += "<td><button type='button' class='btn btn-primary'" 
+										+ "name='detailBtn' value=" + data[i].no + ">조회</button></td>";
+								html += "<td></td>"
 							} else {
 								if('B' == data[i].state) {
 									html += "<td>합류전</td>";
 								} else if('D' == data[i].state) {
 									html += "<td>비활성화</td>";
 								}
+								if(data[i].phone != null) {
+									html += "<td><button type='button' class='btn btn-primary'" 
+										+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button></td>";
+								} else {
+									html +="<td></td>";
+								}
+								
 								html += "<td><span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
-										+ "style=\'color:blue;\' onclick=\"resendSpan(\'" + data[i].no + "\');\"x> 다시 초대하기</span></td>";
+										+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span></td>";
 							}
 							html += "<tr>";
 						}
@@ -457,7 +238,6 @@ $(document).ready(function() {
 				}
 			});
 	 }
-		
 	
 	$('#inviteModal').on('show.bs.modal')
 	$('#inviteModal').on('hide.bs.modal', function() {
@@ -493,6 +273,31 @@ $(document).ready(function() {
 		$(this).find('form')[0].reset();
 	})
 	
+	$('#resendInviteBtn').click(function() {
+		var resendData = {
+				email : $('input[name=reInviteEmail]').val(),
+				no: employNo
+		}
+		
+		$('#resendInviteModal').modal('hide')
+		$('#resendInviteModal').on('hide.bs.modal', function() {
+			$(this).find('form')[0].reset();
+		})
+		$.ajax({
+			url: '/employ/invite',
+			method: 'PUT',
+			data: JSON.stringify(resendData),
+			datatype: 'json',
+			contentType: 'application/json; charset=utf-8',
+			success: function(response) {
+				alert("초대 메시지 전송을 완료하였습니다.")
+				location.reload();	
+			},
+			error: function(error) {
+				alert("오류가 발생했습니다.");
+			}
+		})
+	})
 	$("#validation-form").validate({
 		ignore: ".ignore, .select2-input",
 		focusInvalid: false,
@@ -517,40 +322,10 @@ $(document).ready(function() {
 			var $el = $(element);
 			var $parent = $el.parents(".form-group");
 			$el.addClass("is-invalid");
-			// Select2 and Tagsinput
 		},
 		unhighlight: function(element) {
 			$(element).parents(".form-group").find(".is-invalid").removeClass("is-invalid");
 		}
 	});
 });
-
-var employNo
-function resendSpan(no) {
-	employNo = no
-}
-
-function resendInvite() {
-	var email = { email: $('input[name=reInviteEmail]').val() };
-	var resendUrl = "/employ/invite/" + employNo;
-	
-	$('#resendInviteModal').modal('hide')
-	$('#resendInviteModal').on('hide.bs.modal', function() {
-		$(this).find('form')[0].reset();
-	})
-	$.ajax({
-		url: resendUrl,
-		method: 'PUT',
-		data: email,
-		datatype: 'json',
-		success: function(response) {
-			alert("초대 메시지 전송을 완료하였습니다.")
-			location.reload();	
-		},
-		error: function(error) {
-			alert("오류가 발생했습니다.");
-		}
-	})
- };
-</script>	
-</html>
+</script>
