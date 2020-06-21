@@ -39,6 +39,7 @@
 									<input type="text" id="email" class="form-control form-control-lg" name="email"/>
 									<div class="text-center-mt-3" id="checkEmailDiv"></div>
 									<br>
+									<div th:text="${message}" class="text-center" style="color:red;"></div>
 									<div class="text-center mt-3">
 										<input type="submit" id="signupBtn" class="btn btn-primary" value="가입하기"/>
 									</div>
@@ -115,7 +116,7 @@
 		
 		$("#email").focusout(function() {
 			var email = $('#email').val();
-			if (email == '') {
+			if (email == '' || email.length <= 1) {
 				$('#checkEmailDiv').html("이메일을 입력해주세요.");
 				$('#checkEmailDiv').css("color", "red");
 			} else {

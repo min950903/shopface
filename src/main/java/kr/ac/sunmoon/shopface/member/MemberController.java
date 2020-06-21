@@ -34,11 +34,6 @@ public class MemberController {
 	
 	@PostMapping("/member")
 	public ModelAndView addMember(Member member, RedirectAttributes redirectAttributes) {
-		log.info(member.getId());
-		log.info(member.getPassword());
-		log.info(member.getPhone());
-		log.info(member.getName());
-		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		if (memberService.addMember(member)) {
@@ -67,8 +62,7 @@ public class MemberController {
 	
 	@GetMapping("/member")
 	public ModelAndView getMemberList(@AuthenticationPrincipal User user) {
-		ModelAndView modelAndView = new ModelAndView("member/_list");
-		modelAndView.addObject("loginUser", user);
+		ModelAndView modelAndView = new ModelAndView("member/list");
 		
 		return modelAndView;
 	}
@@ -83,7 +77,7 @@ public class MemberController {
 	
 	@GetMapping("/member/{id}")
 	public ModelAndView getMember(@PathVariable String id) {
-		ModelAndView modelAndView = new ModelAndView("member/_detail");
+		ModelAndView modelAndView = new ModelAndView("member/detail");
 		
 		Member member = new Member();
 		member.setId(id);

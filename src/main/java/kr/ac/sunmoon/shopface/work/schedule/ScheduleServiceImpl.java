@@ -1,10 +1,11 @@
-package kr.ac.sunmoon.shopface.work;
+package kr.ac.sunmoon.shopface.work.schedule;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import kr.ac.sunmoon.shopface.businessman.BranchMapper;
+import kr.ac.sunmoon.shopface.businessman.branch.BranchMapper;
+import kr.ac.sunmoon.shopface.work.timetable.TimetableMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service

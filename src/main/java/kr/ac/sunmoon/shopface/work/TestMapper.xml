@@ -4,7 +4,7 @@
 
 <mapper namespace="kr.ac.sunmoon.shopface.work.TestMapper">
 
-	<resultMap type="kr.ac.sunmoon.shopface.work.Timetable" id="timetableMap">
+	<resultMap type="kr.ac.sunmoon.shopface.work.timetable.Timetable" id="timetableMap">
 		<id column="NO" property="no" />
 		<result column="BRANCH_NO" property="branchNo" />
 		<result column="WORK_START_TIME" property="workStartTime" />
@@ -14,7 +14,7 @@
 		<result column="REGISTER_DATE" property="registerDate" />
 	</resultMap>
 
-	 <resultMap type="kr.ac.sunmoon.shopface.work.Schedule" id="scheduleMap">
+	 <resultMap type="kr.ac.sunmoon.shopface.work.schedule.Schedule" id="scheduleMap">
 		<id column="NO" property="no" />
 		<result column="TIMETABLE_NO" property="timetableNo" />
 		<result column="MEMBER_ID" property="memberId" />
@@ -22,7 +22,7 @@
 	</resultMap> 
 
 
-	<resultMap type="kr.ac.sunmoon.shopface.businessman.Branch" id="branchMap">
+	<resultMap type="kr.ac.sunmoon.shopface.businessman.branch.Branch" id="branchMap">
 		<id column="NO" property="no" />
 		<result column="BUSINESSMAN_ID" property="businessmanId" />
 		<result column="NAME" property="name" />

@@ -1,5 +1,7 @@
 package kr.ac.sunmoon.shopface.work;
 
+import kr.ac.sunmoon.shopface.work.schedule.Schedule;
+import kr.ac.sunmoon.shopface.work.timetable.Timetable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

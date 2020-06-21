@@ -1,85 +1,214 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorator="layout/template">
-<head th:include="layout/template :: scriptHeader">
-<link rel="stylesheet" th:href="@{/styles/css/classic.css}">
-<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+<head>
+<meta charset="UTF-8">
+<title>회원 목록</title>
 </head>
 <body>
-	<form th:action="@{/logout}" method="post">
-		<span th:text="${loginUser.getUsername()}"></span>
-		<button type="submit">로그아웃</button>
-	</form>
-	<table id="datatables-ajax" class="table table-striped dataTable">
-		<thead>
-			<tr>
-				<th>이름</th>
-				<th>휴대폰 번호</th>
-				<th>이메일</th>
-				<th>상태</th>
-			</tr>
-		</thead>
-		<tbody id="table_body">
-			<tr>
-				<td>검색 결과가 없습니다.</td>
-			</tr>
-		</tbody>
-	</table>
-	<form action="/member" method="get">
-		<select id="condition" name="condition">
-			<option value="name">이름</option>
-			<option value="state">상태</option>
-		</select>
-		<input type="text" id="searchQuery" name="searchQuery">
-		<input type="button" id="searchButton" name="searchButton" value="검색">
-	</form>
+	<th:block layout:fragment="content">
+		<main class="content">
+			<div class="container-fluid p-0">
+				<h1 class="h3 mb-3">회원 목록</h1>
+				<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
+								<div id="datatables-buttons_wrapper"
+									class="dataTables_wrapper dt-bootstrap4 no-footer">
+									<div class="row">
+										<div class="col-sm-12 col-md-6"></div>
+										<div class="col-sm-12 col-md-6">
+											<div id="datatables-buttons_filter" class="dataTables_filter">
+												<!-- form 태그 있던 자리  -->
+												<div class="form-inline">
+													<select id="condition" name="condition"
+														class="form-control">
+														<option value="name">이름</option>
+														<option value="state">상태</option>
+													</select> <input type="text" id="searchQuery" name="searchQuery"
+														class="form-control form-control-sm" placeholder=""
+														aria-controls="datatables-buttons"> <input
+														type="button" class="btn btn-primary" id="searchButton"
+														name="searchButton" value="검색">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="datatables-buttons"
+												class="table table-striped dataTable no-footer dtr-inline"
+												style="width: 100%;" role="grid"
+												aria-describedby="datatables-buttons_info">
+												<thead>
+													<tr role="row">
+														<th>이름</th>
+														<th>휴대폰 번호</th>
+														<th>이메일</th>
+														<th>구분</th>
+														<th>상태</th>
+													</tr>
+												</thead>
+												<tbody id="table_body">
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-5">
+											<div class="dataTables_info" id="datatables-buttons_info"
+												role="status" aria-live="polite">Showing 1 to 10 of XX
+												entries</div>
+										</div>
+										<div class="col-sm-12 col-md-7">
+											<div class="dataTables_paginate paging_simple_numbers"
+												id="datatables-buttons_paginate">
+												<ul class="pagination">
+													<li class="paginate_button page-item previous disabled"
+														id="datatables-buttons_previous"><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="0"
+														tabindex="0" class="page-link">Previous</a></li>
+													<li class="paginate_button page-item active"><a
+														href="#" aria-controls="datatables-buttons"
+														data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+													<li class="paginate_button page-item "><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="2"
+														tabindex="0" class="page-link">2</a></li>
+													<li class="paginate_button page-item "><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="3"
+														tabindex="0" class="page-link">3</a></li>
+													<li class="paginate_button page-item "><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="4"
+														tabindex="0" class="page-link">4</a></li>
+													<li class="paginate_button page-item "><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="5"
+														tabindex="0" class="page-link">5</a></li>
+													<li class="paginate_button page-item "><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="6"
+														tabindex="0" class="page-link">6</a></li>
+													<li class="paginate_button page-item next"
+														id="datatables-buttons_next"><a href="#"
+														aria-controls="datatables-buttons" data-dt-idx="7"
+														tabindex="0" class="page-link">Next</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</th:block>
 </body>
 </html>
-
 <script>
 	var dataObj;
-	$(document).ready(function() {
-		$('#searchButton').click(function() {
-			if ($('#condition').val() == 'name') {
-				dataObj = {
-						"name" : $('#searchQuery').val()
-				}
-			} else {
-				dataObj = {
-						"state" : $('#searchQuery').val()
-				}
-			}
+	$(document).ready(function () {
+		drawTable();
+		
+		$('#searchButton').click(function () {
 			drawTable();
 		})
+		
+		$('#alertsDropdown').click(function() {
+			drawAlarmList();
+		})
+		$('#searchQuery').keyup(function(e) {
+		if (e.keyCode == 13) {
+			drawTable();
+		}
+	})
 	});
-	
+
 	function drawTable() {
+		var url = "/member?";
+		if ($('#condition').val() == 'name') {
+			url += "name=" + $('#searchQuery').val();
+		} else {
+			url += "state=" +  $('#searchQuery').val();
+		}
+		
 		$.ajax({
-			url : "/member",
-			type : "get",
-			data : dataObj,
-			headers : {
-				"Content-Type" : "application/json;charset=UTF-8"
+			url: url,
+			type: "get",
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
 			},
-			success : function(data) {
+			success: function (data) {
 				var html = "";
 				if (data.length > 0) {
-					for(var i = 0; i < data.length; i++) {
-						html+= "	<tr>";
-						html+= "	<td>" + "<a href='/member/" + data[i].id+"'>" + data[i].name + "</a>" + "</td>";
-						html+= "	<td>" + data[i].phone + "</td>";
-						html+= "	<td>" + data[i].email + "</td>";
-						html+= "	<td>" + data[i].state + "</td>";
-						html+= "	</tr>";
+					for (var i = 0; i < data.length; i++) {
+						html += "	<tr>";
+						html += "	<td>" + "<a href='/member/" + data[i].id + "'>" + data[i].name + "</a>" +
+							"</td>";
+						html += "	<td>" + data[i].phone + "</td>";
+						if (data[i].email != null) {
+							html += "	<td>" + data[i].email + "</td>";
+						} else {
+							html += "<td></td>";
+						}
+						if (data[i].type == 'B') {
+							html += "	<td>" + "사업자" + "</td>";
+						} else {
+							html += "	<td>" + "회원" + "</td>";
+						}
+						if (data[i].state == 'A') {
+							html += "	<td>" + "활성화" + "</td>";
+						} else {
+							html += "	<td>" + "비활성화" + "</td>";
+						}
+						html += "	</tr>";
 					}
 				} else {
-					html += "<tr><td>검색 결과가 없습니다.</td></tr>";
+					html += "<tr><td colspan='6'>검색 결과가 없습니다.</td></tr>";
 				}
 				$('#table_body').html(html);
 			},
-			error : function(request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
+			}
+		})
+	}
+	
+	function drawAlarmList() {
+		var url = "/alarm?addresseeId=" + $('#user').html();
+		
+		$.ajax({
+			url: url,
+			type: "get",
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			success: function(data) {
+				var html = "";
+				if (data.length > 0) {
+					for(var i = 0; i < data.length; i++) {
+						html += "<a href='#' class='list-group-item'>";
+						html += "<div class='row no-gutters align-items-center'>";
+						html += "<div class='col-2'></div>";
+						//추후 그림 추가
+						html += "<div class='col-10'>";
+						html += "<div class='text-dark'>" + data[i].type  +"</div>";
+						html += "<div class='text-muted small mt-1'>"+ data[i].contents +"</div>";
+						html += "<div class='text-muted small mt-1'>"+ data[i].registerDate +"</div>";
+						html += "</div>";
+						html += "</div>";
+						html += "</a>";
+					}
+				} else {
+					html += "<div class='row no-gutters align-items-center'><div class='col-10'>알람이 없습니다.</div></div>";
+				}
+				$('#alarmSpace').html(html);
+			},
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
 			}
 		})
 	}
