@@ -2,7 +2,6 @@
 <html
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <th:block th:fragment="layoutFragment">
   <head>
@@ -335,8 +334,8 @@
                   ></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="#"
-                    ><svg
+                  <a class="dropdown-item" th:href="@{'/member/'+${#authentication.principal.username}}">
+                  <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
