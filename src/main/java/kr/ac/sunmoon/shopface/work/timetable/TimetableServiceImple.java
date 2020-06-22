@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import kr.ac.sunmoon.shopface.employ.EmployMapper;
 import kr.ac.sunmoon.shopface.work.TimetableSchedule;
 import kr.ac.sunmoon.shopface.work.schedule.Schedule;
 import kr.ac.sunmoon.shopface.work.schedule.ScheduleMapper;
@@ -71,7 +70,7 @@ public class TimetableServiceImple implements TimetableService {
 	 * 시간표 목록 조회
 	 * */
 	@Override
-	public List<TimetableSchedule> selectTimetableList(int branchNo) {
+	public List<TimetableSchedule> getTimetableList(int branchNo) {
 		List<TimetableSchedule> timetableSchedules = new ArrayList<TimetableSchedule>();
 		try {
 			//1. 지점 일련 번호를 받았느니 확인
@@ -80,18 +79,17 @@ public class TimetableServiceImple implements TimetableService {
 				//2. 지점 일련 번호가 있으면 시간표 조회 
 				Timetable timetable = new Timetable();
 				timetable.setBranchNo(branchNo);
-				
 				List<Timetable> timetables = this.timetableMapper.selectAll(timetable);
 				//3. 한 시간표와 연관된 스케줄 존재 시 list에 저장
 				if (timetables.size() > 0) {
-					for (int i = 1; i <= timetables.size(); i++) {
+					for (int i = 0; i < timetables.size(); i++) {
 						int no = timetables.get(i).getNo();
 						
 						Schedule parameterSchedule = new Schedule();
 						parameterSchedule.setTimetableNo(no);
 						
 						List<Schedule> schedules = this.scheduleMapper.selectAll(parameterSchedule);
-						for (int j = 1; j <= schedules.size(); j++) {
+						for (int j = 0; j < schedules.size(); j++) {
 							timetableSchedules.add(new TimetableSchedule(timetables.get(i), schedules.get(j)));
 						}
 					}
@@ -103,6 +101,7 @@ public class TimetableServiceImple implements TimetableService {
 				return timetableSchedules;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return timetableSchedules;
 		} 
 	}
@@ -186,7 +185,7 @@ public class TimetableServiceImple implements TimetableService {
 									return true;
 								}
 							} else {
-//								//		6. 존재하지 않는 경우 연관된 시간표를 삭제한다.
+								//6. 존재하지 않는 경우 연관된 시간표를 삭제한다.
 								this.timetableMapper.delete(new Timetable(schedule.getTimetableNo()));
 								return true;
 							}

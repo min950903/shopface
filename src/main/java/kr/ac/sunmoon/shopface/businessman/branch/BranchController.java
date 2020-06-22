@@ -31,7 +31,7 @@ public class BranchController {
 	 * */
 	@GetMapping("/branch/form")
 	public ModelAndView addBranchForm() {
-		ModelAndView mav = new ModelAndView("branch/add");
+		ModelAndView mav = new ModelAndView("businessman/branch/add");
 		return mav;
 	}
 	
@@ -60,7 +60,7 @@ public class BranchController {
 	 **/
 	@GetMapping(value = "/branch")
 	public ModelAndView getBranchList(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
-		ModelAndView mav = new ModelAndView("branch/list");
+		ModelAndView mav = new ModelAndView("businessman/branch/list");
 		mav.addObject("result", result);
 		return mav;
 	}
@@ -79,7 +79,7 @@ public class BranchController {
 	 * */
 	@GetMapping(value = "/branch/{no}")
 	public ModelAndView getBranch(@RequestParam(value = "result", required = false, defaultValue = "none") String result, @PathVariable(value = "no") int no) {
-		ModelAndView mav = new ModelAndView("branch/detail");
+		ModelAndView mav = new ModelAndView("businessman/branch/detail");
 		try {
 			Branch branch = this.branchService.getBranch(no);
 			mav.addObject("branch", branch);

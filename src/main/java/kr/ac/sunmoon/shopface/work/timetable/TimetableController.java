@@ -42,8 +42,7 @@ public class TimetableController {
 	 * */
 	@GetMapping("/timetable")
 	public ModelAndView getTimetable(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
-		ModelAndView mav = new ModelAndView("timetable/list");
-		log.info("-----------------------------------------------------------------------------");
+		ModelAndView mav = new ModelAndView("work/timetable/testlist");
 		return mav;
 	}
 	
@@ -53,7 +52,6 @@ public class TimetableController {
 	@GetMapping(value = "/timetable", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<TimetableSchedule> getTimetable(int branchNo) {
 		List<TimetableSchedule> timetableSchedule = this.timetableService.selectTimetableList(branchNo);
-		log.info("-------------------------------------시간표 목록 조회---------------------------------------");
 		return timetableSchedule;
 	}
 	

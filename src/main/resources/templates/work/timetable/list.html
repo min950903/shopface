@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorator="layout/template">
+	<head>
+		<meta charset="UTF-8">
+		<title>근무자 목록</title>
+	</head>
+	<body>
+		<th:block layout:fragment="content">
+   			<main class="content">
+				<div class="container-fluid p-0">
+					<h1 class="h3 mb-3">전체 시간표 관리</h1>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<div id="datatables-buttons_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+										<div id="fullcalendar"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</th:block>
+	</body>
+</html>
+<script>
+	var dataObj;
+	$(document).ready(function () {
+		
+	});
+
+	$(function() {
+		$("#fullcalendar").fullCalendar({
+			header : {
+				left : "prev,next today",
+				center : "title", 
+			 	right : "month,agendaWeek,agendaDay" 
+			},
+			weekNumbers : true,
+			eventLimit : true,
+			editable : false,
+			events :[               
+	               {
+	                   title: 'All Day Event',
+	                   start: '2020-06-01',
+	               },
+	               {
+	                   title: 'Long Event',
+	                   start: '2020-06-07',
+	                   end: '2020-06-10'
+	               },
+	               {
+	                   title: 'Meeting',
+	                   start: '2020-06-12T10:30:00',
+	                   end: '2020-06-12T12:30:00'
+	               }
+	               ]
+	
+		});
+	});
+
+
+	
+	function drawTable() {
+		$.ajax({
+			url : "/timetable",
+			type : "get",
+			data : {
+				branchNo : "44"
+			},
+			datatype : "json",
+			headers : {
+				"Content-Type" : "application/json;charset=UTF-8"
+			},
+			success : function(data) {
+				console.log(data);
+			}, error : function(request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		})
+	}
+	
+	
+</script>
+
+
+
+
+
+
