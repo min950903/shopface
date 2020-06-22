@@ -51,7 +51,7 @@ public class TimetableController {
 	 * */
 	@GetMapping(value = "/timetable", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<TimetableSchedule> getTimetable(int branchNo) {
-		List<TimetableSchedule> timetableSchedule = this.timetableService.selectTimetableList(branchNo);
+		List<TimetableSchedule> timetableSchedule = this.timetableService.getTimetableList(branchNo);
 		return timetableSchedule;
 	}
 	

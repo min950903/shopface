@@ -60,53 +60,52 @@
    </main>
 </th:block>
 </body>
-</html>
 <script>
-    $(document).ready(function () {
-        $('#delete_button').click(function () {
-            $('input[name=_method]').val('delete');
-            $('#branch_form').submit();
-        });
-        $('#searchAddressButton').click(function() {
-        	postcodeSearch();
-        })
-    });
-    
-    $('#edit_button').click(function () {
-    	var valid = true;
-    	
-    	var values = new Array($('#name').val()
-    							,$('#phone').val()
-    							,$('#zipCode').val()
-    							,$('#address').val()
-    							,$('#detailAddress').val());
-    	
-    	for (var i = 0; i < 5; i ++) {
-    		console.log(values[i] + "----" + i + "번째" );
-    		if (values[i] == '') {
-    			valid = false;
-    			writeWarningPhrase(i);
-    		}
-    	}
-    	console.log(valid);
-    	
-    	if (valid == true) {
-    		$('input[name=_method]').val('put');
-            $('#branch_form').submit();
-    	}
-    });
-
-    function postcodeSearch() {
-    	new daum.Postcode({
-    		oncomplete: function(data) {
-    			$('input[name=zipCode]').val(data.zonecode);
-    			$('input[name=address]').val(data.address)
-    		}
-    	}).open();
-    };
-    
-    function writeWarningPhrase(i) {
-    	switch(i) {
+	$(document).ready(function () {
+	    $('#delete_button').click(function () {
+	        $('input[name=_method]').val('delete');
+	        $('#branch_form').submit();
+	    });
+	    $('#searchAddressButton').click(function() {
+	    	postcodeSearch();
+	    })
+	});
+	
+	$('#edit_button').click(function () {
+		var valid = true;
+		
+		var values = new Array($('#name').val()
+								,$('#phone').val()
+								,$('#zipCode').val()
+								,$('#address').val()
+								,$('#detailAddress').val());
+		
+		for (var i = 0; i < 5; i ++) {
+			console.log(values[i] + "----" + i + "번째" );
+			if (values[i] == '') {
+				valid = false;
+				writeWarningPhrase(i);
+			}
+		}
+		console.log(valid);
+		
+		if (valid == true) {
+			$('input[name=_method]').val('put');
+	        $('#branch_form').submit();
+		}
+	});
+	
+	function postcodeSearch() {
+		new daum.Postcode({
+			oncomplete: function(data) {
+				$('input[name=zipCode]').val(data.zonecode);
+				$('input[name=address]').val(data.address)
+			}
+		}).open();
+	};
+	
+	function writeWarningPhrase(i) {
+		switch(i) {
 			case 0 : 
 				$('#checkNameDiv').show();
 				$('#checkNameDiv').html("이름을 입력해주세요.");
@@ -133,7 +132,7 @@
 				$('#checkDetailAddressDiv').css("color", "red");
 				break;
 		}
-    }
-    
-    /* alertsDropdown 알람 버튼 id */
+	}
+
 </script>
+</html>

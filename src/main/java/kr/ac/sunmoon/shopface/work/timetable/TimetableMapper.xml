@@ -31,7 +31,6 @@
 		WHERE NO = #{no}
 	</select>
 	
-	
 	<select id="selectAll" parameterType="Timetable" resultType="TimeTable">
 		SELECT 
 			 NO
