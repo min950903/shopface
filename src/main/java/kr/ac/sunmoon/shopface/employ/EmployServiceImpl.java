@@ -28,12 +28,16 @@ public class EmployServiceImpl implements EmployService {
     public boolean addEmploy(Employ employ) {
         boolean isSuccess = false;
         
-        if (employ.getEmail() != null && employ.getName() != null && employ.getBranchNo() != 0) {
+        if ((employ.getEmail() != null && employ.getEmail() != "") 
+             &&(employ.getName() != null && employ.getName() != "")
+             &&employ.getBranchNo() != 0) {
             employ.setCertiCode(verificationAuthCode(employ));
-            
-            employMapper.insert(employ);
 
             isSuccess = sendInviteMessage(employ);
+            
+            if(isSuccess == true) {
+                employMapper.insert(employ);
+            }
         }
 
         return isSuccess;
@@ -118,7 +122,7 @@ public class EmployServiceImpl implements EmployService {
     public boolean editEmploy(Employ employ) {
         boolean isSuccess = false;
         
-        if (null != employ) {
+        if (employ.getName() != null && employ.getName() != "") {
             employMapper.update(employ);
             isSuccess = true;
         }
@@ -139,24 +143,25 @@ public class EmployServiceImpl implements EmployService {
     public boolean resendInviteMessage(Employ employ) {
         boolean isSuccess = false;
         
-        if (employ.getEmail() != null) {
+        if (employ.getEmail() != null && employ.getEmail() != "") {
             Employ savedEmploy = employMapper.select(employ);
             savedEmploy.setEmail(employ.getEmail());
             savedEmploy.setCertiCode(verificationAuthCode(savedEmploy));
             
-            if ('D' == savedEmploy.getState()) {
-                savedEmploy.setEmployDate(null);
-                savedEmploy.setCloseDate(null);
-
-                employMapper.update(savedEmploy);
-                savedEmploy.setState('B');
-                employMapper.update(savedEmploy);
+            isSuccess = sendInviteMessage(savedEmploy);
+            if(isSuccess == true) {
+                if ('D' == savedEmploy.getState()) {
+                    savedEmploy.setEmployDate(null);
+                    savedEmploy.setCloseDate(null);
+                    
+                    employMapper.update(savedEmploy);
+                    savedEmploy.setState('B');
+                    employMapper.update(savedEmploy);
+                }
+                isSuccess = true;
+                //TODO
+                // 알람을 등록한다.
             }
-            
-            sendInviteMessage(savedEmploy);
-            
-            // 알람을 등록한다.
-            isSuccess = true;
         }
         
         return isSuccess;
