@@ -48,7 +48,7 @@
 								                    </button>
 												</div>
 												<div class="modal-body m-3">
-													<form id="validation-form">
+													<form id="validation-invite-form">
 														<div class="form-group">
 															<label class="form-label">이름</label>
 															<input type="text" class="form-control"  id="inviteName" name="inviteName" placeholder="이름을 입력해주세요">
@@ -120,7 +120,7 @@
 									                    </button>
 													</div>
 													<div class="modal-body m-3">
-														<form id="validation-form">
+														<form id="validation-reinvite-form">
 															<div class="form-group">
 																<label class="form-label">이메일</label>
 																<input type="text" class="form-control" id="resendInviteEmail" name="reInviteEmail"  placeholder="이메일을 입력해주세요">
@@ -215,7 +215,7 @@ $(document).ready(function() {
 					if(data.length > 0) {
 						for(var i = 0; i < data.length; i++) {
 							html += "<tr>";
-							html += "<td>" + data[i].name + "</td>";
+							html += 	"<td>" + data[i].name + "</td>";
 							if(data[i].phone != null) {
 								html += "<td>" + data[i].phone + "</td>";
 							} else {
@@ -245,14 +245,18 @@ $(document).ready(function() {
 									html += "<td>비활성화</td>";
 								}
 								if(data[i].phone != null) {
-									html += "<td><button type='button' class='btn btn-primary'" 
-										+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button></td>";
+									html += "<td>" 
+											+ "<button type='button' class='btn btn-primary'" 
+											+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button>" 
+										 + "</td>";
 								} else {
 									html +="<td></td>";
 								}
 								
-								html += "<td><span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
-										+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span></td>";
+								html += "<td>" 
+											+ "<span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
+											+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span>" 
+									  + "</td>";
 							}
 							html += "<tr>";
 						}
@@ -308,8 +312,8 @@ $(document).ready(function() {
 	
 	$('#resendInviteBtn').click(function() {
 		var resendData = {
-				email : $('input[name=reInviteEmail]').val(),
-				no: employNo
+				'email' : $('input[name=reInviteEmail]').val(),
+				'no': employNo
 		}
 		
 		$('#resendInviteModal').modal('hide')
@@ -336,23 +340,17 @@ $(document).ready(function() {
 			}
 		})
 	})
-	$("#validation-form").validate({
-		ignore: ".ignore, .select2-input",
+	
+	$("#validation-invite-form").validate({
 		focusInvalid: false,
 		rules: {
 			"inviteEmail": {
 				required: true,
 				email: true
-			},
-			"reInviteEmail": {
-				required: true,
-				email: true
 			}
 		},
-		// Errors
 		errorPlacement: function errorPlacement(error, element) {
 			var $parent = $(element).parents(".form-group");
-			// Do not duplicate errors
 			if ($parent.find(".jquery-validation-error").length) {
 				return;
 			}
