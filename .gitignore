@@ -34,3 +34,4 @@ build/
 
 application-db.properties
 application-mail.properties
+/bin/
