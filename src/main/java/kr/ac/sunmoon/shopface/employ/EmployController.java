@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -86,9 +87,9 @@ public class EmployController {
     }
     
     @GetMapping(value = "/employ/check", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> checkCertiCode(Employ employ) {
+    public Map<String, Object> checkCertiCode(Employ employ, @RequestParam("date") String expiredDate) {
     	Map<String, Object> result = new HashMap<String, Object>();
-    	if (employService.checkCertiCode(employ)) {
+    	if (employService.checkCertiCode(employ, expiredDate)) {
     		result.put("isCorrect", true);
     	} else {
     		result.put("isCorrect", false);

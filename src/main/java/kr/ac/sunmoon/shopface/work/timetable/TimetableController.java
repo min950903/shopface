@@ -42,7 +42,7 @@ public class TimetableController {
 	 * */
 	@GetMapping("/timetable")
 	public ModelAndView getTimetable(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
-		ModelAndView mav = new ModelAndView("work/timetable/testlist");
+		ModelAndView mav = new ModelAndView("work/timetable/list");
 		return mav;
 	}
 	

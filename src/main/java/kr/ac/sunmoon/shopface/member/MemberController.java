@@ -33,12 +33,12 @@ public class MemberController {
 	public ModelAndView addMember(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView("member/add");
 		
-		
 		String referrer = request.getHeader("Referer");
-		log.info(referrer);
-		
-//		modelAndView.addObject("type", "E");
-		modelAndView.addObject("type", "B");
+		if ("employ".equals(referrer.substring(referrer.lastIndexOf("/") + 1))) {
+			modelAndView.addObject("type", "E");
+		} else {
+			modelAndView.addObject("type", "B");
+		}
 		
 		return modelAndView;
 	}

@@ -97,7 +97,7 @@ public class EmployServiceImpl implements EmployService {
         }
 
         String contents = "안녕하세요" + employ.getName() + "님 \r\n" + "초대경로와 인증코드 첨부드립니다. \r\n" + "초대경로 : "
-                            + "http://nabar/check/date?" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
+                            + "http://localhost:8080/employ/check?date=" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(employ.getEmail());
@@ -169,14 +169,29 @@ public class EmployServiceImpl implements EmployService {
 
     @Transactional
 	@Override
-	public boolean checkCertiCode(Employ employ) {
+	public boolean checkCertiCode(Employ employ, String expiredDate) {
+    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    	
+    	CryptogramImpl cryptogram = new CryptogramImpl(secretKey);
+    	String decryptDate = "";
+    	Date targetDate = null;
+    	Date currentDate = null;
+    	try {
+			decryptDate = cryptogram.decrypt(expiredDate);
+			targetDate = simpleDateFormat.parse(decryptDate);
+			currentDate = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
     	boolean isCorrect = false;
-    	if (employMapper.findByCertiCode(employ) > 0) {
-    		isCorrect = true;
+    	int compareResult = targetDate.compareTo(currentDate);
+    	if (compareResult <= -1) {
+    		if (employMapper.findByCertiCode(employ) > 0) {
+    			isCorrect = true;
+    		}
     	}
     	
 		return isCorrect;
 	}
-    
-    
 }

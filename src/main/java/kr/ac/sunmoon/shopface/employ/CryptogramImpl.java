@@ -7,8 +7,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.StringUtils;
-
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 
 public class CryptogramImpl {
 	private String iv;

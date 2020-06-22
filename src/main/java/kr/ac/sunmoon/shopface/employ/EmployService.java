@@ -15,5 +15,5 @@ public interface EmployService {
     public SimpleMailMessage createInviteMessage(Employ employ);
     public boolean sendInviteMessage(Employ employ);
     public boolean resendInviteMessage(Employ employ);
-    public boolean checkCertiCode(Employ employ);
+    public boolean checkCertiCode(Employ employ, String expiredDate);
 }
