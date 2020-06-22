@@ -2,6 +2,8 @@ package kr.ac.sunmoon.shopface.member;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,17 @@ public class MemberController {
 	private final MemberService memberService;
 	
 	@GetMapping("/member/form")
-	public ModelAndView addMember() {	
-		return new ModelAndView("member/add");
+	public ModelAndView addMember(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("member/add");
+		
+		
+		String referrer = request.getHeader("Referer");
+		log.info(referrer);
+		
+//		modelAndView.addObject("type", "E");
+		modelAndView.addObject("type", "B");
+		
+		return modelAndView;
 	}
 	
 	@PostMapping("/member")
@@ -69,9 +80,6 @@ public class MemberController {
 	
 	@GetMapping(value = "/member", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Member> getMemberList(Member member) {
-		log.info(String.valueOf(member.getState()));
-		log.info(member.getName());
-		
 		return memberService.getMemberList(member);
 	}
 	

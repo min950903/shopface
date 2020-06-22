@@ -161,4 +161,17 @@ public class EmployServiceImpl implements EmployService {
         
         return isSuccess;
     }
+
+    @Transactional
+	@Override
+	public boolean checkCertiCode(Employ employ) {
+    	boolean isCorrect = false;
+    	if (employMapper.findByCertiCode(employ) > 0) {
+    		isCorrect = true;
+    	}
+    	
+		return isCorrect;
+	}
+    
+    
 }

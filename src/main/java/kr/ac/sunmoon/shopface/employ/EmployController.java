@@ -79,4 +79,21 @@ public class EmployController {
         
         return responseMap;
     }
+    
+    @GetMapping("/employ")
+    public ModelAndView certificationCode() {
+    	return new ModelAndView("/member/authenticationCode");
+    }
+    
+    @GetMapping(value = "/employ/check", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> checkCertiCode(Employ employ) {
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	if (employService.checkCertiCode(employ)) {
+    		result.put("isCorrect", true);
+    	} else {
+    		result.put("isCorrect", false);
+    	}
+    	
+    	return result;
+    }
 }

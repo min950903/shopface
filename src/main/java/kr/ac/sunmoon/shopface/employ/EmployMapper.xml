@@ -39,6 +39,10 @@
         </where>
     </select>
     
+    <select id="findByCertiCode" parameterType="employ" resultType="int">
+    	 SELECT COUNT(*) FROM EMPLOY WHERE CERTI_CODE= #{certiCode}
+    </select>
+    
     <insert id="insert" parameterType="employ">
         INSERT INTO EMPLOY(NO, BRANCH_NO, NAME, CERTI_CODE)
         VALUES(EMPLOY_NO_SEQ.NEXTVAL, #{branchNo}, #{name}, #{certiCode})

@@ -11,4 +11,5 @@ public interface EmployMapper {
     public void insert(Employ employ);
     public void update(Employ employ);
     public void delete(Employ employ);
+    public int findByCertiCode(Employ employ);
 }

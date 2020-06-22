@@ -38,7 +38,7 @@
 
           <ul class="sidebar-nav">
             <li class="sidebar-header">Pages</li>
-            <li class="sidebar-item">
+            <li class="sidebar-item" sec:authorize="hasRole('ROLE_ADMIN')">
               <a
                 href="#dashboards"
                 data-toggle="collapse"
@@ -78,7 +78,7 @@
                 </li>
               </ul>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
               <a
                 href="#pages"
                 data-toggle="collapse"
@@ -112,7 +112,7 @@
                 </li>
               </ul>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item" sec:authorize="hasRole('ROLE_MEMBER')">
               <a
                 href="#auth"
                 data-toggle="collapse"
@@ -147,7 +147,7 @@
                 </li>
               </ul>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item" sec:authorize="hasAnyRole('ROLE_BUSINESSMAN', 'ROLE_MEMBER')">
               <a
                 href="#documentation"
                 data-toggle="collapse"
@@ -183,7 +183,7 @@
                 </li>
               </ul>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item" sec:authorize="hasAnyRole('ROLE_BUSINESSMAN', 'ROLE_ADMIN')">
               <a
                 href="#ui"
                 data-toggle="collapse"
@@ -213,13 +213,13 @@
                 class="sidebar-dropdown list-unstyled collapse"
                 data-parent="#sidebar"
               >
-                <li class="sidebar-item">
+                <li class="sidebar-item" sec:authorize="hasAnyRole('ROLE_BUSINESSMAN', 'ROLE_ADMIN')">
                   <a class="sidebar-link" href="/branch">사업장 관리</a>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
                   <a class="sidebar-link" href="/occupation">업무 관리</a>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
                   <a class="sidebar-link" href="/employ/21">근무자 관리</a>
                 </li>
               </ul>

@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final MemberService memberService;
+	private final CustomSuccessHandler successHanlder;
+	
 	
 	@Bean
     public SpringSecurityDialect springSecurityDialect(){
@@ -44,16 +46,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//추후에 관리자 추가
 		http.authorizeRequests()
-			.antMatchers("/login", "/member/form", "/member/check").permitAll()
+			.antMatchers("/login", "/member/form", "/member/check", "/employ", "/employ/check").permitAll()
 			.antMatchers(HttpMethod.POST, "/member", "/employ", "/login").permitAll()
 			.antMatchers(HttpMethod.PUT, "/employ", "/employ/invite/").permitAll()
-			.antMatchers("/**").hasRole("MEMBER")
+			.antMatchers("/member").hasRole("ADMIN")
+			.antMatchers("/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MEMBER", "ROLE_BUSINESSMAN")
 		.and()
 			.formLogin()
 			.loginPage("/login")
-			.defaultSuccessUrl("/member", true)
+			.successHandler(successHanlder)
 			.usernameParameter("id")
 			.failureUrl("/login?error")
 			.permitAll()
@@ -61,11 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logout()
 			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 			.logoutSuccessUrl("/login")
-			.deleteCookies("JSESSIONID")
 			.invalidateHttpSession(true)
+			.deleteCookies("JSESSIONID")
 		.and()
-			.exceptionHandling().accessDeniedPage("/login")
-		.and()
-		    .csrf().ignoringAntMatchers("/employ/**","/occupation/**");
+			.exceptionHandling().accessDeniedPage("/login");
 	}
 }
