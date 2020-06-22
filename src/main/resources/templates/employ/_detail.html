@@ -46,7 +46,8 @@
 									</div>
 									<div class="form-group">
 										<label>급여</label>
-										<input type="text" class="form-control" name="salary" th:value="*{salary}">
+										<input type="text" class="form-control" name="salary" th:value="*{salary}" 
+											   onKeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 									</div>
 									<div class="form-group">
 										<label>상태</label>
@@ -75,9 +76,13 @@
 <script>
 	$(document).ready(function() {
 		$('#edit_btn').click(function(){
-			$('input[name=_method]').val('put');
-			changeState();
-			$('#employ_form').submit();
+			var name = $('input[name=name]').val();
+			if( name != null && name != "" ) {
+				$('input[name=_method]').val('put');
+				changeState();
+				$('#employ_form').submit();
+			}
+			alert("이름을 입력해주세요");
 		});
 		
 		$('#disable_btn').click(function() {

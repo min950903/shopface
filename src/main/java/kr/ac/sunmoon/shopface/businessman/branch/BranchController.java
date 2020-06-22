@@ -20,24 +20,24 @@ import org.springframework.web.servlet.view.RedirectView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class BranchController {
 	private final BranchService branchService;
-	
+
 	/**
 	 * 지점 등록 폼
-	 * */
+	 */
 	@GetMapping("/branch/form")
 	public ModelAndView addBranchForm() {
-		ModelAndView mav = new ModelAndView("branch/add");
+		ModelAndView mav = new ModelAndView("businessman/branch/add");
 		return mav;
 	}
-	
+
 	/**
 	 * 지점 등록
-	 * */
+	 */
 	@PostMapping("/branch")
 	public ModelAndView addBranch(RedirectAttributes redirect, Branch branch) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/branch"));
@@ -48,38 +48,41 @@ public class BranchController {
 			} else {
 				redirect.addAttribute("result", "addFail");
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			redirect.addAttribute("result", "addFail");
 		} finally {
 			return mav;
 		}
 	}
-	
+
 	/**
-	 * 지점 목록 조회 폼 
+	 * 지점 목록 조회 폼
 	 **/
 	@GetMapping(value = "/branch")
-	public ModelAndView getBranchList(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
-		ModelAndView mav = new ModelAndView("branch/list");
+	public ModelAndView getBranchList(
+			@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
+		ModelAndView mav = new ModelAndView("businessman/branch/list");
 		mav.addObject("result", result);
 		return mav;
 	}
-	
+
 	/**
 	 * 지점 목록 조회
-	 * */
+	 */
 	@GetMapping(value = "/branch", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Branch> getBranchList(Branch branch) {
 		List<Branch> branches = this.branchService.getBranchList(branch);
 		return branches;
 	}
-	
+
 	/**
 	 * 지점 조회
-	 * */
+	 */
 	@GetMapping(value = "/branch/{no}")
-	public ModelAndView getBranch(@RequestParam(value = "result", required = false, defaultValue = "none") String result, @PathVariable(value = "no") int no) {
-		ModelAndView mav = new ModelAndView("branch/detail");
+	public ModelAndView getBranch(
+			@RequestParam(value = "result", required = false, defaultValue = "none") String result,
+			@PathVariable(value = "no") int no) {
+		ModelAndView mav = new ModelAndView("businessman/branch/detail");
 		try {
 			Branch branch = this.branchService.getBranch(no);
 			mav.addObject("branch", branch);
@@ -89,10 +92,10 @@ public class BranchController {
 			return mav;
 		}
 	}
-	
+
 	/**
 	 * 지점 수정
-	 * */
+	 */
 	@PutMapping("/branch/{no}")
 	public ModelAndView editBranch(RedirectAttributes redirect, Branch branch) {
 		try {
@@ -105,13 +108,13 @@ public class BranchController {
 		} catch (Exception e) {
 			redirect.addAttribute("result", "editFail");
 		}
-		
+
 		return new ModelAndView(new RedirectView("/branch/" + branch.getNo()));
 	}
-	
+
 	/**
 	 * 지점 삭제
-	 * */
+	 */
 	@DeleteMapping("/branch/{no}")
 	public ModelAndView removeBranch(Branch branch) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/branch"));
@@ -122,11 +125,11 @@ public class BranchController {
 			} else {
 				mav.addObject("result", "deleteFail");
 			}
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			mav.addObject("result", "deleteFail");
 		}
-		
+
 		return mav;
 	}
 }

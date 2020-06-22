@@ -19,15 +19,16 @@
 								class="dataTables_wrapper dt-bootstrap4 no-footer">
 								<div class="row">
 									<div class="col-sm-12 col-md-6">
-										<div class="form-group">
+										<div class="form-group" id="check-disable">
 							              <input type="checkbox" id="disableCheck">
 							              <label for="checkDisabel">비활성화 근무자</label>
+							              <label id="count-Disable"></label>
 								        </div>
 									</div>
 									<div class="col-sm-12 col-md-6">
 										<div class="row">
 											<div class="form-inline col-5"></div>
-												<div class="form-inline col ml-4">
+												<div class="form-inline col ml-6	">
 													<label for="name">이름:</label>
 													<input type="search" id="search-name"
 															class="form-control form-control-sm mr-1 ml-1" placeholder=""
@@ -47,7 +48,7 @@
 								                    </button>
 												</div>
 												<div class="modal-body m-3">
-													<form id="validation-form">
+													<form id="validation-invite-form">
 														<div class="form-group">
 															<label class="form-label">이름</label>
 															<input type="text" class="form-control"  id="inviteName" name="inviteName" placeholder="이름을 입력해주세요">
@@ -119,7 +120,7 @@
 									                    </button>
 													</div>
 													<div class="modal-body m-3">
-														<form id="validation-form">
+														<form id="validation-reinvite-form">
 															<div class="form-group">
 																<label class="form-label">이메일</label>
 																<input type="text" class="form-control" id="resendInviteEmail" name="reInviteEmail"  placeholder="이메일을 입력해주세요">
@@ -152,6 +153,32 @@ function sendEmployNo(no) {
 }
 
 $(document).ready(function() {
+	countDisable();
+	
+	function countDisable() {
+		$.ajax({
+			url: location.pathname,
+			type:'GET',
+			data: {
+				'state': 'D'
+			},
+			contentType: "application/json;charset=UTF-8",
+			success: function(employList) {
+				var countDisableState = 0;
+				
+				if(employList.length > 0) {
+					for(var i = 0; i < employList.length; i++) {
+						if(employList[i].state == 'D') {
+							countDisableState++;
+						}
+					}
+				}
+				$('#count-Disable').html("<label for='countDisable'>(" + countDisableState + ")</label>");
+			}
+			
+		});
+	};
+	
 	$('#disableCheck').click(function() {
 		searchEmploy();
 	});
@@ -188,7 +215,7 @@ $(document).ready(function() {
 					if(data.length > 0) {
 						for(var i = 0; i < data.length; i++) {
 							html += "<tr>";
-							html += "<td>" + data[i].name + "</td>";
+							html += 	"<td>" + data[i].name + "</td>";
 							if(data[i].phone != null) {
 								html += "<td>" + data[i].phone + "</td>";
 							} else {
@@ -218,14 +245,18 @@ $(document).ready(function() {
 									html += "<td>비활성화</td>";
 								}
 								if(data[i].phone != null) {
-									html += "<td><button type='button' class='btn btn-primary'" 
-										+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button></td>";
+									html += "<td>" 
+											+ "<button type='button' class='btn btn-primary'" 
+											+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button>" 
+										 + "</td>";
 								} else {
 									html +="<td></td>";
 								}
 								
-								html += "<td><span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
-										+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span></td>";
+								html += "<td>" 
+											+ "<span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
+											+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span>" 
+									  + "</td>";
 							}
 							html += "<tr>";
 						}
@@ -260,7 +291,12 @@ $(document).ready(function() {
 			data: formData,
 			datatype: 'json',
 			success: function(response) {
-				alert("초대 메시지 전송을 완료하였습니다.");
+				if(response.isSuccess) {
+					alert("초대 메시지 전송을 완료하였습니다.");
+				} else {
+					alert("초대메시지 전송에 실패했습니다.\r\n이름과 이메일을 입력해주세요");
+				}
+				
 				location.reload();
 			},
 			error: function(error) {
@@ -276,8 +312,8 @@ $(document).ready(function() {
 	
 	$('#resendInviteBtn').click(function() {
 		var resendData = {
-				email : $('input[name=reInviteEmail]').val(),
-				no: employNo
+				'email' : $('input[name=reInviteEmail]').val(),
+				'no': employNo
 		}
 		
 		$('#resendInviteModal').modal('hide')
@@ -291,16 +327,21 @@ $(document).ready(function() {
 			datatype: 'json',
 			contentType: 'application/json; charset=utf-8',
 			success: function(response) {
-				alert("초대 메시지 전송을 완료하였습니다.")
-				location.reload();	
+				if(response.isSuccess) {
+					alert("초대 메시지 전송을 완료하였습니다.");
+				} else {
+					alert("초대메시지 전송에 실패했습니다.\r\n올바른 이메일을 입력해주세요");
+				}
+				
+				location.reload();
 			},
 			error: function(error) {
 				alert("오류가 발생했습니다.");
 			}
 		})
 	})
-	$("#validation-form").validate({
-		ignore: ".ignore, .select2-input",
+	
+	$("#validation-invite-form").validate({
 		focusInvalid: false,
 		rules: {
 			"inviteEmail": {
@@ -308,10 +349,8 @@ $(document).ready(function() {
 				email: true
 			}
 		},
-		// Errors
 		errorPlacement: function errorPlacement(error, element) {
 			var $parent = $(element).parents(".form-group");
-			// Do not duplicate errors
 			if ($parent.find(".jquery-validation-error").length) {
 				return;
 			}

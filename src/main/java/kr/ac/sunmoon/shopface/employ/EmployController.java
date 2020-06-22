@@ -59,7 +59,7 @@ public class EmployController {
     
     @PutMapping(value = "/employ/{branchNo}")
     public ModelAndView editEmploy(@PathVariable int branchNo, Employ employ) {
-        employService.editEmploy(employ);
+        boolean isSuccess = employService.editEmploy(employ);
         ModelAndView modelAndView = new ModelAndView("/employ/_detail.html");
         
         return modelAndView;

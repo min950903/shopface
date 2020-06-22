@@ -1,52 +1,138 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-	<head th:fragment="scriptHeader">
-		<meta charset="UTF-8">
-		<title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">Shop Face</title>
-		<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-		</script>
-	</head>
-	<body>
-		<form id="branch" th:action="@{/branch/{no}(no=${branch.no})}" method="post">
-			<input type="hidden" name="_method">
-			<input type="hidden" name="memberId" value="admin">
-			<label for="name">지점 명 : </label>
-			<input type="text" name="name" th:value="${branch.name}"><br>
-			
-			<label for="phone">전화번호 : </label>
-			<input type="text" name="phone" th:value="${branch.phone}"><br>
-			
-			<label for="address">주소 : </label>
-			<input type="text" name="address" th:value="${branch.address}" ><br>
-			
-			<label for="detailAddress">상세주소</label>
-			<input type="text" name="detailAddress" th:value="${branch.detailAddress}"><br>
-			
-			<label for="zipNo">우편번호</label>
-			<input type="text" name="zipNo" th:value="${branch.zipNo}"><br>
-			
-			<label for="businessLPath">사업자등록증 업로드 : </label>
-			<input type="text" name="businessLPath" th:value="${branch.businessLPath}"><br>
-			
-			<div id="message_div"></div>
-			<a id="edit_button">수정</a>
-			<a id="delete_button">삭제</a>
-		</form>
-	</body>
-</html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorator="layout/template">
+<head>
+<meta charset="UTF-8">
+<title>근무자 목록</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+   <main class="content">
+      <div class="content">
+           	<div class="container-fluid p-0">
+           		<h1>사업장 조회</h1>
+           		<div class="row">
+           			<div class="col-12">
+           				<div class="card">
+           					<div class="card-header"></div>
+           					<div class="card-body">
+           						<form id="branch_form" th:action="@{/branch/{no}(no=${branch.no})}" method="post">
+				                    <input type="hidden" name="_method">
+				                    <input type="hidden" name="memberId" value="admin">
+           							<div class="form-group col-md-4">
+					                    <label for="name">사업장 명 : </label>
+					                    <input type="text" id="name" class="form-control" name="name" th:value="${branch.name}" >
+					                    <div class="text-center-mt-3" id="checkNameDiv"></div>
+           							</div>
+				                    <div class="form-group col-md-4">
+				                    	<label for="phone">전화번호 : </label>
+				                    	<input type="text" id="phone" class="form-control" name="phone" th:value="${branch.phone}" ><br>
+           								<div class="text-center-mt-3" id="checkPhoneDiv"></div>
+           							</div>
+           							<div class="form-group col-md-4">
+           								<label for="zip_code">우편 번호 : </label>
+           								<button type="button" id="searchAddressButton" class="btn btn-outline-primary" >우편번호 찾기</button>
+					                    <input type="text" id="zipCode" class="form-control" name="zipCode" th:value="${branch.zipCode}" readOnly><br>
+           								<div class="text-center-mt-3" id="checkZipCodeDiv"></div>
+           							</div>
+           							<div class="form-group col-md-4">
+           								<label for="address">주소 : </label>
+					                    <input type="text" id="address" class="form-control" name="address" th:value="${branch.address}" readOnly><br>
+           								<div class="text-center-mt-3" id="checkAddressDiv"></div>
+           							</div>
+           							<div class="form-group col-md-2">
+           								<label for="detail_address">상세 주소 : </label>
+					                    <input type="text" id="detailAddress" class="form-control" name="detailAddress" th:value="${branch.detailAddress}" ><br>
+           								<div class="text-center-mt-3" id="checkDetailAddressDiv"></div>
+           							</div>
+				                    <div class="form-group" id="message_div" th:text="${message}" style="color:red;"></div>
+				                    <button type="button" id="edit_button" class="btn btn-outline-primary">수정</button>
+				                    <button type="button" id="delete_button" class="btn btn-outline-primary">삭제</button>
+				                    <button type="button" class="btn btn-outline-primary" onclick="location.href='/branch'">목록</button>
+				                </form>
+           					</div>
+           				</div>
+           			</div>
+           		</div>
+           	</div>
+		</div>
+   </main>
+</th:block>
+</body>
 <script>
-	$(document).ready(function(){
-		$('#edit_button').click(function() {
-			$('input[name=_method]').val('put');
-			$('#branch').submit();
-		});
-		
-		$('#delete_button').click(function(){
-			$('input[name=_method]').val('delete');
-			$('#branch').submit();
-		});
+	$(document).ready(function () {
+	    $('#delete_button').click(function () {
+	        $('input[name=_method]').val('delete');
+	        $('#branch_form').submit();
+	    });
+	    $('#searchAddressButton').click(function() {
+	    	postcodeSearch();
+	    })
 	});
+	
+	$('#edit_button').click(function () {
+		var valid = true;
+		
+		var values = new Array($('#name').val()
+								,$('#phone').val()
+								,$('#zipCode').val()
+								,$('#address').val()
+								,$('#detailAddress').val());
+		
+		for (var i = 0; i < 5; i ++) {
+			console.log(values[i] + "----" + i + "번째" );
+			if (values[i] == '') {
+				valid = false;
+				writeWarningPhrase(i);
+			}
+		}
+		console.log(valid);
+		
+		if (valid == true) {
+			$('input[name=_method]').val('put');
+	        $('#branch_form').submit();
+		}
+	});
+	
+	function postcodeSearch() {
+		new daum.Postcode({
+			oncomplete: function(data) {
+				$('input[name=zipCode]').val(data.zonecode);
+				$('input[name=address]').val(data.address)
+			}
+		}).open();
+	};
+	
+	function writeWarningPhrase(i) {
+		switch(i) {
+			case 0 : 
+				$('#checkNameDiv').show();
+				$('#checkNameDiv').html("이름을 입력해주세요.");
+				$('#checkNameDiv').css("color", "red");
+				break;
+			case 1 :
+				$('#checkPhoneDiv').show();
+				$('#checkPhoneDiv').html("전화번호를 입력해주세요.");
+				$('#checkPhoneDiv').css("color", "red");
+				break;
+			case 2 :
+				$('#checkZipCodeDiv').show();
+				$('#checkZipCodeDiv').html("우편번호를 입력해주세요.");
+				$('#checkZipCodeDiv').css("color", "red");
+				break;
+			case 3 :
+				$('#checkAddressDiv').show();
+				$('#checkAddressDiv').html("주소를 입력해주세요.");
+				$('#checkAddressDiv').css("color", "red");
+				break;
+			case 4 :
+				$('#checkDetailAddressDiv').show();
+				$('#checkDetailAddressDiv').html("상세 주소를 입력해주세요.");
+				$('#checkDetailAddressDiv').css("color", "red");
+				break;
+		}
+	}
+
 </script>
+</html>
