@@ -155,6 +155,9 @@ function sendEmployNo(no) {
 	employNo = no
 }
 
+var header = $("meta[name='_csrf_header']").attr("content");
+var token = $("meta[name=_csrf]").attr("content");
+
 $(document).ready(function() {
 	countDisable();
 	
@@ -280,9 +283,6 @@ $(document).ready(function() {
 		})
 		
 	$('#inviteBtn').click(function() {
-		var header = $("meta[name='_csrf_header']").attr("content");
-		var token = $("meta[name=_csrf]").attr("content");
-		
 		var formData = {
 			'name': $('input[name=inviteName]').val(),
 			'email': $('input[name=inviteEmail]').val()	
@@ -333,6 +333,9 @@ $(document).ready(function() {
 			url: '/employ/invite',
 			method: 'PUT',
 			data: JSON.stringify(resendData),
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
 			datatype: 'json',
 			contentType: 'application/json; charset=utf-8',
 			success: function(response) {
