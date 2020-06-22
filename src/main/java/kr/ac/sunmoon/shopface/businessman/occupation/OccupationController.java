@@ -29,7 +29,7 @@ public class OccupationController {
     
     @GetMapping("/occupation")
     public ModelAndView getOccupationList() {
-        return new ModelAndView("/occupation/_list.html");
+        return new ModelAndView("/businessman/occupation/_list.html");
     }
     
     @GetMapping(value = "/occupation", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -10,6 +10,7 @@
     <select id="selectAll" parameterType="occupation" resultType="occupation">
         SELECT NO, BRANCH_NO, NAME, COLOR FROM OCCUPATION
         WHERE BRANCH_NO = 21
+        ORDER BY NAME
     </select>
     <update id="update" parameterType="occupation">
         UPDATE OCCUPATION SET NAME = #{name}, COLOR = #{color}
