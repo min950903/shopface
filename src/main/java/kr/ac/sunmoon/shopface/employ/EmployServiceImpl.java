@@ -97,7 +97,7 @@ public class EmployServiceImpl implements EmployService {
         }
 
         String contents = "안녕하세요" + employ.getName() + "님 \r\n" + "초대경로와 인증코드 첨부드립니다. \r\n" + "초대경로 : "
-                            + "http://localhost:8080/employ/check?date=" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
+                            + "http://localhost:8080/employ?date=" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(employ.getEmail());

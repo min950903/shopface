@@ -82,12 +82,15 @@ public class EmployController {
     }
     
     @GetMapping("/employ")
-    public ModelAndView certificationCode() {
-    	return new ModelAndView("/member/authenticationCode");
+    public ModelAndView certificationCode(@RequestParam("date") String expiredDate) {
+    	ModelAndView modelAndView = new ModelAndView("/member/authenticationCode");
+    	modelAndView.addObject("date", expiredDate);
+    	
+    	return modelAndView;
     }
     
     @GetMapping(value = "/employ/check", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> checkCertiCode(Employ employ, @RequestParam("date") String expiredDate) {
+    public Map<String, Object> checkCertiCode(Employ employ, @RequestParam("expiredDate") String expiredDate) {
     	Map<String, Object> result = new HashMap<String, Object>();
     	if (employService.checkCertiCode(employ, expiredDate)) {
     		result.put("isCorrect", true);

@@ -18,6 +18,7 @@
 						<div class="card">
 							<div class="m-sm-4">
 								<form th:action="@{/member/form}" method="get">
+									<input type="hidden" id="expiredDate" th:value="${date}" />
 									<label for="id">인증코드  : </label>
 									<input type="text" id="certiCode" class="form-control form-control-lg" name="certiCode"/>
 									<div class="text-center-mt-3" id="checkIdDiv"></div>
@@ -40,12 +41,13 @@
 <script>
 	$("#certiCode").keyup(function() {
 		var certiCode = $('#certiCode').val();
+		var expiredDate = $('#expiredDate').val();
 		if (certiCode == null || certiCode == '') {
 			$('#checkIdDiv').html('인증코드를 입력해주세요.');
 			$('#checkIdDiv').css("color", "red");
 		} else {
 			$.ajax({
-				url: '/employ/check?certiCode=' + certiCode,
+				url: '/employ/check?certiCode=' + certiCode + '&expiredDate=' + expiredDate,
 				type:'get',
 				dataType: 'JSON',
 				headers: {
