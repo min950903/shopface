@@ -24,10 +24,10 @@ public class EmployController {
         
     @PostMapping("/employ/{branchNo}")
     public Map<String, Object> addEmploy(@PathVariable int branchNo, Employ employ) {
-        boolean isSucess = employService.addEmploy(employ);
+        boolean isSuccess = employService.addEmploy(employ);
         
         Map<String, Object> responseMap = new HashMap<String, Object>();
-        responseMap.put("isSucess", isSucess);
+        responseMap.put("isSuccess", isSuccess);
         
         return responseMap;
     }
