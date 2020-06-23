@@ -9,63 +9,8 @@
 </head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <body>
-				<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
-						
-							<div class="modal-header">
-								<h5 class="modal-title"></h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				                     <span aria-hidden="true">&times;</span>
-				                   </button>
-							</div>
-							
-							<div class="modal-body m-3">
-								<form id="validation-form">
-									<div class="form-group">
-										<label class="form-label">이름 
-										<select id='name' name='name' class='form-control'>
-											<option value="">임시1</option>
-										</select></label>
-										<br>
-										<label class="form-label">시간  <select id="startHour" name="startHour" class="form-control">
-												<option value="00">00</option>
-											</select> 시 : <select id="startMin" name="startMin" class="form-control">
-												<option value="00">00</option>
-												<option value="10">10</option>
-												<option value="20">20</option>
-												<option value="30">30</option>
-												<option value="40">40</option>
-												<option value="50">50</option>
-											</select> 분  ~ <select id="endHour" name="endHour" class="form-control">
-												<option value="00">00</option>
-											</select> 시 : <select id="endMin" name="endMin" class="form-control">
-												<option value="00">00</option>
-												<option value="10">10</option>
-												<option value="20">20</option>
-												<option value="30">30</option>
-												<option value="40">40</option>
-												<option value="50">50</option>
-											</select> 분 </label>
-											<br>
-											<label class="form-label">업무</label>
-												<div id="occupation"></div>
-												<input type='text' id="occupation-color" name="color"/>color
-											
-										<label class="form-label">이메일</label>
-										<input type="text" class="form-control" id="inviteEmail" name="inviteEmail"  placeholder="이메일을 입력해주세요">
-									</div>
-								</form>
-							</div>
-							
-							<div class="modal-footer">
-								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary" id="addBtn">시간표 등록</button>
-							</div>
-							
-						</div>
-					</div>
-				</div>
+
+				
    <th:block layout:fragment="content">
       <main class="content">
          <div class="container-fluid p-0">
@@ -78,12 +23,7 @@
 							<div class="col-sm-12 col-md-6"></div>
 							<div class="col-sm-12 col-md-6">
 								<div id="datatables-buttons_filter" class="dataTables_filter">
-									<div class="form-inline"  style="float:right">
-										<div id="searchInput"></div>
-										<input
-											type="button" class="btn btn-primary" id="searchButton"
-											name="searchButton" value="검색"  style="float:right">
-									</div>
+											<button id="testBtn" class="btn">모달 테스트</button>
 								</div>
 							</div>
 						</div>
@@ -101,9 +41,92 @@
                         </div>
                      </div>
                   </div>
+                  
+                  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+						
+							<div class="modal-header">
+								<h5 class="modal-title"><div id="time"></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				                     <span aria-hidden="true">&times;</span>
+				                   </button>
+							</div>
+							
+							<div class="modal-body m-3">
+								<form id="addForm">
+									<div class="form-group">
+										<table id="datatables-buttons"
+													class="table table-striped dataTable no-footer dtr-inline"
+													style="width: 100%;" role="grid"
+													aria-describedby="datatables-buttons_info">
+													<thead>
+													</thead>
+													<tbody id="table_body">
+														<tr role="row">
+															<td>이름</td>
+															<td>
+																<select id='name' name='name' class='form-control'>
+																	<option value="">임시1</option>
+																</select>
+															</td>
+														</tr>
+														<tr>
+															<td>시간  </td>
+															<td>
+																<select id="startHour" name="startHour">
+																	<option value="00">00</option>
+																</select> 시 : <select id="startMin" name="startMin">
+																	<option value="00">00</option>
+																	<option value="10">10</option>
+																	<option value="20">20</option>
+																	<option value="30">30</option>
+																	<option value="40">40</option>
+																	<option value="50">50</option>
+																</select> 분  ~ <select id="endHour" name="endHour">
+																	<option value="00">00</option>
+																</select> 시 : <select id="endMin" name="endMin">
+																	<option value="00">00</option>
+																	<option value="10">10</option>
+																	<option value="20">20</option>
+																	<option value="30">30</option>
+																	<option value="40">40</option>
+																	<option value="50">50</option>
+																</select> 분 
+															</td>
+														</tr>
+														<tr>
+															<td>업무</td>
+															<td>
+																<select id='occupation' name='occupation'>
+																	<option value="">서빙</option>
+																	<option value="">배달</option>
+																</select>
+																<input type='text' id="occupation-color" name="color"/>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</form>
+										<div id="checkDupli"></div>
+									</div>
+							
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary" id="addBtn">시간표 등록</button>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+                  
+                  
                </div>
             </div>
          </div>
+         
+         
       </main>
    </th:block>
 </body>
@@ -114,16 +137,19 @@
 <script type="text/javascript" src="js/spectrum/prettify.js"></script> 
 <script th:inline="javascript">
 	 var branchNo = '';
+	 var username = '';
 	 
 	$(function() {
-		$("#addModal").show();
-		drawSearchBtn();
+		username = /*[[${#authentication.principal.username}]]*/ '';
 		drawCalendar();
 		
-		$('#searchButton').click(function () {
-			if ($('#branchNo').val() != '') {
-				branchNo = $('#branchNo').val();
-			}
+		$('#testBtn').click(function(e){
+			e.preventDefault();
+			$('#addModal').modal("show");
+		});
+		
+		$('#selectBranchDiv').change(function () {
+			branchNo = $('#selectBranchDiv').val();
 			$("#fullcalendar").fullCalendar('destroy');
 			drawCalendar();
 		});
@@ -138,46 +164,6 @@
 			  ]
 		});
 	});
-	
-	function drawSearchBtn() {
-		var username = /*[[${#authentication.principal.username}]]*/ '';
-		var url = "/branch?memberId=" + username;
-		$.ajax({
-			url : "/branch",
-			type : "get",
-			data : {
-				approvalStatus : "Y"
-			},
-			headers : {
-				"Content-Type" : "application/json;charset=UTF-8",			
-			},
-			success : function(data) {
-				var html = "";
-				html += "";
-				html += "<select id='branchNo' name='branchNo' class='form-control' style='float:right'>";
-				for (i in data) {
-					if (data[i].state == 'D') {
-						continue;
-					} else {
-						if (i == 0) {
-							html += "<option value='" + data[i].no + "' selected>" + data[i].name + "</option>";
-						}else {
-							html += "<option value='" + data[i].no + "'>" + data[i].name + "</option>";
-						}
-					}
-				}
-				
-				html += "</select>";
-				
-				$('#searchInput').html(html);
-			},
-			error: function (request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
-					"error:" + error);
-			}
-		})
-	}
-	
 	
 	function drawCalendar() {
 		$("#fullcalendar").fullCalendar({
@@ -202,6 +188,7 @@
 						"Content-Type" : "application/json;charset=UTF-8"
 					},
 					success : function(data) {
+						console.log("지점 변경 후 시간표 그리는 중 .. ");
 						var events = [];
 						for (i in data) {
 							events.push({
@@ -214,7 +201,6 @@
 						}
 						callback(events);
 					}, error : function(request, status, error) {
-						console.log("문제");
 						console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 					}
 				});
