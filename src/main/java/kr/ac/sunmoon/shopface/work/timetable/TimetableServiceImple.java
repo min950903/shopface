@@ -26,7 +26,9 @@ public class TimetableServiceImple implements TimetableService {
 	public boolean addTimetable(Timetable timetable, Schedule schedule) {
 		try {
 			if (timetable.getWorkStartTime() != null 
+					&& "".equals(timetable.getWorkStartTime())
 					&& timetable.getWorkEndTime() != null
+					&& "".equals(timetable.getWorkEndTime())
 					&& timetable.getOccupName() != null
 					&& "".equals(timetable.getOccupName())
 					&& timetable.getOccupColor() != null
@@ -115,14 +117,14 @@ public class TimetableServiceImple implements TimetableService {
 	public boolean editTimetable(Timetable timetable, Schedule schedule) {
 		//1. 현재 시간보다 근무 시작 시간이 지났는지 확인
 		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("YY-MM-DD-HH24:MI:SS");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("YY-MM-DD HH24:MI:SS");
 			
 			Date currentTime = new Date();
 			String current = dateFormat.format(currentTime);
 			
 			Date today = dateFormat.parse(current);
 			
-			String startTime = dateFormat.format(timetable.getWorkStartTime());
+			String startTime = timetable.getWorkStartTime();
 			Date workStartTime = dateFormat.parse(startTime);
 			
 			int compare = today.compareTo(workStartTime);

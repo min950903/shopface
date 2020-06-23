@@ -44,10 +44,10 @@ public class MemberController {
 	}
 	
 	@PostMapping("/member")
-	public ModelAndView addMember(Member member, RedirectAttributes redirectAttributes) {
+	public ModelAndView addMember(Member member, String certiCode, RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		if (memberService.addMember(member)) {
+		if (memberService.addMember(member, certiCode)) {
 			modelAndView.setView(new RedirectView("/login"));
 		} else {
 			modelAndView.setView(new RedirectView("/member/form"));

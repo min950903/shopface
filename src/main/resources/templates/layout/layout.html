@@ -35,6 +35,13 @@
             </svg>
             <span class="align-middle">ShopFace</span>
           </a>
+          
+          <div class="form-row" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
+          	<div class="form-group col-md-8">
+	          <select id="branchSelect" class="form-control">
+	          </select>
+          	</div>
+          </div>
 
           <ul class="sidebar-nav">
             <li class="sidebar-header">Pages</li>
@@ -392,5 +399,33 @@
           </div>
         </footer>
       </div>
+     </div>
   </body>
 </html>
+
+<script>
+	$('document').ready(function() {
+		$.ajax({
+			url: '/branch/check?id=' + id,
+				type:'get',
+				dataType: 'JSON',
+				headers: {
+					"Content-Type" : 'application/json;charset=UTF-8'
+				},
+				success: function(response) {
+					if (response.duplicate == true) {
+						$('#checkIdDiv').html("입력한 아이디가 사용 중 입니다.");
+						$('#checkIdDiv').css("color", "red");
+					} else {
+						$('#checkIdDiv').html("사용가능한 아이디 입니다.");
+						$('#checkIdDiv').css("color", "green");
+					}
+				},
+				error: function() {
+				}
+		});
+		
+		$('#branchSelect').html();
+	});
+
+</script>

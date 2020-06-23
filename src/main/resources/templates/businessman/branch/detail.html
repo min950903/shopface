@@ -4,59 +4,61 @@
    layout:decorator="layout/template">
 <head>
 <meta charset="UTF-8">
-<title>근무자 목록</title>
+<title>사업장 조회</title>
 </head>
 <body>
 <th:block layout:fragment="content">
    <main class="content">
-      <div class="content">
-           	<div class="container-fluid p-0">
-           		<h1>사업장 조회</h1>
-           		<div class="row">
-           			<div class="col-12">
-           				<div class="card">
-           					<div class="card-header"></div>
-           					<div class="card-body">
-           						<form id="branch_form" th:action="@{/branch/{no}(no=${branch.no})}" method="post">
-				                    <input type="hidden" name="_method">
-				                    <input type="hidden" name="memberId" value="admin">
-           							<div class="form-group col-md-4">
-					                    <label for="name">사업장 명 : </label>
-					                    <input type="text" id="name" class="form-control" name="name" th:value="${branch.name}" >
-					                    <div class="text-center-mt-3" id="checkNameDiv"></div>
-           							</div>
-				                    <div class="form-group col-md-4">
-				                    	<label for="phone">전화번호 : </label>
-				                    	<input type="text" id="phone" class="form-control" name="phone" th:value="${branch.phone}" ><br>
-           								<div class="text-center-mt-3" id="checkPhoneDiv"></div>
-           							</div>
-           							<div class="form-group col-md-4">
-           								<label for="zip_code">우편 번호 : </label>
-           								<button type="button" id="searchAddressButton" class="btn btn-outline-primary" >우편번호 찾기</button>
-					                    <input type="text" id="zipCode" class="form-control" name="zipCode" th:value="${branch.zipCode}" readOnly><br>
-           								<div class="text-center-mt-3" id="checkZipCodeDiv"></div>
-           							</div>
-           							<div class="form-group col-md-4">
-           								<label for="address">주소 : </label>
-					                    <input type="text" id="address" class="form-control" name="address" th:value="${branch.address}" readOnly><br>
-           								<div class="text-center-mt-3" id="checkAddressDiv"></div>
-           							</div>
-           							<div class="form-group col-md-2">
-           								<label for="detail_address">상세 주소 : </label>
-					                    <input type="text" id="detailAddress" class="form-control" name="detailAddress" th:value="${branch.detailAddress}" ><br>
-           								<div class="text-center-mt-3" id="checkDetailAddressDiv"></div>
-           							</div>
-				                    <div class="form-group" id="message_div" th:text="${message}" style="color:red;"></div>
-				                    <button type="button" id="edit_button" class="btn btn-outline-primary">수정</button>
-				                    <button type="button" id="delete_button" class="btn btn-outline-primary">삭제</button>
-				                    <button type="button" class="btn btn-outline-primary" onclick="location.href='/branch'">목록</button>
-				                </form>
-           					</div>
-           				</div>
-           			</div>
-           		</div>
-           	</div>
+   	<div class="container-fluid p-0">
+   		<h1>사업장 조회</h1>
+   		<div class="row">
+   			<div class="col-12">
+   				<div class="card">
+   					<div class="card-header"></div>
+   					<div class="card-body">
+   						<form id="branch_form" th:action="@{/branch/{no}(no=${branch.no})}" method="post" enctype="multipart/form-data">
+			                <input type="hidden" name="_method">
+			                <input type="hidden" name="memberId" th:value="${#authentication.principal.username}" />
+   							<div class="form-group col-md-4">
+			                 	<label for="name">사업장 명 : </label>
+			                 	<input type="text" id="name" class="form-control" name="name" th:value="${branch.name}" />
+			                 	<div class="text-center-mt-3" id="checkNameDiv"></div>
+   							</div>
+			                <div class="form-group col-md-4">
+			                	<label for="phone">전화번호 : </label>
+			                	<input type="text" id="phone" class="form-control" name="phone" th:value="${branch.phone}" /><br>
+			   								<div class="text-center-mt-3" id="checkPhoneDiv"></div>
+   							</div>
+   							<div class="form-group col-md-4">
+   								<label for="zip_code">우편 번호 : </label>
+   								<button type="button" id="searchAddressButton" class="btn btn-outline-primary" >우편번호 찾기</button>
+                				<input type="text" id="zipCode" class="form-control" name="zipCode" th:value="${branch.zipCode}" readOnly /><br>
+   								<div class="text-center-mt-3" id="checkZipCodeDiv"></div>
+   							</div>
+   							<div class="form-group col-md-4">
+   								<label for="address">주소 : </label>
+                				<input type="text" id="address" class="form-control" name="address" th:value="${branch.address}" readOnly /><br>
+   								<div class="text-center-mt-3" id="checkAddressDiv"></div>
+   							</div>
+   							<div class="form-group col-md-2">
+   								<label for="detail_address">상세 주소 : </label>
+                 				<input type="text" id="detailAddress" class="form-control" name="detailAddress" th:value="${branch.detailAddress}" /><br>
+   								<div class="text-center-mt-3" id="checkDetailAddressDiv"></div>
+   							</div>
+   							<div class="form-group col-md-4">
+   								<label for="license" class="form-label w-100">사업장 등록증</label>
+   								<input type="file" name="licenseImage" />
+   							</div>
+                			<div class="form-group" id="message_div" th:text="${message}" style="color:red;"></div>
+			                <button type="button" id="edit_button" class="btn btn-outline-primary">수정</button>
+			                <button type="button" id="delete_button" class="btn btn-outline-primary">삭제</button>
+			                <button type="button" class="btn btn-outline-primary" onclick="location.href='/branch'">목록</button>
+           			 </form>
+   					</div>
+				</div>
+			</div>
 		</div>
+   	</div>
    </main>
 </th:block>
 </body>
@@ -132,7 +134,5 @@
 				$('#checkDetailAddressDiv').css("color", "red");
 				break;
 		}
-	}
-
+	};
 </script>
-</html>

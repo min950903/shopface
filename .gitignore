@@ -34,4 +34,5 @@ build/
 
 application-db.properties
 application-mail.properties
+application-aws.properties
 /bin/

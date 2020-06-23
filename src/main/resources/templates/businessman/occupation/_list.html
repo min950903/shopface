@@ -187,9 +187,13 @@ $('document').ready(function() {
 	});
 	
 	$('#post-button').click(function() {
-	 	var occupationColor = $("#occupation-color").spectrum("get").toHexString().toUpperCase();
-		$('input[name=color]').val(occupationColor);
-		$('#post-form').submit();
+		if($('input[name=name]').val() != null && $('input[name=name]').val() != '' ) {
+		 	var occupationColor = $("#occupation-color").spectrum("get").toHexString().toUpperCase();
+			$('input[name=color]').val(occupationColor);
+			$('#post-form').submit();
+		} else {
+			alert("업무명을 입력해주세요");
+		}
 	})
 	
 	$("#occupation-color").spectrum({

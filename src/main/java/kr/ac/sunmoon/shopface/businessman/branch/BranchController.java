@@ -1,11 +1,8 @@
 package kr.ac.sunmoon.shopface.businessman.branch;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -71,8 +69,7 @@ public class BranchController {
 	 */
 	@GetMapping(value = "/branch", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Branch> getBranchList(Branch branch) {
-		List<Branch> branches = this.branchService.getBranchList(branch);
-		return branches;
+		return this.branchService.getBranchList(branch);
 	}
 
 	/**
@@ -97,9 +94,9 @@ public class BranchController {
 	 * 지점 수정
 	 */
 	@PutMapping("/branch/{no}")
-	public ModelAndView editBranch(RedirectAttributes redirect, Branch branch) {
+	public ModelAndView editBranch(Branch branch, MultipartFile licenseImage, RedirectAttributes redirect) {
 		try {
-			boolean result = this.branchService.editBranch(branch);
+			boolean result = this.branchService.editBranch(branch, licenseImage);
 			if (result == true) {
 				redirect.addAttribute("result", "editSuccess");
 			} else {

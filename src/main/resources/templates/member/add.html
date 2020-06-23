@@ -19,6 +19,7 @@
 							<div class="m-sm-4">
 								<form th:action="@{/member}" method="post">
 									<input type="hidden" name="type" th:value="${type}" />
+									<input type="hidden" name="certiCode" th:value="${param.certiCode}" />
 									<label for="id">아이디 : </label>
 									<input type="text" id="id" class="form-control form-control-lg" name="id"/>
 									<div class="text-center-mt-3" id="checkIdDiv"></div>

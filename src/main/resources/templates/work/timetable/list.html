@@ -2,91 +2,181 @@
 <html xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorator="layout/template">
-	<head>
-		<meta charset="UTF-8">
-		<title>근무자 목록</title>
-	</head>
-	<body>
-		<th:block layout:fragment="content">
-   			<main class="content">
-				<div class="container-fluid p-0">
-					<h1 class="h3 mb-3">전체 시간표 관리</h1>
-					<div class="row">
-						<div class="col-12">
-							<div class="card">
-								<div class="card-body">
-									<div id="datatables-buttons_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-										<div id="fullcalendar">
-										</div>
+<head>
+<meta charset="UTF-8">
+<title>전체 시간표 관리</title>
+</head>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<body>
+				<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title"></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				                     <span aria-hidden="true">&times;</span>
+				                   </button>
+							</div>
+							<div class="modal-body m-3">
+								<form id="validation-form">
+									<div class="form-group">
+										<label class="form-label">이름</label>
+										<select id='branchNo' name='branchNo' class='form-control' style='float:right'>
+											<option value="">임시1</option>
+										</select>
+										<input type="text" class="form-control"  id="inviteName" name="inviteName" placeholder="이름을 입력해주세요">
+										<br>
+										<label class="form-label">이메일</label>
+										<input type="text" class="form-control" id="inviteEmail" name="inviteEmail"  placeholder="이메일을 입력해주세요">
 									</div>
-								</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary" id="inviteBtn">초대하기</button>
 							</div>
 						</div>
 					</div>
 				</div>
-			</main>
-		</th:block>
-	</body>
+   <th:block layout:fragment="content">
+      <main class="content">
+         <div class="container-fluid p-0">
+            <h1 class="h3 mb-3">월간 시간표</h1>
+            <div class="row">
+               <div class="col-12">
+                  <div class="card">
+                     <div class="card-header">
+                        <div class="row">
+							<div class="col-sm-12 col-md-6"></div>
+							<div class="col-sm-12 col-md-6">
+								<div id="datatables-buttons_filter" class="dataTables_filter">
+									<div class="form-inline"  style="float:right">
+										<div id="searchInput"></div>
+										<input
+											type="button" class="btn btn-primary" id="searchButton"
+											name="searchButton" value="검색"  style="float:right">
+									</div>
+								</div>
+							</div>
+						</div>
+                     </div>
+                     <div class="card-body">
+                        <div id="datatables-buttons_wrapper"
+                           class="dataTables_wrapper dt-bootstrap4 no-footer">
+                           
+                           <div class="row">
+                              <div class="col-sm-12 col-md-6"></div>
+                              <div class="col-sm-12 col-md-6">
+                              </div>
+                           </div>
+                           <div id="fullcalendar"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </main>
+   </th:block>
+</body>
+</html> 
 <script>
-	var dataObj;
-	$(document).ready(function () {
-		
-	});
-
+	var branchNo = '';
 	$(function() {
-		$("#fullcalendar").fullCalendar({
-			header : {
-				left : "prev,next today",
-				center : "title", 
-			 	right : "month,agendaWeek,agendaDay" 
-			},
-			weekNumbers : true,
-			eventLimit : true,
-			editable : false,
-			events :[               
-	               {
-	                   title: 'All Day Event',
-	                   start: '2020-06-01',
-	               },
-	               {
-	                   title: 'Long Event',
-	                   start: '2020-06-07',
-	                   end: '2020-06-10'
-	               },
-	               {
-	                   title: 'Meeting',
-	                   start: '2020-06-12T10:30:00',
-	                   end: '2020-06-12T12:30:00'
-	               }
-	               ]
-	
-		});
+		drawSearchBtn();
+		drawCalendar();
+		
+		$('#searchButton').click(function () {
+			if ($('#branchNo').val() != '') {
+				branchNo = $('#branchNo').val();
+			}
+			drawCalendar();
+		})
 	});
 	
-	function drawTable() {
+	function drawSearchBtn() {
 		$.ajax({
-			url : "/timetable",
+			url : "/branch",
 			type : "get",
 			data : {
-				branchNo : "44"
+				memberId : "admin",
+				approvalStatus : "Y"
 			},
-			datatype : "json",
 			headers : {
-				"Content-Type" : "application/json;charset=UTF-8"
+				"Content-Type" : "application/json;charset=UTF-8",			
 			},
 			success : function(data) {
-				console.log(data);
-			}, error : function(request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				var html = "";
+				html += "";
+				html += "<select id='branchNo' name='branchNo' class='form-control' style='float:right'>";
+				html += "<option value=''>전체 사업장</option>";
+				for (i in data) {
+					if (data[i].state == 'D') {
+						continue;
+					}
+					html += "<option value='" + data[i].no + "'>" + data[i].name + "</option>";
+				}
+				
+				html += "</select>";
+				
+				$('#searchInput').html(html);
+			},
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
 			}
 		})
 	}
 	
+	
+	function drawCalendar() {
+		$("#fullcalendar").fullCalendar({
+			header : {
+				left : "prev,next today",
+				center : "title", 
+			 	right : "month" 
+			},
+			weekNumbers : true,
+			eventLimit : true,
+			editable : false,
+			displayEventEnd : true,
+			events : function(start, end, timezone, callback) {
+						$.ajax({
+							url : "/timetable",
+							type : "get",
+							data : {
+								branchNo : branchNo
+							},
+							datatype : "json",
+							headers : {
+								"Content-Type" : "application/json;charset=UTF-8"
+							},
+							success : function(data) {
+								var events = [];
+								for (i in data) {
+									events.push({
+							            title: "\n" + data[i].timetable.occupName + "\n" + data[i].schedule.name,
+							            start: data[i].timetable.workStartTime,
+							            end: data[i].timetable.workEndTime, 
+							            color: data[i].timetable.occupColor,
+							            textColor: "#ffffff"
+							        });
+								}
+								callback(events);
+							}, error : function(request, status, error) {
+								console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							}
+						})
+			},
+			timeFormat: 'H:mm',
+			eventClick:function (event) {
+				alert(event.title);
+				return false;
+			},
+			dayClick:function(date, jsEvent, view) {
+				alert("Clicked on : " + date.format());
+				return false;
+			}
+		});
+	}
 </script>
-</html>
-
-
-
-
-
-

@@ -4,20 +4,6 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.branch.BranchMapper">
-	<resultMap id="Branch" type="kr.ac.sunmoon.shopface.businessman.branch.Branch">
-        <id column="NO" property="no"/>
-        <result column="MEMBER_ID" property="memberId"/>
-        <result column="NAME" property="name"/>
-        <result column="PHONE" property="phone"/>
-        <result column="REGISTER_DATE" property="registerDate"/>
-        <result column="ADDRESS" property="address"/>
-        <result column="DETAIL_ADDRESS" property="detailAddress"/>
-        <result column="ZIP_CODE" property="zipCode"/>
-        <result column="BUSINESS_L_PATH" property="businessLPath"/>
-        <result column="STATE" property="state"/>
-        <result column="APPROVAL_STATUS" property="approvalStatus"/>
-    </resultMap>
-
 	<insert id="insert" parameterType="Branch">
 		INSERT INTO BRANCH_NEW(NO, MEMBER_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, STATE, APPROVAL_STATUS)
 		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{memberId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipCode}, 'A', 'W')
@@ -41,7 +27,7 @@
 				AND MEMBER_ID = #{memberId}
 			</if>
 			<if test="approvalStatus != null and approvalStatus != ''">
-				AND APPROBVAL_STATUS = #{approvalStatus}
+				AND APPROVAL_STATUS = #{approvalStatus}
 			</if>
 		</where>
 		ORDER BY NO DESC
