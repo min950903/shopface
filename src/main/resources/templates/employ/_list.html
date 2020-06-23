@@ -90,7 +90,7 @@
 												</tr>
 											</thead>
 											<tbody id="table_body">
-												<tr th:each="employ : ${employList}">
+												<!-- <tr th:each="employ : ${employList}">
 													<td th:text="${employ.name}"></td>
 													<td th:if="${employ.phone}" th:text="${employ.phone}"></td>
 													<td th:if="!${employ.phone}"></td>
@@ -109,7 +109,7 @@
 															th:onclick="|javascript:sendEmployNo('${employ.no}')|">다시 초대하기</span>
 													</td>
 													<td th:if="${employ.state} == 'C'"></td>
-												</tr>
+												</tr> -->
 											</tbody>
 										</table>
 									</form>
@@ -181,12 +181,11 @@ $(document).ready(function() {
 				}
 				$('#count-Disable').html("<label for='countDisable'>(" + countDisableState + ")</label>");
 			}
-			
 		});
 	};
 	
 	$('#disableCheck').click(function() {
-		searchEmploy();
+		drawEmploy();
 	});
 	
 	$('#table_body').on('click','button[name=detailBtn]', function() {
@@ -198,21 +197,25 @@ $(document).ready(function() {
 	});
 	
 	$('#searchBtn').click(function() {
-		searchEmploy();
+		drawEmploy();
 	});
 	
 	$('#search-name').keyup(function(e) {
-		if (e.keyCode == 13) {searchEmploy();}
+		if (e.keyCode == 13) {drawEmploy();}
 	});
 	
-	function searchEmploy() {
-		searchData= {name: $('#search-name').val()};
+	function drawEmploy() {
+		var searchData= {
+			name: $('#search-name').val(),
+			branchNo: $('#selectBranch').val()
+		};
+		
 		if($("#disableCheck").prop('checked') == true) {
 			searchData.state='D';
 		} 
 					
 		 $.ajax({
-				url: location.pathname,
+				url: location.pathname + "/" + searchData.branchNo,
 				type:"GET",
 				data: searchData,
 				contentType: "application/json;charset=UTF-8",
