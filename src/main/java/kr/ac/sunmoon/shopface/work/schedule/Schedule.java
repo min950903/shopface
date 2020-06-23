@@ -16,6 +16,7 @@ public class Schedule implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int no;
 	private int timetableNo;
+	private String name;
 	private String memberId;
 	private char state;
 }

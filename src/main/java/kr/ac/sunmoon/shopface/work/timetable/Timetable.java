@@ -21,8 +21,8 @@ public class Timetable {
 	@NonNull
 	private int no;
 	private int branchNo;
-	private Date workStartTime;
-	private Date workEndTime;
+	private String workStartTime;
+	private String workEndTime;
 	private String occupName;
 	private String occupColor;
 	private String RegisterDate;
