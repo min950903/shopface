@@ -12,6 +12,7 @@
 	<groupId>kr.ac.sunmoon</groupId>
 	<artifactId>shopface</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>shopface</name>
 	<description>SUNMOON UNIV Capstone Design Project ShopFace</description>
 
