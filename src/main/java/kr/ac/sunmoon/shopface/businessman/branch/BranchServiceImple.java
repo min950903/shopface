@@ -20,6 +20,7 @@ public class BranchServiceImple implements BranchService {
 	private final EmployMapper employMapper;
 	
 //	private AmazonS3 s3Client;
+//	private String bucket;
 	
 	@Override
 	public boolean addBranch(Branch branch) {
