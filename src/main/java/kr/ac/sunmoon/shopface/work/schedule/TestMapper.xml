@@ -22,7 +22,7 @@
 	</resultMap> 
 
 
-	<!-- <resultMap type="branch" id="branchMap">
+	 <resultMap type="branch" id="branchMap">
 		<id column="NO" property="no" />
 		<result column="MEMBER_ID" property="memberId" />
 		<result column="NAME" property="name" />
@@ -34,19 +34,19 @@
 		<result column="BUSINESS_PATH" property="businessPath" />
 		<result column="STATE" property="state" />
 		<result column="APPROVAL_STATUS" property="approvalStatus" />
-	</resultMap>  -->
- 
+	</resultMap>  
+
 
 	<resultMap type="test" id="TestMap">
 		<collection property="timetable" resultMap="timetableMap"></collection>
 		<collection property="schedule" resultMap="scheduleMap"></collection>
-		<!-- <collection property="branch" resultMap="branchMap"></collection>	 -->
+		<collection property="branch" resultMap="branchMap"></collection>
 	</resultMap>
 	
 	<select id ="select" resultMap="TestMap">
 		SELECT * 
-		FROM TIMETABLE, BRANCH, SCHEDULE
-		WHERE<!--  TIMETABLE.BRANCH_NO = BRANCH.NO AND --> TIMETABLE.NO = SCHEDULE.TIMETABLE_NO 
+		FROM TIMETABLE T, BRANCH_NEW B, SCHEDULE S
+		WHERE T.BRANCH_NO = B.NO AND T.NO = S.TIMETABLE_NO 
 	</select>
 
 </mapper>

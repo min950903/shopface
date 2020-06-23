@@ -146,7 +146,7 @@ $(function() {
 					var events = [];
 					for (i in data) {
 						events.push({
-				            title: data[i].timetable.occupName /* + "," + data[i].timetable.branchNo */,
+				            title: data[i].timetable.occupName + "," + data[i].branch.name,
 				            start: data[i].timetable.workStartTime,
 				            end: data[i].timetable.workEndTime, 
 				        });
