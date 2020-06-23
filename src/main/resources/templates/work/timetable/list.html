@@ -5,36 +5,64 @@
 <head>
 <meta charset="UTF-8">
 <title>전체 시간표 관리</title>
+<link rel="stylesheet" type="text/css" th:href="@{css/spectrum/spectrum.css}">
 </head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <body>
-				<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
+						
 							<div class="modal-header">
 								<h5 class="modal-title"></h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				                     <span aria-hidden="true">&times;</span>
 				                   </button>
 							</div>
+							
 							<div class="modal-body m-3">
 								<form id="validation-form">
 									<div class="form-group">
-										<label class="form-label">이름</label>
-										<select id='branchNo' name='branchNo' class='form-control' style='float:right'>
+										<label class="form-label">이름 
+										<select id='name' name='name' class='form-control'>
 											<option value="">임시1</option>
-										</select>
-										<input type="text" class="form-control"  id="inviteName" name="inviteName" placeholder="이름을 입력해주세요">
+										</select></label>
 										<br>
+										<label class="form-label">시간  <select id="startHour" name="startHour" class="form-control">
+												<option value="00">00</option>
+											</select> 시 : <select id="startMin" name="startMin" class="form-control">
+												<option value="00">00</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="30">30</option>
+												<option value="40">40</option>
+												<option value="50">50</option>
+											</select> 분  ~ <select id="endHour" name="endHour" class="form-control">
+												<option value="00">00</option>
+											</select> 시 : <select id="endMin" name="endMin" class="form-control">
+												<option value="00">00</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="30">30</option>
+												<option value="40">40</option>
+												<option value="50">50</option>
+											</select> 분 </label>
+											<br>
+											<label class="form-label">업무</label>
+												<div id="occupation"></div>
+												<input type='text' id="occupation-color" name="color"/>color
+											
 										<label class="form-label">이메일</label>
 										<input type="text" class="form-control" id="inviteEmail" name="inviteEmail"  placeholder="이메일을 입력해주세요">
 									</div>
 								</form>
 							</div>
+							
 							<div class="modal-footer">
 								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary" id="inviteBtn">초대하기</button>
+								<button type="button" class="btn btn-primary" id="addBtn">시간표 등록</button>
 							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -79,10 +107,16 @@
       </main>
    </th:block>
 </body>
-</html> 
-<script>
-	var branchNo = '';
+</html>
+<script type="text/javascript" src="js/spectrum/spectrum.js"></script>
+<script type='text/javascript' src="js/spectrum/toc.js"></script>
+<script type='text/javascript' src="js/spectrum/docs.js"></script>
+<script type="text/javascript" src="js/spectrum/prettify.js"></script> 
+<script th:inline="javascript">
+	 var branchNo = '';
+	 
 	$(function() {
+		$("#addModal").show();
 		drawSearchBtn();
 		drawCalendar();
 		
@@ -90,16 +124,28 @@
 			if ($('#branchNo').val() != '') {
 				branchNo = $('#branchNo').val();
 			}
+			$("#fullcalendar").fullCalendar('destroy');
 			drawCalendar();
-		})
+		});
+		
+		$("#occupation-color").spectrum({
+			  showPaletteOnly: true,
+			  showPalette:true,
+			  color: '#0070C0',
+			  palette: [
+			      ['#0070C0', '00B050', '#FFC000', '#7030A0', '#C00000'],
+			      ['#4BACC6', '#9BBB59', '#F79646', '#C0504D', '#7F7F7F']
+			  ]
+		});
 	});
 	
 	function drawSearchBtn() {
+		var username = /*[[${#authentication.principal.username}]]*/ '';
+		var url = "/branch?memberId=" + username;
 		$.ajax({
 			url : "/branch",
 			type : "get",
 			data : {
-				memberId : "admin",
 				approvalStatus : "Y"
 			},
 			headers : {
@@ -109,12 +155,16 @@
 				var html = "";
 				html += "";
 				html += "<select id='branchNo' name='branchNo' class='form-control' style='float:right'>";
-				html += "<option value=''>전체 사업장</option>";
 				for (i in data) {
 					if (data[i].state == 'D') {
 						continue;
+					} else {
+						if (i == 0) {
+							html += "<option value='" + data[i].no + "' selected>" + data[i].name + "</option>";
+						}else {
+							html += "<option value='" + data[i].no + "'>" + data[i].name + "</option>";
+						}
 					}
-					html += "<option value='" + data[i].no + "'>" + data[i].name + "</option>";
 				}
 				
 				html += "</select>";
@@ -140,34 +190,35 @@
 			eventLimit : true,
 			editable : false,
 			displayEventEnd : true,
-			events : function(start, end, timezone, callback) {
-						$.ajax({
-							url : "/timetable",
-							type : "get",
-							data : {
-								branchNo : branchNo
-							},
-							datatype : "json",
-							headers : {
-								"Content-Type" : "application/json;charset=UTF-8"
-							},
-							success : function(data) {
-								var events = [];
-								for (i in data) {
-									events.push({
-							            title: "\n" + data[i].timetable.occupName + "\n" + data[i].schedule.name,
-							            start: data[i].timetable.workStartTime,
-							            end: data[i].timetable.workEndTime, 
-							            color: data[i].timetable.occupColor,
-							            textColor: "#ffffff"
-							        });
-								}
-								callback(events);
-							}, error : function(request, status, error) {
-								console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-							}
-						})
-			},
+			events : function (start, end, timezone, callback) {
+				$.ajax({
+					url : "/timetable",
+					type : "get",
+					data : {
+						branchNo : Number(branchNo)
+					},
+					datatype : "json",
+					headers : {
+						"Content-Type" : "application/json;charset=UTF-8"
+					},
+					success : function(data) {
+						var events = [];
+						for (i in data) {
+							events.push({
+					            title: "\n" + data[i].timetable.occupName + "\n" + data[i].schedule.name,
+					            start: data[i].timetable.workStartTime,
+					            end: data[i].timetable.workEndTime, 
+					            color: data[i].timetable.occupColor,
+					            textColor: "#ffffff"
+					        });
+						}
+						callback(events);
+					}, error : function(request, status, error) {
+						console.log("문제");
+						console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+					}
+				});
+			 },
 			timeFormat: 'H:mm',
 			eventClick:function (event) {
 				alert(event.title);
