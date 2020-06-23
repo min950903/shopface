@@ -27,7 +27,7 @@
 				AND MEMBER_ID = #{memberId}
 			</if>
 			<if test="approvalStatus != null and approvalStatus != ''">
-				AND APPROBVAL_STATUS = #{approvalStatus}
+				AND APPROVAL_STATUS = #{approvalStatus}
 			</if>
 		</where>
 		ORDER BY NO DESC
