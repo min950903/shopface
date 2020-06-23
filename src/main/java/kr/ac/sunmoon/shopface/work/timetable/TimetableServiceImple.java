@@ -72,8 +72,8 @@ public class TimetableServiceImple implements TimetableService {
 	 * 시간표 목록 조회
 	 * */
 	@Override
-	public List<Timetable> getTimetableList(int branchNo) {
-		List<Timetable> timetableSchedules = new ArrayList<Timetable>();
+	public List<TimetableSchedule> getTimetableList(int branchNo) {
+		List<TimetableSchedule> timetableSchedules = new ArrayList<TimetableSchedule>();
 		try {
 			//1. 지점 일련 번호를 받았느니 확인
 			if (branchNo > 0 
@@ -92,9 +92,8 @@ public class TimetableServiceImple implements TimetableService {
 						
 						List<Schedule> schedules = this.scheduleMapper.selectAll(parameterSchedule);
 						for (int j = 0; j < schedules.size(); j++) {
-							/*
-							 * timetableSchedules.add(new Timetable(timetables.get(i), schedules.get(j)));
-							 */
+							
+							timetableSchedules.add(new TimetableSchedule(timetables.get(i), schedules.get(j)));
 						}
 					}
 					return timetableSchedules;
