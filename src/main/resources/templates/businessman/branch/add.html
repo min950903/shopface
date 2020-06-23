@@ -18,7 +18,7 @@
 							<div class="card-header"></div>
 							<div class="card-body">
 								<form id="branch_form" th:action="@{/branch}" method="post">
-									<input type="hidden" name="memberId" value="admin">
+									<input type="hidden" name="memberId" th:value="${#authentication.principal.username}">
 									<div class="form-group col-md-4">
 										<label for="name">사업장 이름 : </label>
 										<input type="text" id="name" class="form-control" name="name">
@@ -57,6 +57,7 @@
    </main>
 </th:block>
 </body>
+</html>
 <script>
 	$(document).ready(function () {
 		$("#name").focusout(function() {
@@ -182,9 +183,5 @@
 				$('#checkDetailAddressDiv').css("color", "red");
 				break;
 		}
-    }
-    
-    /* alertsDropdown 알람 버튼 id */
+    };
 </script>
-
-</html>

@@ -12,16 +12,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.ac.sunmoon.shopface.alarm.Alarm;
+import kr.ac.sunmoon.shopface.alarm.AlarmMapper;
+import kr.ac.sunmoon.shopface.businessman.branch.Branch;
+import kr.ac.sunmoon.shopface.businessman.branch.BranchMapper;
+import kr.ac.sunmoon.shopface.employ.Employ;
+import kr.ac.sunmoon.shopface.employ.EmployMapper;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
 	private final MemberMapper memberMapper;
+	private final EmployMapper employMapper;
+	private final AlarmMapper alarmMapper;
+	private final BranchMapper branchMapper;
 	
 	@Transactional
 	@Override
-	public boolean addMember(Member member) {
+	public boolean addMember(Member member, String certiCode) {
 		if (!member.getId().equals("") 
 				&& !member.getName().equals("")
 				&& !member.getPassword().equals("")
@@ -29,6 +38,23 @@ public class MemberServiceImpl implements MemberService {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			member.setPassword(passwordEncoder.encode(member.getPassword()));
 			memberMapper.insert(member);
+			
+			Employ employ = new Employ();
+			employ.setCertiCode(certiCode);
+			Employ existEmploy = employMapper.select(employ);
+			
+			employ.setNo(existEmploy.getNo());
+			employ.setCertiCode(null);
+			employ.setState('C');
+			employMapper.update(employ);
+
+			Branch existBranch = branchMapper.select(existEmploy.getBranchNo());
+			
+			Alarm alarm = new Alarm();
+			alarm.setAddresseeID(existBranch.getMemberId());
+			alarm.setContents(member.getName() + " 근무자가 합류했습니다.");
+			alarm.setType("근무자 합류");
+			alarmMapper.insert(alarm);
 			
 			return true;
 		} else {

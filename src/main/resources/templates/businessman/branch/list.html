@@ -53,7 +53,8 @@
   		 	</main>
 		</th:block>
 	</body>
-<script>
+</html>
+<script th:inline="javascript">
 	var dataObj;
 	$(document).ready(function () {
 		drawTable();
@@ -64,7 +65,8 @@
 	});
 	
 	function drawTable() {
-		var url = "/branch";
+		var username = /*[[${#authentication.principal.username}]]*/ '';
+		var url = "/branch?memberId=" + username;
 		
 		$.ajax({
 			url: url,
@@ -150,7 +152,3 @@
 		})
 	}
 </script>
-</html>
-
-
-

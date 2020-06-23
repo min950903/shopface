@@ -1,10 +1,11 @@
 package kr.ac.sunmoon.shopface.businessman.branch;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
 
 import kr.ac.sunmoon.shopface.employ.Employ;
 import kr.ac.sunmoon.shopface.employ.EmployMapper;
@@ -17,68 +18,39 @@ import lombok.extern.slf4j.Slf4j;
 public class BranchServiceImple implements BranchService {
 	private final BranchMapper branchMapper;
 	private final EmployMapper employMapper;
-
-	/*
-	 * 지점 등록
-	 * */
+	
+//	private AmazonS3 s3Client;
+	
 	@Override
 	public boolean addBranch(Branch branch) {
-		//1. 입력 값이 존재하는가?
-		try {
-			System.out.println(branch);
-			if (branch.getMemberId() != null
-					&& !"".equals(branch.getMemberId())
-					&& branch.getName() != null
-					&& !"".equals(branch.getName())
-					&& branch.getPhone() != null
-					&& !"".equals(branch.getPhone())
-					&& branch.getAddress() != null
-					&& !"".equals(branch.getAddress())
-					&& branch.getDetailAddress() != null
-					&& !"".equals(branch.getDetailAddress())
-					&& branch.getZipCode() != null
-					&& !"".equals(branch.getZipCode())) {
-				//2. 존재하면 정보 등록
-				String logs = branch.toString();
-				log.info("-------------------" + logs);
-				this.branchMapper.insert(branch);
-				return true;
-			}
-		} catch(Exception e) {
-			//3. 아니면 false갑 반환
-			e.getStackTrace();
+		if (branch.getMemberId() != null
+				&& !"".equals(branch.getMemberId())
+				&& branch.getName() != null
+				&& !"".equals(branch.getName())
+				&& branch.getPhone() != null
+				&& !"".equals(branch.getPhone())
+				&& branch.getAddress() != null
+				&& !"".equals(branch.getAddress())
+				&& branch.getDetailAddress() != null
+				&& !"".equals(branch.getDetailAddress())
+				&& branch.getZipCode() != null
+				&& !"".equals(branch.getZipCode())) {
+			this.branchMapper.insert(branch);
+			return true;
+		} else {
 			return false;
 		}
-		return false;
 	}
 
-	/*
-	 * 지점 목록 조회
-	 * */
 	@Override
 	public List<Branch> getBranchList(Branch branch) {
-		//지점 목록 조회한다
-		List<Branch> branches = new ArrayList<Branch>();
-		try {
-			//1. 입력 값 조회 - 사업자 id, 승인 여부 
-			if (branch != null) {
-				branches = this.branchMapper.selectAll(branch);	
-				return branches;				
-			}
-			
-			return null;
-		} catch (Exception e) {
-			//2. 조회 중 오류 발생 시 널값 반환
-			e.printStackTrace();
-			log.info("--------------------------------------아닙니다 그냥 오류 발생함 ..");
-			return null;
+		if (branch != null) {
+			return this.branchMapper.selectAll(branch);				
 		}
+		
+		return null;
 	}
 	
-	/*
-	 * 지점 조회
-	 * */
-	@Override
 	public Branch getBranch(int no) {
 		//지점 조회한다
 		Branch branch = new Branch();
@@ -99,11 +71,8 @@ public class BranchServiceImple implements BranchService {
 		}
 	}
 
-	/*
-	 * 지점 수정
-	 * */
 	@Override
-	public boolean editBranch(Branch branch) {
+	public boolean editBranch(Branch branch, MultipartFile licenseImage) {
 		//1. 입력값 검증
 		try {
 			if (branch.getNo() != 0
@@ -122,9 +91,6 @@ public class BranchServiceImple implements BranchService {
 		return false;
 	}
 
-	/*
-	 * 지점 삭제
-	 * */
 	@Override
 	public boolean removeBranch(Branch branch) {
 		try{
