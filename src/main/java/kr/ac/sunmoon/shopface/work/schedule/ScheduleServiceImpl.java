@@ -12,19 +12,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private final ScheduleMapper scheduleMapper;
-	private final TimetableMapper timetableMapper;
-	private final BranchMapper branchMapper;
+	private final TestMapper testMapper;
+
 	@Override
-	public List<Schedule> getScheduleList(Schedule schedule) {
-
-		/*
-		 * timetableMapper.selectAll(timetable)(no); branchMapper.selectAll(branch)
-		 * branchMapper.select(no);
-		 */
-		return scheduleMapper.selectAll(schedule);
+	public List<Test> getInfo() {
+		List<Test> list = this.testMapper.select();
+		return list;
 	}
-
+	
 	
 	/*
 	@Override

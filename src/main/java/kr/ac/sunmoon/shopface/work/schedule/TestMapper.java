@@ -1,4 +1,4 @@
-package kr.ac.sunmoon.shopface.work;
+package kr.ac.sunmoon.shopface.work.schedule;
 
 import java.util.List;
 

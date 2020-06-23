@@ -2,85 +2,161 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout/template">
-	<head th:include="layout/template :: scriptHeader"></head>
-<body th:align="center">
-	<h1>스케줄 목록</h1>
-	<table th:algin="center" border="1">
-		<thead>
-			<tr>
-				<th>no</th>
-				<th>시간표 no</th>
-				<th>회원 ID</th>
-				<th>상태</th>
-			</tr>
-		</thead>
-		<tbody id="table">
-			<tr>
-				<td>검색 결과가 없습니다.</td>
-		</tbody>
-	</table>
-
-	<form action="/member" method="get">
-		<select id="condition" name="condition">
-			<option value="state">상태</option>
-			<option value="memberId">회원아이디</option>
-		</select> 
-		<input type="text" id="searchQuery" name="searchQuery"> 
-		<input type="button" id="searchButton" name="searchButton" value="검색">
-	</form>
+<head>
+<meta charset="UTF-8">
+<title>스케줄 목록</title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<main class="content">
+			<div class="container-fluid p-0">
+				<h1 class="h3 mb-3">스케줄 목록</h1>
+				<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-title">FullCalendar</h5>
+							</div>
+							<div class="card-body">
+								<div id="datatables-buttons_wrapper"
+									class="dataTables_wrapper dt-bootstrap4 no-footer">
+									<div class="row">
+										<div class="col-sm-12 col-md-6"></div>
+										<div class="col-sm-12 col-md-6">
+											<!-- 	<div id="datatables-buttons_filter"
+													class="dataTables_filter">
+													<form class="form-inline d-none d-sm-inline-block"
+														action="/test" method="GET">
+														<div class="form-inline">
+															<select id="condition" name="condition" class="form-control">
+																<option value="branch.name">지점명</option>
+															</select> 
+															<input type="search" name="searchQuery"
+																class="form-control form-control-sm" placeholder=""
+																aria-controls="datatables-buttons"> <input
+																type="button" class="btn btn-primary" id="searchButton"
+																name="searchButton" value="검색">
+														</div>
+													</form>
+												</div> -->
+										</div>
+									</div>
+									<div id="fullcalendar"></div>
+									<!-- 		<div class="row">
+											<div class="col-sm-12">
+												<table id="datatables-buttons"
+													class="table table-striped dataTable no-footer dtr-inline"
+													style="width: 100%;" role="grid"
+													aria-describedby="datatables-buttons_info">
+													<thead>
+														<tr role="row">
+															<th>시작시간</th>
+															<th>종료시간</th>
+															<th>업무명</th>
+														</tr>
+													</thead>
+													<tbody id="table_body">
+													</tbody>
+												</table>
+											</div>
+										</div>  -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</th:block>
 </body>
+</html>
 
-<script>  
-		var dataObj;
-		
-		$(document).ready(function() {
-			$('#searchButton').click(function(){
-				if($('condition').val() == 'state') {
-				dataObj = {
-						"state" : $('#searchQuery').val()
-				} 
-			} else {
-				dataObj = {
-						"memberId" : $('#searchQuery').val()
-				}
-			}
+<!-- 
+<script>
+	var dataObj;
+	$(document).ready(function() {
+		/* 		$('#searchButton').click(function() {
+		 if ($('#condition').val() == 'branch.name') {
+		 dataObj = {
+		 "branch.name" : $('input[name=searchQuery]').val()
+		 }
+		 }
+		 drawTable(dataObj);
+		 }) */
+		drawTable(dataObj);
+	});
 
-			drawTable();
-		
-			})
-		});
-		
-		function drawTable(){
-			$.ajax({
+	function drawTable() {
+		$
+				.ajax({
 					url : "/schedule",
 					type : "get",
 					data : dataObj,
 					headers : {
-							"Content-Type" : "applicaion/json;charset=UTF-8"
+						"Content-Type" : "application/json;charset=UTF-8"
 					},
 					success : function(data) {
 						var html = "";
-						if(data.length > 0){
-							for(var i = 0; i < data.length; i++){
-								html+=  "     <tr>";
-								html+=  "     <td>" + data[i].no + "</td>";
-								html+=  "     <td>" + data[i].timetableNo + "</td>";
-								html+=  "     <td>" + data[i].memberId + "</td>";
-								html+=  "     <td>" + data[i].state + "</td>";
-								html+=  "     </tr>"
+						if (data.length > 0) {
+							for (var i = 0; i < data.length; i++) {
+								html += "	<tr>";
+							/* 	html += "	<td>"+ data[i].timetable.workStartTime + "</td>"; */
+							/* 	html += "	<td>" + data[i].timetable.workEndTime + "</td>";
+								html += "	<td>" + data[i].timetable.occupName	+ "</td>"; */
+								html += "	</tr>";
 							}
-						
 						} else {
-							html += " <tr><td>검색 결과가 없습니다.</td></tr>";
+							html += "<tr><td>검색 결과가 없습니다.</td></tr>";
 						}
-						$('#table').html(html);
+						$('#table_body').html(html);
 					},
-					error : function(request,status,error) {
-						console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+					error : function(request, status, error) {
+						console.log("Code:" + request.status + "\n"
+								+ "message:" + request.responseText + "\n"
+								+ "error:" + error);
 					}
-			})					
-		}
+				})
+	}
 </script>
-
-
-</html>
+ -->
+<script>
+$(function() {
+	$("#fullcalendar").fullCalendar({
+		header : {
+			left : "prev,next today",
+			center : "title", 
+		 	right : "month" 
+		},
+		weekNumbers : true,
+		eventLimit : true,
+		editable : false,
+		displayEventEnd : true,
+		events : function(start, end, timezone, callback) {
+			$.ajax({
+				url : "/schedule",
+				type : "get",
+			/* 	data : {
+					branchNo : branchNo
+				}, */
+				datatype : "json",
+				headers : {
+					"Content-Type" : "application/json;charset=UTF-8"
+				},
+				success : function(data) {
+					var events = [];
+					for (i in data) {
+						events.push({
+				            title: data[i].timetable.occupName /* + "," + data[i].timetable.branchNo */,
+				            start: data[i].timetable.workStartTime,
+				            end: data[i].timetable.workEndTime, 
+				        });
+					}
+					callback(events);
+				}, error : function(request, status, error) {
+					console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			})    
+		},
+	});
+})
+</script> 

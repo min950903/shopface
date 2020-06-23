@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.ac.sunmoon.shopface.work.schedule.ScheduleMapper">
-	
+<mapper
+	namespace="kr.ac.sunmoon.shopface.work.schedule.ScheduleMapper">
+
 	<select id="selectAll" parameterType="schedule"
 		resultType="schedule">
 		SELECT
@@ -18,14 +19,25 @@
 		</where>
 	</select>
 
-	<insert id="insert" parameterType="schedule"> 
-		INSERT INTO SCHEDULE VALUES (#{no},#{timetableNo},#{memberId},#{state}) </insert> 
-  
-		<update id="update" parameterType="schedule"> UPDATE SCHEDULE <set> <if test="state 
-		!= null"> STATE = #{state} </if> </set> WHERE NO = #{no} </update> 
-  <delete 
-		id="delete" parameterType="schedule"> DELETE FROM SCHEDULE WHERE NO = #{no} 
-		</delete>
+	<insert id="insert" parameterType="schedule">
+		INSERT INTO SCHEDULE VALUES (#{no},#{timetableNo},#{memberId},#{state})
+	</insert>
+
+	<update id="update" parameterType="schedule">
+		UPDATE SCHEDULE
+		<set>
+			<if test="state 
+		!= null"> STATE = #{state} </if>
+		</set>
+		WHERE NO = #{no}
+	</update>
+	<delete id="delete" parameterType="schedule"> 
+	DELETE 
+	FROM 
+	SCHEDULE 
+	WHERE 
+	NO = #{no}
+	</delete>
 
 
 </mapper>

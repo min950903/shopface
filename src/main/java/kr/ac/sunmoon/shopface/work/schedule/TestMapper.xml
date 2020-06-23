@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.ac.sunmoon.shopface.work.TestMapper">
+<mapper namespace="kr.ac.sunmoon.shopface.work.schedule.TestMapper">
 
-	<resultMap type="kr.ac.sunmoon.shopface.work.timetable.Timetable" id="timetableMap">
+	<resultMap type="timetable" id="timetableMap">
 		<id column="NO" property="no" />
 		<result column="BRANCH_NO" property="branchNo" />
 		<result column="WORK_START_TIME" property="workStartTime" />
@@ -14,7 +14,7 @@
 		<result column="REGISTER_DATE" property="registerDate" />
 	</resultMap>
 
-	 <resultMap type="kr.ac.sunmoon.shopface.work.schedule.Schedule" id="scheduleMap">
+	 <resultMap type="schedule" id="scheduleMap">
 		<id column="NO" property="no" />
 		<result column="TIMETABLE_NO" property="timetableNo" />
 		<result column="MEMBER_ID" property="memberId" />
@@ -22,32 +22,31 @@
 	</resultMap> 
 
 
-	<resultMap type="kr.ac.sunmoon.shopface.businessman.branch.Branch" id="branchMap">
+	<!-- <resultMap type="branch" id="branchMap">
 		<id column="NO" property="no" />
-		<result column="BUSINESSMAN_ID" property="businessmanId" />
+		<result column="MEMBER_ID" property="memberId" />
 		<result column="NAME" property="name" />
 		<result column="PHONE" property="phone" />
 		<result column="REGISTER_DATE" property="registerDate" />
 		<result column="ADDRESS" property="address" />
 		<result column="DETAIL_ADDRESS" property="detailAddress" />
-		<result column="ZIP_NO" property="zipNo" />
+		<result column="ZIP_CODE" property="zipCode" />
 		<result column="BUSINESS_PATH" property="businessPath" />
 		<result column="STATE" property="state" />
 		<result column="APPROVAL_STATUS" property="approvalStatus" />
-	</resultMap>
+	</resultMap>  -->
  
 
-	<resultMap type="kr.ac.sunmoon.shopface.work.Test" id="TestMap">
+	<resultMap type="test" id="TestMap">
 		<collection property="timetable" resultMap="timetableMap"></collection>
 		<collection property="schedule" resultMap="scheduleMap"></collection>
-		<collection property="branch" resultMap="branchMap"></collection> 
+		<!-- <collection property="branch" resultMap="branchMap"></collection>	 -->
 	</resultMap>
 	
 	<select id ="select" resultMap="TestMap">
 		SELECT * 
 		FROM TIMETABLE, BRANCH, SCHEDULE
-		WHERE TIMETABLE.BRANCH_NO = BRANCH.NO
-		AND TIMETABLE.NO = SCHEDULE.TIMETABLE_NO 
+		WHERE<!--  TIMETABLE.BRANCH_NO = BRANCH.NO AND --> TIMETABLE.NO = SCHEDULE.TIMETABLE_NO 
 	</select>
 
 </mapper>
