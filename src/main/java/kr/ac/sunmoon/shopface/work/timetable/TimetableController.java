@@ -35,6 +35,12 @@ public class TimetableController {
 	public ModelAndView addTimetable(RedirectAttributes redirect, Timetable timetable, Schedule schedule) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
 		
+		boolean result = this.timetableService.addTimetable(timetable, schedule);
+		if (result == true) {
+			redirect.addAttribute("result", "addSuccess");
+		} else {
+			redirect.addAttribute("result", "addFail");
+		}
 		return mav;
 	}
 	

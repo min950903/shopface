@@ -26,43 +26,49 @@ public class TimetableServiceImple implements TimetableService {
 	public boolean addTimetable(Timetable timetable, Schedule schedule) {
 		try {
 			if (timetable.getWorkStartTime() != null 
-					&& "".equals(timetable.getWorkStartTime())
+					&& !"".equals(timetable.getWorkStartTime())
 					&& timetable.getWorkEndTime() != null
-					&& "".equals(timetable.getWorkEndTime())
+					&& !"".equals(timetable.getWorkEndTime())
 					&& timetable.getOccupName() != null
-					&& "".equals(timetable.getOccupName())
+					&& !"".equals(timetable.getOccupName())
 					&& timetable.getOccupColor() != null
-					&& "".equals(timetable.getOccupColor())
+					&& !"".equals(timetable.getOccupColor())
 					&& schedule.getMemberId() != null
-					&& "".equals(schedule.getMemberId())) {
+					&& !"".equals(schedule.getMemberId())) {
 				List<Timetable> timetables = this.timetableMapper.selectAll(timetable);
-				
-				if (timetables == null) {
-					this.timetableMapper.insert(timetable);//시간표 등록
-					// 스케줄 등록
-					schedule.setTimetableNo(timetable.getNo());
-					this.scheduleMapper.insert(schedule);
-					return true;
-					//알람 등록
-					
-				} else {
-					//중복한 시간표의 스케줄 조회
-					if (timetables.size() == 1) {
-						Schedule parameter = new Schedule();
-						parameter.setTimetableNo(timetables.get(1).getNo());
-						
-						List<Schedule> schedules = this.scheduleMapper.selectAll(parameter);
-						//중복하는 스케줄이 존재하는가?
-						if (schedules == null) {
-							//존재 하지 않을 시 스케줄 등록
+				if (timetables != null) {
+					if (timetables.size() < 1) {
+						this.timetableMapper.insert(timetable);//시간표 등록
+						List<Timetable> result = this.timetableMapper.selectAll(timetable);
+						if (result.size() == 1) {
+							// 스케줄 등록
+							schedule.setTimetableNo(result.get(0).getTimetableNo());
+							schedule.setState('R');
 							this.scheduleMapper.insert(schedule);
 							return true;
+							//알람 등록						
 						}
-						return false;
-					}
-				} return true;
+					} else {
+						//중복한 시간표의 스케줄 조회
+						if (timetables.size() == 1) {
+							Schedule parameter = new Schedule();
+							parameter.setTimetableNo(timetables.get(1).getTimetableNo());
+							
+							List<Schedule> schedules = this.scheduleMapper.selectAll(parameter);
+							//중복하는 스케줄이 존재하는가?
+							if (schedules == null) {
+								//존재 하지 않을 시 스케줄 등록
+								this.scheduleMapper.insert(schedule);
+								return true;
+							}
+							return false;
+						}
+					}return false;
+					
+				}  return true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return false;
@@ -85,7 +91,7 @@ public class TimetableServiceImple implements TimetableService {
 				//3. 한 시간표와 연관된 스케줄 존재 시 list에 저장
 				if (timetables.size() > 0) {
 					for (int i = 0; i < timetables.size(); i++) {
-						int no = timetables.get(i).getNo();
+						int no = timetables.get(i).getTimetableNo();
 						
 						Schedule parameterSchedule = new Schedule();
 						parameterSchedule.setTimetableNo(no);
@@ -144,7 +150,7 @@ public class TimetableServiceImple implements TimetableService {
 					List<Timetable> result = this.timetableMapper.selectAll(timetable);
 					if (result != null && result.size() == 1) {
 						//8. 새로 등록한 시간표의 일련번호를 전달받은 스케줄에 수정반영
-						schedule.setTimetableNo(result.get(1).getNo());
+						schedule.setTimetableNo(result.get(1).getTimetableNo());
 						this.scheduleMapper.update(schedule);
 						return true;
 						//8. 알람 등록 
