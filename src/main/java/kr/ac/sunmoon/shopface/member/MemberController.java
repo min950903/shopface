@@ -34,7 +34,9 @@ public class MemberController {
 		ModelAndView modelAndView = new ModelAndView("member/add");
 		
 		String referrer = request.getHeader("Referer");
-		if ("employ".equals(referrer.substring(referrer.lastIndexOf("/") + 1))) {
+		
+		log.info(referrer);
+		if ("employ".equals(referrer.substring(referrer.lastIndexOf("/") + 1, referrer.lastIndexOf("/") + 7))) {
 			modelAndView.addObject("type", "E");
 		} else {
 			modelAndView.addObject("type", "B");

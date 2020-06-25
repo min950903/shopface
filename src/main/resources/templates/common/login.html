@@ -17,15 +17,13 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 							</div>
 							<div class="card">
 								<div class="m-sm-4">
-									<form action="/login" method="post">
-										<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-										
+									<form th:action="@{/login}" method="post">
 										<label for="id">아이디 : </label>
 										<input type="text" class="form-control form-control-lg" name="id"><br>
 										<label for="password">비밀번호 : </label>
 										<input type="password" class="form-control form-control-lg" name="password"><br>
 										<small><a href="#">아이디 찾기</a></small>
-										<small><a href="#">비밀번호 찾기</a></small>
+										<small><a href="/forgotpassword">비밀번호 찾기</a></small>
 										<div th:if="${param.error}">
 											<span style="color:red;">로그인 정보가 일치하지 않습니다.</span>
 										</div>

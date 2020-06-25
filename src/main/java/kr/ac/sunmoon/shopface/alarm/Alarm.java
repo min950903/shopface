@@ -14,7 +14,7 @@ import lombok.Setter;
 @Alias(value = "alarm")
 public class Alarm {
 	private int no;
-	private String addresseeID;
+	private String addresseeId;
 	private String type;
 	private String contents;
 	private LocalDate registerDate;

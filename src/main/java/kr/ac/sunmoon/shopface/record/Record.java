@@ -22,10 +22,12 @@ public class Record {
 	private String branchPhone;
 	private String memberId;
 	private String memberName;
-	private LocalDateTime workStartTime;
-	private LocalDateTime workEndTime;
-	private LocalDateTime workingTime;
-	private LocalDateTime quittingTime;
+	private String memberPhone;
+	private String occupationName;
+	private String workStartTime;
+	private String workEndTime;
+	private String workingTime;
+	private String quittingTime;
 	private int salaryPlan;
 	private int salaryPay;
 	private int evaluation;

@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.ac.sunmoon.shopface.work.schedule.Schedule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,19 +25,34 @@ public class RecordController {
 	
 	@GetMapping(value = "/record")
 	public ModelAndView getRecordList() {
-		return new ModelAndView("record");
+		return new ModelAndView("work/record/list");
 	}
 	
-	@PostMapping(value = "/record", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecordMessage> addRecord(Record record) {
+	@PostMapping(value = "/working", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RecordMessage> addRecord(@RequestBody Schedule schedule) {
 		RecordMessage message = new RecordMessage();
 		
-		if (recordService.addRecord(record)) {
+		if (recordService.addRecord(schedule)) {
 			message.setSuccess(true);
 			message.setMessage("근무 기록이 등록 되었습니다.");
 		} else {
 			message.setSuccess(false);
 			message.setMessage("근무 기록 등록에 실패하였습니다.");
+		}
+		
+		return new ResponseEntity<>(message, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/quitting", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RecordMessage> quitting(@RequestBody Schedule schedule) {
+		RecordMessage message = new RecordMessage();
+		
+		if (recordService.qutting(schedule)) {
+			message.setSuccess(true);
+			message.setMessage("퇴근 기록이 등록 되었습니다.");
+		} else {
+			message.setSuccess(false);
+			message.setMessage("퇴근 기록 등록에 실패하였습니다.");
 		}
 		
 		return new ResponseEntity<>(message, HttpStatus.OK);
