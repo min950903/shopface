@@ -3,9 +3,11 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorator="layout/template">
 <head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <meta charset="UTF-8">
 <title>업무 관리</title>
-    <link rel="stylesheet" type="text/css" th:href="@{css/spectrum/spectrum.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/spectrum/spectrum.css}">
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -18,6 +20,7 @@
             <div class="card-body">
               <div class="col-sm-6">
                 <form class="form-inline" id="post-form" th:action="@{/occupation}" method="post">
+                	<input type="hidden" id="occupationNo-input" name="branchNo">
 					<label for="occupationLabel">업무 명: </label>
 	                <input type="text" class="form-control ml-2 mr-2" id="occupation-input" name="name">
 					
@@ -38,7 +41,8 @@
                       aria-describedby="datatables-buttons_info">
                       <thead>
                         <tr role="row">
-                          <th></th>
+                          <th style="display:none;"></th>
+                          <th style="display:none;"></th>
                           <th>업무</th>
                           <th>색상</th>
                           <th>관리</th>
@@ -57,7 +61,7 @@
 		                              </button>
 		                  </div>
 		                  <div class="modal-body m-3">
-		                    <label for="occupation-color" class="mr-2">색상:</label>
+		                    <label for="occupation-color-modal" class="mr-2">색상:</label>
 		                    <input type='text' id="modal-color" name="modalColor"/>
 		                  </div>
 		                  <div class="modal-footer">
@@ -79,17 +83,31 @@
 </th:block>
 </body>
 </html>
-<script type="text/javascript" src="js/spectrum/spectrum.js"></script>
-<script type='text/javascript' src="js/spectrum/toc.js"></script>
-<script type='text/javascript' src="js/spectrum/docs.js"></script>
-<script type="text/javascript" src="js/spectrum/prettify.js"></script>
+<script type="text/javascript" src="/js/spectrum/spectrum.js"></script>
+<script type='text/javascript' src="/js/spectrum/toc.js"></script>
+<script type='text/javascript' src="/js/spectrum/docs.js"></script>
+<script type="text/javascript" src="/js/spectrum/prettify.js"></script>
 <script>
+var currentBranchNo = 0;
+
+var header = $("meta[name='_csrf_header']").attr("content");
+var token = $("meta[name=_csrf]").attr("content");
+
 $('document').ready(function() {
-	drawTable();
+	drawOccupationTable();
 	
-	function drawTable() { 
+	function drawOccupationTable() {
+		if (branchNo > 0) {
+			currentBranchNo = $('#selectBranch').val();		
+		} else {
+			var currentUri = location.pathname;
+			currentBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
+		}
+		
+		drawSelectBranch(currentBranchNo);
+		
 		$.ajax({
-			url: '/occupation',
+			url: '/occupation/' + currentBranchNo,
 			type: 'GET',
 			contentType: "application/json;charset=UTF-8",
 			success: function(data) {
@@ -100,8 +118,11 @@ $('document').ready(function() {
 				if(data.length != 0) {
 					for(var i = 0; i < data.length; i++) {
 						html += "<tr>";
-						html += 	"<td>";
+						html += 	"<td style='display:none;'>";
 						html +=  		"<input type='hidden' name='occupationNo' value=" + data[i].no + ">";
+						html +=  	"</td>";
+						html += 	"<td  style='display:none;'>";
+						html +=  		"<input type='hidden' name='occupationBranchNo' value=" + data[i].branchNo + ">";
 						html +=  	"</td>";
 						html +=  	"<td>";
 						html += 		"<input type='text' class='form-control col-md-4' name='occupationName' value=" + data[i].name + ">";
@@ -131,12 +152,22 @@ $('document').ready(function() {
 		})
 	}
 	
+	$(document).on('change', 'select[name=selectBranch]', function() {
+		var currentValue = $('#selectBranch').val(); 
+		
+		$('option:selected', this).removeAttr('selected');
+		$('#selectBranch > option[value=currentValue]').attr('selected', true);
+		
+		drawOccupationTable();
+	})
+	
 	$('#table-body').on("click", "button[name='editBtn']", function() {
 		var currentRow = $(this).closest("tr");
 		var occupationData = {
 			no: currentRow.find("td:eq(0) input[name='occupationNo']").val(),
-			name: currentRow.find('td:eq(1) input[name="occupationName"]').val(),
-			color: currentRow.find('td:eq(2) input[name="selectedColor"]').val()
+			brancNo: currentBranchNo,
+			name: currentRow.find('td:eq(2) input[name="occupationName"]').val(),
+			color: currentRow.find('td:eq(3) input[name="selectedColor"]').val()
 		};
 		
 		$.ajax({
@@ -144,11 +175,15 @@ $('document').ready(function() {
 			type: 'PUT',
 			data: JSON.stringify(occupationData),
 			dataType: 'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
 			contentType: 'application/json; charset=utf-8',
 			success: function(response) {
 				if (response.isSuccess) {
 					alert("수정하였습니다");
-					drawTable();
+					
+					drawOccupationTable();
 				} else {
 					alert("수정에 실패 했습니다.");
 				}
@@ -169,11 +204,15 @@ $('document').ready(function() {
 			type: 'DELETE',
 			data: JSON.stringify(no),
 			dataType: 'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
 			contentType: 'application/json; charset=utf-8',
 			success: function(response) {
 				if (response.isSuccess) {
 					alert("삭제 하였습니다.");
-					drawTable();
+					
+					drawOccupationTable();
 				} else {
 					alert("삭제에 실패 했습니다.");
 					
@@ -190,6 +229,7 @@ $('document').ready(function() {
 		if($('input[name=name]').val() != null && $('input[name=name]').val() != '' ) {
 		 	var occupationColor = $("#occupation-color").spectrum("get").toHexString().toUpperCase();
 			$('input[name=color]').val(occupationColor);
+			$('input[name=branchNo]').val(currentBranchNo);
 			$('#post-form').submit();
 		} else {
 			alert("업무명을 입력해주세요");
@@ -207,7 +247,7 @@ $('document').ready(function() {
 	});
 	
 	var selectRow
-	$('#table-body').on('click', 'input[name=selectedColor]' ,function() {
+	$('#table-body').on('click', 'input[name=selectedColor]', function() {
 		$("#modal-color").spectrum({
 		  showPaletteOnly: true,
 		  showPalette:true,
@@ -219,14 +259,15 @@ $('document').ready(function() {
 		});
 		
 		selectRow = $(this).closest('tr');
-		var inputColor = selectRow.find('td:eq(2) input[name=selectedColor]').val();
+		var inputColor = selectRow.find('td:eq(3) input[name=selectedColor]').val();
 		$("#modal-color").spectrum('set',inputColor);
 	});
 	
 	$('#change-color-button').click(function() {
-		selectRow.find('td:eq(2) input[name=selectedColor]').attr({
-			value: $("#modal-color").spectrum("get").toHexString().toUpperCase(),
-			style: 'background-color:' + occupationColor +';color:' + occupationColor
+		var occupationColor = $("#modal-color").spectrum("get").toHexString().toUpperCase();
+		selectRow.find('td:eq(3) input[name=selectedColor]').attr({
+			value: occupationColor,
+			style: 'background-color:' + occupationColor  +';color:' + occupationColor
 		});
 		
 		$('#color-modal-form').modal('hide');

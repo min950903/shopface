@@ -228,10 +228,10 @@
                   <a class="sidebar-link" href="/branch">사업장 관리</a>
                 </li>
                 <li class="sidebar-item" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
-                  <a class="sidebar-link" href="/occupation">업무 관리</a>
+                  <a class="sidebar-link" th:onclick="moveOccupation()">업무 관리</a>
                 </li>
                 <li class="sidebar-item" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
-                  <a class="sidebar-link" href="/employ/21">근무자 관리</a>
+                  <a class="sidebar-link" th:onclick="moveEmploy()">근무자 관리</a>
                 </li>
               </ul>
             </li>
