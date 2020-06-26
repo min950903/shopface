@@ -40,22 +40,22 @@ public class MemberServiceImpl implements MemberService {
 			memberMapper.insert(member);
 			
 			if (!"".equals(certiCode)) {
-			    Employ employ = new Employ();
-			    employ.setCertiCode(certiCode);
-			    Employ existEmploy = employMapper.select(employ);
-			    
-			    employ.setNo(existEmploy.getNo());
-			    employ.setCertiCode(null);
-			    employ.setState('C');
-			    employMapper.update(employ);
-			    
-			    Branch existBranch = branchMapper.select(existEmploy.getBranchNo());
-			    
-			    Alarm alarm = new Alarm();
-			    alarm.setAddresseeID(existBranch.getMemberId());
-			    alarm.setContents(member.getName() + " 근무자가 합류했습니다.");
-			    alarm.setType("근무자 합류");
-			    alarmMapper.insert(alarm);
+				Employ employ = new Employ();
+				employ.setCertiCode(certiCode);
+				Employ existEmploy = employMapper.select(employ);
+				
+				employ.setNo(existEmploy.getNo());
+				employ.setCertiCode(null);
+				employ.setState('C');
+				employMapper.update(employ);
+	
+				Branch existBranch = branchMapper.select(existEmploy.getBranchNo());
+				
+				Alarm alarm = new Alarm();
+				alarm.setAddresseeId(existBranch.getMemberId());
+				alarm.setContents(member.getName() + "- 근무자가 합류했습니다.");
+				alarm.setType("근무자 합류");
+				alarmMapper.insert(alarm);
 			}
 			
 			return true;
@@ -95,6 +95,8 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	@Override
 	public boolean editMember(Member member, String oldPassword) {
+		boolean isSuccess = false;
+		
 		Member existMember = memberMapper.select(member);
 		if (existMember != null) {
 			if (member.getPassword() != null) {
@@ -104,18 +106,16 @@ public class MemberServiceImpl implements MemberService {
 					
 					memberMapper.update(member);
 					
-					return true;
+					isSuccess = true;
 				} else {
-					return false;
-				}
-			} else {
-				memberMapper.update(member);
+					memberMapper.update(member);
 				
-				return true;
+					isSuccess = true;
+				}
 			}
-		} else {
-			return false;
 		}
+		
+		return isSuccess;
 	}
 
 	@Transactional
@@ -123,7 +123,8 @@ public class MemberServiceImpl implements MemberService {
 	public boolean removeMember(Member member) {
 		if (member.getId() != null 
 				&& memberMapper.select(member) != null) {
-			memberMapper.delete(member);
+			member.setState("D");
+			memberMapper.update(member);
 			
 			return true;
 		} else {

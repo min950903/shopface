@@ -21,7 +21,13 @@
 			</if>
 		</where>
 	</select>
-
+	
+	<select id="select" parameterType="schedule" resultType="schedule">
+		SELECT NO, TIMETABLE_NO, MEMBER_ID, STATE
+		FROM SCHEDULE
+		WHERE NO = #{no}
+	</select>
+	
 	<insert id="insert" parameterType="schedule"> 
 		INSERT INTO SCHEDULE VALUES (SCHEDULE_NO_SEQ.NEXTVAL,#{timetableNo},#{memberId},#{state}) 
 	</insert> 

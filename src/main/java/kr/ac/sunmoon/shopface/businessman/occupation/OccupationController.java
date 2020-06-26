@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,16 +25,16 @@ public class OccupationController {
     public ModelAndView addOccupation(Occupation occupation) {
         boolean isSuccess = occupationService.addOccupation(occupation);
         
-        return new ModelAndView("redirect:/occupation");
+        return new ModelAndView("redirect:/occupation/" + occupation.getBranchNo());
     }
     
-    @GetMapping("/occupation")
-    public ModelAndView getOccupationList() {
-        return new ModelAndView("/businessman/occupation/_list.html");
+    @GetMapping("/occupation/{branchNo}")
+    public ModelAndView getOccupationList(@PathVariable int branchNo) {
+        return new ModelAndView("/businessman/occupation/list.html");
     }
     
-    @GetMapping(value = "/occupation", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<Occupation> getOccupationList(Occupation occupation) {
+    @GetMapping(value = "/occupation/{branchNo}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Occupation> getOccupationList(@PathVariable int branchNo, Occupation occupation) {
         return occupationService.getOccupationList(occupation);
     }
     

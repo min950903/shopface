@@ -5,7 +5,7 @@
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.occupation.OccupationMapper">
     <insert id="insert" parameterType="occupation">
         INSERT INTO OCCUPATION(NO, BRANCH_NO, NAME, COLOR) 
-        VALUES(OCCUPATION_NO_SEQ.NEXTVAL, 21, #{name}, #{color})
+        VALUES(OCCUPATION_NO_SEQ.NEXTVAL, #{branchNo}, #{name}, #{color})
     </insert>
     <select id="selectAll" parameterType="occupation" resultType="occupation">
         SELECT NO, BRANCH_NO, NAME, COLOR FROM OCCUPATION

@@ -5,7 +5,7 @@
 	<select id="selectAll" parameterType="alarm" resultType="alarm">
 		SELECT NO, ADDRESSEE_ID, TYPE, CONTENTS, REGISTER_DATE, CHECK_STATE
 		FROM ALARM
-		WHERE ADDRESSEE_ID = #{addresseeID}
+		WHERE ADDRESSEE_ID = #{addresseeId}
 		ORDER BY REGISTER_DATE DESC
 	</select>
 	
@@ -19,12 +19,10 @@
 		INSERT INTO ALARM
 		(NO, ADDRESSEE_ID, TYPE, CONTENTS)
 		VALUES
-		(
-			ALARM_NO_SEQ.NEXTVAL,
-			ADDRESSEE_ID = {addresseeId},
-			TYPE = #{type},
-			CONTETNS = #{contents}
-		)
+		(ALARM_NO_SEQ.NEXTVAL,
+		#{addresseeId},
+		#{type},
+		#{contents})
 	</insert>
 	
 	<update id="update" parameterType="alarm">

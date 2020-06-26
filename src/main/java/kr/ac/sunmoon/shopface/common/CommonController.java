@@ -1,16 +1,14 @@
 package kr.ac.sunmoon.shopface.common;
 
-import java.util.stream.Stream;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -21,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-@Controller
+@RestController
 public class CommonController {
 	private final CommonService commonService;
 	
@@ -39,7 +37,6 @@ public class CommonController {
 //		return null;
 //	}
 	
-	
 	@GetMapping("/login")
 	public ModelAndView login(HttpSession httpSession, @AuthenticationPrincipal User user) {
 		if (user != null) {
@@ -56,11 +53,15 @@ public class CommonController {
 		return new ModelAndView("common/login");
 	}
 	
-	/*
-	 * 유효성 검사 구현
-	 * JWT 가능하면 구현
-	 * 로그인 여부 확인 후 로그인 구현
-	 * */
+	@GetMapping("/forgotpassword")
+	public ModelAndView forgotPassword() {
+		return new ModelAndView("common/forgotPassword");
+	}
+	
+	@PostMapping("/forgotpassword")
+	public ModelAndView forgotPassword(Member member) {
+		return null;
+	}
 	
 	
 	@PostMapping("/login")

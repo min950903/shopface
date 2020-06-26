@@ -79,9 +79,9 @@ public class EmployServiceImpl implements EmployService {
             isSuccess = true;
         } catch (MailException e) {
             e.printStackTrace();
-        } finally {
-            return isSuccess;
         }
+        
+        return isSuccess;
     }
 
     public SimpleMailMessage createInviteMessage(Employ employ) {
@@ -158,9 +158,6 @@ public class EmployServiceImpl implements EmployService {
                     savedEmploy.setState('B');
                     employMapper.update(savedEmploy);
                 }
-                isSuccess = true;
-                //TODO
-                // 알람을 등록한다.
             }
         }
         
@@ -186,7 +183,7 @@ public class EmployServiceImpl implements EmployService {
     	
     	boolean isCorrect = false;
     	int compareResult = targetDate.compareTo(currentDate);
-    	if (compareResult <= -1) {
+    	if (compareResult <= 0) {
     		if (employMapper.findByCertiCode(employ) > 0) {
     			isCorrect = true;
     		}

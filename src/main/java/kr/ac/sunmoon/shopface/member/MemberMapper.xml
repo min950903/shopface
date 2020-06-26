@@ -11,11 +11,15 @@
 			<if test="state != null and state != ''">AND STATE = #{state}</if>
 			<if test="type != null and type != ''">AND TYPE = #{type}</if>
 		</where>
+		ORDER BY STATE ASC
 	</select>
 	<select id="select" parameterType="member" resultType="member">
 		SELECT ID, NAME, PASSWORD, PHONE, EMAIL, BANK_NAME, ACCOUNT_NUM, STATE, TYPE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE 
 		FROM NEW_MEMBER
-		WHERE ID = #{id}
+		<where>
+			<if test="id != null and !id.equals('')">AND ID = #{id}</if>
+			<if test="email != null and !email.equals('')">AND EMIAL = #{email}</if>
+		</where>
 	</select>
 	<insert id="insert" parameterType="member">
 		INSERT INTO NEW_MEMBER
@@ -39,6 +43,7 @@
 			<if test="phone != null">PHONE = #{phone},</if>
 			<if test="accountNum != null">ACCOUNT_NUM = #{accountNum},</if>
 			<if test="address != null">ADDRESS = #{address},</if>
+			<if test="state != null">STATE = #{state},</if>
 			<if test="detailAddress != null">DETAIL_ADDRESS = #{detailAddress},</if>
 			<if test="zipCode != null">ZIP_CODE = #{zipCode}</if>
 		</set>

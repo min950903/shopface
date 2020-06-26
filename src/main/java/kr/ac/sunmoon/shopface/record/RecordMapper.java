@@ -11,4 +11,5 @@ public interface RecordMapper {
 	public List<Record> selectAll(Record record);
 	public void update(Record record);
 	public void delete(Record record);
+	public void quittingUpadte(Record record);
 }
