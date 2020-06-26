@@ -36,7 +36,23 @@
         <if test="certiCode != null and certiCode != ''">
             AND E.CERTI_CODE = #{certiCode}
         </if>
+        <if test="memberId != null and memberId != ''">
+        	AND M.ID = #{memberId}
+        </if>
         </where>
+    </select>
+    
+    <select id="selectEmploy" parameterType="employ" resultType="employ">
+    	SELECT NO, BRANCH_NO, MEMBER_ID, NAME, SALARY
+    	FROM EMPLOY
+    	<where>
+    		<if test="memberId != null and memberId != ''">
+    			AND MEMBER_ID = #{memberId}
+    		</if>
+    		<if test="branchNo > 0">
+    			AND BRANCH_NO = #{branchNo}
+    		</if>
+    	</where>
     </select>
     
     <select id="findByCertiCode" parameterType="employ" resultType="int">

@@ -4,29 +4,52 @@
 <mapper namespace="kr.ac.sunmoon.shopface.record.RecordMapper">
 	<select id="select" parameterType="record" resultType="record">
 	SELECT NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NAME, BRANCH_PHONE, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE,
-	WORK_START_TIME, WORK_END_TIME, WORKING_TIME, QUITTING_TIME, SALARY_PLAN, SALARY_PAY, EVALUATION, NOTE
+	OCCUPATION_NAME, WORK_START_TIME, WORK_END_TIME, WORKING_TIME, QUITTING_TIME, SALARY_PLAN, SALARY_PAY, EVALUATION, NOTE
 	FROM RECORD
-	WHERE MEMBER_ID = #{memberId}
+	<where>
+		<if test="no > 0">AND NO = #{no}</if>
+		<if test="memberId != null and memberId != ''">AND MEMBER_ID = #{memberId}</if>
+		<if test="workStartTime != null and workStartTime != ''">AND WORK_START_TIME = TO_DATE(#{workStartTime}, 'YYYY-MM-DD HH24:MI:SS')</if>
+		<if test="workEndTime != null and workEndTime != ''">AND WORK_END_TIME = TO_DATE(#{workEndTime}, 'YYYY-MM-DD HH24:MI:SS')</if>
+	</where>
 	</select>
+	
+	<select id="selectAll" parameterType="record" resultType="record">
+		SELECT NO, BUSINESSMAN_NAME, BRANCH_NAME, MEMBER_ID,
+		MEMBER_NAME, MEMBER_PHONE, OCCUPATION_NAME, WORK_START_TIME, WORK_END_TIME, 
+		WORKING_TIME, QUITTING_TIME, SALARY_PLAN, SALARY_PAY, EVALUATION, NOTE
+		FROM RECORD
+		WHERE MEMBER_ID = #{memberId}
+	</select>
+	
 	<insert id="insert" parameterType="record">
 	INSERT INTO RECORD
 	(NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NAME,
-	BRANCH_PHONE, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE,
+	BRANCH_PHONE, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, OCCUPATION_NAME,
 	WORK_START_TIME, WORK_END_TIME, WORKING_TIME,SALARY_PLAN) 
 	VALUES
-	(1, 'business1', '사업자1', '선문대', '01012345678',
-	'employee1', '직원1', '01043782389',
-	TO_DATE('20200615110000','YYYYMMDDHH24MISS'),
-	TO_DATE('20200615140000','YYYYMMDDHH24MISS'),
-	TO_DATE('20200615105833','YYYYMMDDHH24MISS'),30000)
+	(RECORD_NO_SEQ.NEXTVAL, #{businessmanId}, #{businessmanName}, #{branchName}, #{branchPhone},
+	#{memberId}, #{memberName}, #{memberPhone}, #{occupationName},
+	TO_DATE(#{workStartTime, jdbcType=DATE},'YYYY-MM-DD HH24:MI:SS'),
+	TO_DATE(#{workEndTime, jdbcType=DATE},'YYYY-MM-DD HH24:MI:SS'),
+	SYSDATE,
+	#{salaryPlan})
 	</insert>
+	
 	<update id="update" parameterType="record">
 	UPDATE RECORD
 	SET WORKING_TIME = #{workingTime}, QUITTING_TIME = #{quittingTime}, SALARY_PAY = #{salaryPay}, EVALUATION = #{evaluation}, NOTE = #{note}
 	WHERE NO = #{no}
 	</update>
+	
 	<delete id="delete" parameterType="record">
 	DELETE FROM RECORD
 	WHERE NO = #{no};
 	</delete>
+	
+	<update id="quittingUpadte" parameterType="record">
+		UPDATE RECORD
+		SET QUITTING_TIME = SYSDATE
+		WHERE NO = #{no}
+	</update>
 </mapper>

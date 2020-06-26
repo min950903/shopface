@@ -1,6 +1,9 @@
 package kr.ac.sunmoon.shopface.businessman.branch;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -106,7 +110,7 @@ public class BranchController {
 			redirect.addAttribute("result", "editFail");
 		}
 
-		return new ModelAndView(new RedirectView("/branch/" + branch.getNo()));
+		return new ModelAndView(new RedirectView("/branch"));
 	}
 
 	/**
@@ -128,5 +132,19 @@ public class BranchController {
 		}
 
 		return mav;
+	}
+	
+	@PutMapping(value = "/branch")
+	public Map<String, Object> changeApprovalStatus(@RequestBody Branch branch) throws IOException {
+		log.info("" + branch.getApprovalStatus());
+		
+		Map<String, Object> result = new HashMap<>();
+		if (branchService.editBranch(branch, null)) {
+			result.put("isSuccess", true);
+		} else {
+			result.put("isSuccess", false);
+		}
+		
+		return result;
 	}
 }

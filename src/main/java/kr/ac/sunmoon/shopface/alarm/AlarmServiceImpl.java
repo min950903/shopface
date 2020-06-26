@@ -17,7 +17,7 @@ public class AlarmServiceImpl implements AlarmService {
 	public boolean addAlarm(Alarm alarm) {
 		boolean isSuccess = false;
 		
-		if (!"".equals(alarm.getAddresseeID()) 
+		if (!"".equals(alarm.getAddresseeId()) 
 				&& !"".equals(alarm.getType()) 
 				&& !"".equals(alarm.getContents())) {
 			alarmMapper.insert(alarm);

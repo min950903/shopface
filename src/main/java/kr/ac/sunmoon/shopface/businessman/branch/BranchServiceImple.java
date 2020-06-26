@@ -1,11 +1,14 @@
 package kr.ac.sunmoon.shopface.businessman.branch;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import kr.ac.sunmoon.shopface.employ.Employ;
 import kr.ac.sunmoon.shopface.employ.EmployMapper;
@@ -18,9 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 public class BranchServiceImple implements BranchService {
 	private final BranchMapper branchMapper;
 	private final EmployMapper employMapper;
+	private final AmazonS3 awsS3Client;
 	
-//	private AmazonS3 s3Client;
-//	private String bucket;
+	@Value("${cloud.aws.s3.bucket}")
+	private String bucket;
 	
 	@Override
 	public boolean addBranch(Branch branch) {
@@ -46,7 +50,13 @@ public class BranchServiceImple implements BranchService {
 	@Override
 	public List<Branch> getBranchList(Branch branch) {
 		if (branch != null) {
-			return this.branchMapper.selectAll(branch);				
+			if ("admin".equals(branch.getMemberId())) {
+				branch.setMemberId(null);
+				
+				return this.branchMapper.selectAll(branch);
+			}
+			
+			return this.branchMapper.selectAll(branch);
 		}
 		
 		return null;
@@ -73,7 +83,7 @@ public class BranchServiceImple implements BranchService {
 	}
 
 	@Override
-	public boolean editBranch(Branch branch, MultipartFile licenseImage) {
+	public boolean editBranch(Branch branch, MultipartFile licenseImage) throws IOException {
 		//1. 입력값 검증
 		try {
 			if (branch.getNo() != 0
@@ -82,7 +92,20 @@ public class BranchServiceImple implements BranchService {
 					&& branch.getName() != null
 					&& !"".equals(branch.getName())) {
 				//2. 존재 시 지점 정보 수정 후 true값 밪환
+				if (licenseImage != null) {
+					String fileName = licenseImage.getOriginalFilename();
+					awsS3Client.putObject(new PutObjectRequest(this.bucket, fileName, licenseImage.getInputStream(), null));
+					
+					String url = awsS3Client.getUrl(this.bucket, fileName).toString();
+					
+					branch.setBusinessLPath(awsS3Client.getUrl(this.bucket, fileName).toString());
+				}
 				this.branchMapper.update(branch);
+				return true;
+			} else if (branch.getNo() != 0 
+					&& !"".equals("" + branch.getApprovalStatus())){
+				this.branchMapper.update(branch);
+				
 				return true;
 			}
 		} catch(Exception e) {

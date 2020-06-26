@@ -23,7 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final MemberService memberService;
 	private final CustomSuccessHandler successHanlder;
 	
-	
 	@Bean
     public SpringSecurityDialect springSecurityDialect(){
         return new SpringSecurityDialect();
@@ -47,8 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/login", "/member/form", "/member/check", "/employ", "/employ/check").permitAll()
-			.antMatchers(HttpMethod.POST, "/member", "/employ", "/login").permitAll()
+			.antMatchers("/login", "/member/form", "/member/check", "/employ", "/employ/check", "/forgotpassword").permitAll()
+			.antMatchers(HttpMethod.POST, "/member", "/employ", "/login", "/working", "/quitting").permitAll()
 			.antMatchers(HttpMethod.PUT, "/employ", "/employ/invite/").permitAll()
 			.antMatchers("/member").hasRole("ADMIN")
 			.antMatchers("/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MEMBER", "ROLE_BUSINESSMAN")
@@ -67,5 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID")
 		.and()
 			.exceptionHandling().accessDeniedPage("/login");
+//		.and().csrf().disable();
 	}
 }

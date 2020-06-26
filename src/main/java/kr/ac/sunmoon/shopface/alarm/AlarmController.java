@@ -24,7 +24,7 @@ public class AlarmController {
 	@GetMapping(value = "/alarm", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<Alarm> getAlarmList(@RequestParam("addresseeId") String addresseeId) {
 		Alarm alarm = new Alarm();
-		alarm.setAddresseeID(addresseeId);
+		alarm.setAddresseeId(addresseeId);
 		
 		return alarmService.getAlarmList(alarm);
 	}
