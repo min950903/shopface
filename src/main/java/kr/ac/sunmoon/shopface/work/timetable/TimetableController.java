@@ -3,7 +3,9 @@ package kr.ac.sunmoon.shopface.work.timetable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,12 @@ public class TimetableController {
 	public ModelAndView addTimetable(RedirectAttributes redirect, Timetable timetable, Schedule schedule) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
 		
+		boolean result = this.timetableService.addTimetable(timetable, schedule);
+		if (result == true) {
+			redirect.addAttribute("result", "addSuccess");
+		} else {
+			redirect.addAttribute("result", "addFail");
+		}
 		return mav;
 	}
 	
@@ -57,7 +65,7 @@ public class TimetableController {
 	/**
 	 * 시간표 수정
 	 * */
-	@PutMapping("/timetable/{no}")
+	@PutMapping("/timetable/{timetableNo}")
 	public ModelAndView editTimetable(RedirectAttributes redirect, Timetable timetable, Schedule schedule) {
 		try {
 			boolean result = this.timetableService.editTimetable(timetable, schedule);
@@ -76,7 +84,7 @@ public class TimetableController {
 	/**
 	 * 시간표 삭제
 	 * */
-	@DeleteMapping("/timetable/schedule{no}")
+	@DeleteMapping("/timetable/schedule/{no}")
 	public ModelAndView removeTimetable(RedirectAttributes redirect, Schedule schedule) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
 		try {

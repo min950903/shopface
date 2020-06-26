@@ -10,7 +10,7 @@
 <th:block layout:fragment="content">
    <main class="content">
    	<div class="container-fluid p-0">
-   		<h1>사업장 조회</h1>
+   		<h1 class="h3 mb-3">사업장 조회</h1>
    		<div class="row">
    			<div class="col-12">
    				<div class="card">
@@ -65,38 +65,94 @@
 </html>
 <script>
 	$(document).ready(function () {
+		$("#name").focusout(function() {
+			var name = $('#name').val();
+			if (name == '') {
+				$('#checkNameDiv').html("이름을 입력해주세요.");
+				$('#checkNameDiv').css("color", "red");
+				$('#checkNameDiv').show();
+			} else {
+				$('#checkNameDiv').hide();
+			}
+		});
+		
+		$("#phone").focusout(function() {
+			var phone = $('#phone').val();
+			if (phone == '') {
+				$('#checkPhoneDiv').html("전화번호를 입력해주세요.");
+				$('#checkPhoneDiv').css("color", "red");
+				$('#checkPhoneDiv').show();
+			} else {
+				$('#checkPhoneDiv').hide();
+			}
+		});
+		
+		$("#zipCode").focusout(function() {
+			var zipCode = $('#zipCode').val();
+			if (zipCode == '') {
+				$('#checkZipCodeDiv').html("우편번호를 입력해주세요.");
+				$('#checkZipCodeDiv').css("color", "red");
+				$('#checkZipCodeDiv').show();
+			} else {
+				$('#checkZipCodeDiv').hide();
+			}
+		});
+		
+		$("#address").focusout(function() {
+			var address = $('#address').val();
+			if (address == '') {
+				$('#checkAddressDiv').html("주소를 입력해주세요.");
+				$('#checkAddressDiv').css("color", "red");
+				$('#checkAddressDiv').show();
+			} else {
+				$('#checkAddressDiv').hide();
+			}
+		});
+		
+		$("#detailAddress").focusout(function() {
+			var detailAddress = $('#detailAddress').val();
+			if (detailAddress == '') {
+				$('#checkDetailAddressDiv').html("상세 주소를 입력해주세요.");
+				$('#checkDetailAddressDiv').css("color", "red");
+				$('#checkDetailAddressDiv').show();
+			} else {
+				$('#checkDetailAddressDiv').hide();
+			}
+		});
+		
 	    $('#delete_button').click(function () {
 	        $('input[name=_method]').val('delete');
 	        $('#branch_form').submit();
 	    });
+	    
+	    $("#edit_button").click(function () {
+			var valid = true;
+			
+			var values = new Array($('#name').val()
+									,$('#phone').val()
+									,$('#zipCode').val()
+									,$('#address').val()
+									,$('#detailAddress').val());
+			
+			for (var i = 0; i < 5; i ++) {
+				if (values[i] == '') {
+					valid = false;
+					writeWarningPhrase(i);
+				}
+			}
+			
+			if (valid == true) {
+				$('input[name=_method]').val('put');
+		        $('#branch_form').submit();
+			}
+		});
+	    
 	    $('#searchAddressButton').click(function() {
 	    	postcodeSearch();
 	    })
 	});
 	
-	$('#edit_button').click(function () {
-		var valid = true;
-		
-		var values = new Array($('#name').val()
-								,$('#phone').val()
-								,$('#zipCode').val()
-								,$('#address').val()
-								,$('#detailAddress').val());
-		
-		for (var i = 0; i < 5; i ++) {
-			console.log(values[i] + "----" + i + "번째" );
-			if (values[i] == '') {
-				valid = false;
-				writeWarningPhrase(i);
-			}
-		}
-		console.log(valid);
-		
-		if (valid == true) {
-			$('input[name=_method]').val('put');
-	        $('#branch_form').submit();
-		}
-	});
+	
 	
 	function postcodeSearch() {
 		new daum.Postcode({
