@@ -191,7 +191,7 @@
 			$("#edt_workStartTime").val(day + " " + sHour + ":" + sMin + ":" + "00");
 			$("#edt_workEndTime").val(day + " " + eHour + ":" + eMin + ":" + "00");
 			$("#edt_branchNo").val(parseInt(branchNo));
-			//$("#edt_modal-color").val($("#edt_modal-color").spectrum("get").toHexString().toUpperCase());
+			$("#edt_modal-color").val($("#edt_modal-color").spectrum("get").toHexString().toUpperCase());
 			
 			$('input[name=_method]').val('put');
 			$("#editRemoveForm").submit();
@@ -322,7 +322,7 @@
 		$('#edt_endMin option[value=' + endArry[1] + ']').prop('selected', 'selected').change();
 		
 		$("#edt_occupName option[value='" + titleArry[1] + "']").prop('selected', 'selected').change();
-		$("#edt_modal-color option[value='" + color + "']").prop('selected', 'selected').change();
+		$("#edt_modal-color").spectrum('set',color);
 	}
 	
 	function drawEditModal() {
@@ -375,7 +375,7 @@
 		html += "<tr>";
 		html += "<td>업무</td>";
 		html += "<td>";
-		html += "<select id='edt_occupName' name='occupName'>";
+		html += "<select class='ml-2 mr-2' id='edt_occupName' name='occupName'>";
 		for (var i = 0; i < occupation.length; i++) {
 			html += "<option value='" + occupation[i].name + "'>" + occupation[i].name + "</option>";
 		}
@@ -436,7 +436,7 @@
 		html += "<tr>";
 		html += "<td>업무</td>";
 		html += "<td>";
-		html += "<select id='occupName' name='occupName'>";
+		html += "<select class='ml-2 mr-2' id='occupName' name='occupName'>";
 		for (var i = 0; i < occupation.length; i++) {
 			html += "<option value='" + occupation[i].name + "'>" + occupation[i].name + "</option>";
 		}
