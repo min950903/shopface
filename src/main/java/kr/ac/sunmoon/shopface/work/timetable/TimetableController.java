@@ -65,7 +65,7 @@ public class TimetableController {
 	/**
 	 * 시간표 수정
 	 * */
-	@PutMapping("/timetable/{no}")
+	@PutMapping("/timetable/{timetableNo}")
 	public ModelAndView editTimetable(RedirectAttributes redirect, Timetable timetable, Schedule schedule) {
 		try {
 			boolean result = this.timetableService.editTimetable(timetable, schedule);
@@ -84,7 +84,7 @@ public class TimetableController {
 	/**
 	 * 시간표 삭제
 	 * */
-	@DeleteMapping("/timetable/schedule{no}")
+	@DeleteMapping("/timetable/schedule/{no}")
 	public ModelAndView removeTimetable(RedirectAttributes redirect, Schedule schedule) {
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
 		try {

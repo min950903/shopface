@@ -23,7 +23,7 @@
 	</select>
 
 	<insert id="insert" parameterType="schedule"> 
-		INSERT INTO SCHEDULE VALUES (#{no},#{timetableNo},#{memberId},#{state}) 
+		INSERT INTO SCHEDULE VALUES (SCHEDULE_NO_SEQ.NEXTVAL,#{timetableNo},#{memberId},#{state}) 
 	</insert> 
   
 	<update id="update" parameterType="schedule"> 

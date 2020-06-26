@@ -9,7 +9,7 @@
     </insert>
     <select id="selectAll" parameterType="occupation" resultType="occupation">
         SELECT NO, BRANCH_NO, NAME, COLOR FROM OCCUPATION
-        WHERE BRANCH_NO = 21
+        WHERE BRANCH_NO = #{branchNo}
         ORDER BY NAME
     </select>
     <update id="update" parameterType="occupation">
