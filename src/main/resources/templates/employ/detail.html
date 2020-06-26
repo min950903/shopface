@@ -18,12 +18,15 @@
 							<h5 class="card-title">근무자 기본정보</h5>
 						</div>
 						<div class="card-body">
-							<form class="form-group" id="employ_form" th:action="@{/employ/{branchNo}(branchNo = *{branchNo})}" 
+							<form class="form-group" id="employ_form" th:action="@{/employ}" 
 								  method="post" th:object="${employ}">
 								  <input type="hidden" name="_method">
 								<div class="col-12 col-lg-6">
 										<label for="no"></label>
 										<input type="hidden" class="form-control"  name="no" th:value="*{no}">
+										
+										<label for="branchNo"></label>
+										<input type="hidden" class="form-control"  name="branchNo" th:value="*{branchNo}">
 									<div class="form-group">
 										<label>이름</label>
 										<input type="text" class="form-control" name="name" th:value="*{name}">
@@ -81,8 +84,9 @@
 				$('input[name=_method]').val('put');
 				changeState();
 				$('#employ_form').submit();
+			} else {
+				alert("이름을 입력해주세요");
 			}
-			alert("이름을 입력해주세요");
 		});
 		
 		$('#disable_btn').click(function() {

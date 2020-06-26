@@ -79,9 +79,9 @@ public class EmployServiceImpl implements EmployService {
             isSuccess = true;
         } catch (MailException e) {
             e.printStackTrace();
-        } finally {
-            return isSuccess;
         }
+        
+        return isSuccess;
     }
 
     public SimpleMailMessage createInviteMessage(Employ employ) {
@@ -158,9 +158,6 @@ public class EmployServiceImpl implements EmployService {
                     savedEmploy.setState('B');
                     employMapper.update(savedEmploy);
                 }
-                isSuccess = true;
-                //TODO
-                // 알람을 등록한다.
             }
         }
         

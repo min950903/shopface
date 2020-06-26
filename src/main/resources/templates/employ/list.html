@@ -30,7 +30,7 @@
 									<div class="col-sm-12 col-md-6">
 										<div class="row">
 											<div class="form-inline col-5"></div>
-												<div class="form-inline col ml-6	">
+												<div class="form-inline col ml-6">
 													<label for="name">이름:</label>
 													<input type="search" id="search-name"
 															class="form-control form-control-sm mr-1 ml-1" placeholder=""
@@ -71,8 +71,8 @@
 								</div>
 								<div class="row">
 									<div class="col-sm-12">
-									<!-- branchNo select 박스에서 값 가져오기 -->
-									<form id="detail-form" th:action="@{/employ/21}" method="get">
+									<form id="detail-form" th:action="@{/employ}" method="get">
+										<input type="hidden" id="employNo-input" name="no">
 										<table id="datatables-buttons"
 											class="table table-striped dataTable no-footer dtr-inline"
 											style="width: 100%;" role="grid"
@@ -89,7 +89,7 @@
 													
 												</tr>
 											</thead>
-											<tbody id="table_body">
+											 <tbody id="table_body">
 												<!-- <tr th:each="employ : ${employList}">
 													<td th:text="${employ.name}"></td>
 													<td th:if="${employ.phone}" th:text="${employ.phone}"></td>
@@ -155,15 +155,103 @@ function sendEmployNo(no) {
 	employNo = no
 }
 
+var currentBranchNo = 0;
+
 var header = $("meta[name='_csrf_header']").attr("content");
 var token = $("meta[name=_csrf]").attr("content");
 
 $(document).ready(function() {
-	countDisable();
+	drawEmploy();
+	
+	function drawEmploy() {
+		var searchData= {
+				name: $('#search-name').val(),
+		};
+		
+		if (branchNo > 0) {
+			currentBranchNo = $('#selectBranch').val();		
+		} else {
+			var currentUri = location.pathname;
+			currentBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
+		}
+		searchData.branchNo = currentBranchNo;
+		drawSelectBranch(currentBranchNo);
+		
+		if ($("#disableCheck").prop('checked') == true) {
+			searchData.state='D';
+		}
+		
+		countDisable();
+					
+		 $.ajax({
+			url: '/employ/' + currentBranchNo,
+			type:"GET",
+			data: searchData,
+			contentType: "application/json;charset=UTF-8",
+			success: function(data) {
+				var html = "";
+				if(data.length > 0) {
+					for(var i = 0; i < data.length; i++) {
+						html += "<tr>";
+						html += 	"<td>" + data[i].name + "</td>";
+						if(data[i].phone != null) {
+							html += "<td>" + data[i].phone + "</td>";
+						} else {
+							html += "<td></td>";
+						}
+							
+						if(data[i].email != null) {
+							html += "<td>" + data[i].email + "</td>"
+						} else {
+								html += "<td></td>";
+						}
+						
+						if(data[i].salary != null) {
+							html += "<td>" + data[i].salary + "</td>"
+						} else {
+							html += "<td></td>";
+						}
+						if('C' == data[i].state) {
+							html += "<td>합류 완료</td>";
+							html += "<td><button type='button' class='btn btn-primary'" 
+									+ "name='detailBtn' value=" + data[i].no + ">조회</button></td>";
+							html += "<td></td>"
+						} else {
+							if('B' == data[i].state) {
+								html += "<td>합류전</td>";
+							} else if('D' == data[i].state) {
+								html += "<td>비활성화</td>";
+							}
+							if(data[i].phone != null) {
+								html += "<td>" 
+										+ "<button type='button' class='btn btn-primary'" 
+										+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button>" 
+									 + "</td>";
+							} else {
+								html +="<td></td>";
+							}
+								
+							html += "<td>" 
+										+ "<span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
+										+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span>" 
+									 + "</td>";
+						}
+						html += "<tr>";
+					}
+				} else {
+					html += "<tr><td>검색 결과가 없습니다.</td></tr>";
+				}
+				$('#table_body').html(html);
+			},
+			error: function(error) {
+					console.log(error)
+			}
+		});
+	}
 	
 	function countDisable() {
 		$.ajax({
-			url: location.pathname,
+			url: '/employ/' + currentBranchNo,
 			type:'GET',
 			data: {
 				'state': 'D'
@@ -188,14 +276,6 @@ $(document).ready(function() {
 		drawEmploy();
 	});
 	
-	$('#table_body').on('click','button[name=detailBtn]', function() {
-		var currentRow =$ (this).closest('tr');
-		var no = currentRow.find('td:eq(5) button[name="detailBtn"]').val()
-		
-		$('#detail-form').attr('action','/employ/21/' + no);
-		$('#detail-form').submit();
-	});
-	
 	$('#searchBtn').click(function() {
 		drawEmploy();
 	});
@@ -204,81 +284,22 @@ $(document).ready(function() {
 		if (e.keyCode == 13) {drawEmploy();}
 	});
 	
-	function drawEmploy() {
-		var searchData= {
-			name: $('#search-name').val(),
-			branchNo: $('#selectBranch').val()
-		};
+	$(document).on('change', 'select[name=selectBranch]', function() {
+		var currentValue = $('#selectBranch').val(); 
 		
-		if($("#disableCheck").prop('checked') == true) {
-			searchData.state='D';
-		} 
-					
-		 $.ajax({
-				url: location.pathname + "/" + searchData.branchNo,
-				type:"GET",
-				data: searchData,
-				contentType: "application/json;charset=UTF-8",
-				success: function(data) {
-					var html = "";
-					if(data.length > 0) {
-						for(var i = 0; i < data.length; i++) {
-							html += "<tr>";
-							html += 	"<td>" + data[i].name + "</td>";
-							if(data[i].phone != null) {
-								html += "<td>" + data[i].phone + "</td>";
-							} else {
-								html += "<td></td>";
-							}
-							
-							if(data[i].email != null) {
-								html += "<td>" + data[i].email + "</td>"
-							} else {
-								html += "<td></td>";
-							}
-							
-							if(data[i].salary != null) {
-								html += "<td>" + data[i].salary + "</td>"
-							} else {
-								html += "<td></td>";
-							}
-							if('C' == data[i].state) {
-								html += "<td>합류 완료</td>";
-								html += "<td><button type='button' class='btn btn-primary'" 
-										+ "name='detailBtn' value=" + data[i].no + ">조회</button></td>";
-								html += "<td></td>"
-							} else {
-								if('B' == data[i].state) {
-									html += "<td>합류전</td>";
-								} else if('D' == data[i].state) {
-									html += "<td>비활성화</td>";
-								}
-								if(data[i].phone != null) {
-									html += "<td>" 
-											+ "<button type='button' class='btn btn-primary'" 
-											+" id='detail-button' name='detailBtn' value=" + data[i].no + ">조회</button>" 
-										 + "</td>";
-								} else {
-									html +="<td></td>";
-								}
-								
-								html += "<td>" 
-											+ "<span data-toggle=\'modal\' data-target=\'#resendInviteModal\'" 
-											+ "style=\'color:blue;\' onclick=\"sendEmployNo(\'" + data[i].no + "\');\"> 다시 초대하기</span>" 
-									  + "</td>";
-							}
-							html += "<tr>";
-						}
-					} else {
-						html += "<tr><td>검색 결과가 없습니다.</td></tr>";
-					}
-					$('#table_body').html(html);
-				},
-				error: function(error) {
-					console.log(error)
-				}
-			});
-	 }
+		$('option:selected', this).removeAttr('selected');
+		$('#selectBranch > option[value=currentValue]').attr('selected', true);
+		
+		drawEmploy();
+	})
+	
+	$('#table_body').on('click','button[name=detailBtn]', function() {
+		var currentRow =$ (this).closest('tr');
+		var no = currentRow.find('td:eq(5) button[name="detailBtn"]').val()
+		$('#employNo-input').val(no);
+		
+		$('#detail-form').submit();
+	});
 	
 	$('#inviteModal').on('show.bs.modal')
 	$('#inviteModal').on('hide.bs.modal', function() {
@@ -287,15 +308,17 @@ $(document).ready(function() {
 		
 	$('#inviteBtn').click(function() {
 		var formData = {
-			'name': $('input[name=inviteName]').val(),
-			'email': $('input[name=inviteEmail]').val()	
+			name: $('input[name=inviteName]').val(),
+			email: $('input[name=inviteEmail]').val(),
+			branchNo: currentBranchNo
 		}
+		
 		$('#inviteModal').modal('hide')
 		$('#inviteModal').on('hide.bs.modal', function() {
 			$(this).find('form')[0].reset();
 		})
 		$.ajax({
-			url: location.pathname,
+			url: '/employ',
 			type: 'POST',
 			data: formData,
 			beforeSend: function(xhr) {
@@ -309,7 +332,7 @@ $(document).ready(function() {
 					alert("초대메시지 전송에 실패했습니다.\r\n이름과 이메일을 입력해주세요");
 				}
 				
-				location.reload();
+				drawEmploy();
 			},
 			error: function(error) {
 				alert("오류가 발생했습니다.");
@@ -325,7 +348,7 @@ $(document).ready(function() {
 	$('#resendInviteBtn').click(function() {
 		var resendData = {
 				'email' : $('input[name=reInviteEmail]').val(),
-				'no': employNo
+				'no': employNo,
 		}
 		
 		$('#resendInviteModal').modal('hide')
@@ -348,7 +371,7 @@ $(document).ready(function() {
 					alert("초대메시지 전송에 실패했습니다.\r\n올바른 이메일을 입력해주세요");
 				}
 				
-				location.reload();
+				drawEmploy();
 			},
 			error: function(error) {
 				alert("오류가 발생했습니다.");
