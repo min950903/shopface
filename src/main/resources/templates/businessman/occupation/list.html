@@ -95,16 +95,16 @@ var token = $("meta[name=_csrf]").attr("content");
 
 $('document').ready(function() {
 	drawOccupationTable();
-	
+
 	function drawOccupationTable() {
-		if (branchNo > 0) {
+		if (currentBranchNo > 0) {
 			currentBranchNo = $('#selectBranch').val();		
 		} else {
 			var currentUri = location.pathname;
 			currentBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
 		}
 		
-		drawSelectBranch(currentBranchNo);
+		drawBranchList(currentBranchNo);
 		
 		$.ajax({
 			url: '/occupation/' + currentBranchNo,

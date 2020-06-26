@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>전체 시간표 관리</title>
-<link rel="stylesheet" type="text/css" th:href="@{css/spectrum/spectrum.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/spectrum/spectrum.css}">
 </head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <body>
@@ -82,7 +82,7 @@
 				                   </button>
 							</div>
 							<div class="modal-body m-3">
-								<form id="editRemoveForm" th:action="@{/timetable}" method="post" enctype="multipart/form-data">
+								<form id="editRemoveForm" th:action="@{/timetable}" method="post">
 									<input type="hidden" name="_method">
 									<div class="form-group">
 										<table id="datatables-buttons"
@@ -115,11 +115,11 @@
    </th:block>
 </body>
 </html>
-<script type="text/javascript" src="js/sidebar.js"></script> 
-<script type="text/javascript" src="js/spectrum/spectrum.js"></script>
-<script type='text/javascript' src="js/spectrum/toc.js"></script>
-<script type='text/javascript' src="js/spectrum/docs.js"></script>
-<script type="text/javascript" src="js/spectrum/prettify.js"></script> 
+<script type="text/javascript" src="/js/sidebar.js"></script> 
+<script type="text/javascript" src="/js/spectrum/spectrum.js"></script>
+<script type='text/javascript' src="/js/spectrum/toc.js"></script>
+<script type='text/javascript' src="/js/spectrum/docs.js"></script>
+<script type="text/javascript" src="/js/spectrum/prettify.js"></script> 
 <script th:inline="javascript">
 	var branchNo = $("#selectBranch").val();
 	var occupation;
@@ -127,13 +127,13 @@
 	 
 	$(function() {
 		branchNo = $("#selectBranch").val();
-    
 		drawCalendar();
 		getOccupation();
 		getEmploy();
 		drawAddModal();
 		drawEditModal();
-		
+		drawBranchList(branchNo);
+
 		$("#selectBranch").change(function () {
 			branchNo = $("#selectBranch").val();
 			$("#fullcalendar").fullCalendar('destroy');
@@ -145,6 +145,8 @@
 		});
 		
 		$("#modal-color").spectrum({
+				
+			
 			  showPaletteOnly: true,
 			  showPalette:true,
 			  color: '#0070C0',
@@ -154,7 +156,7 @@
 			  ]
 		});
 		
-		$("edt_#modal-color").spectrum({
+		$("#edt_modal-color").spectrum({
 			  showPaletteOnly: true,
 			  showPalette:true,
 			  color: '#0070C0',
@@ -198,12 +200,9 @@
 	
 	function getOccupation() {
 		$.ajax({
-			url : "/occupation",
+			url : "/occupation/" + branchNo,
 			type : "get",
 			async : false,
-			data : {
-				branchNo : parseInt(branchNo)
-			},
 			headers : {
 				"Content-Type" : "application/json;charset=UTF-8"
 			},
@@ -219,6 +218,9 @@
 		$.ajax({
 			url : "/employ/" + parseInt(branchNo),
 			type : "get",
+			data : {
+				branchNo : parseInt(branchNo)
+			},
 			async : false,
 			headers : {
 				"Content-Type" : "application/json;charset=UTF-8"
@@ -230,7 +232,6 @@
 			}
 		});
 	}
-	
 
 	function drawCalendar() {
 		var eventData;
@@ -257,7 +258,6 @@
 					success : function(data) {
 						var events = [];
 						for (i in data) {
-							console.log(data[i].timetable.timetableNo + "/" + data[i].schedule.no + "/" + data[i].schedule.memberId);
 							events.push({
 								id: data[i].timetable.timetableNo + "/" + data[i].schedule.no + "/" + data[i].schedule.memberId,
 					            title: "\n" + data[i].timetable.occupName + "\n" + data[i].schedule.name,
@@ -281,7 +281,6 @@
 				var titleArry = event.title.split("\n");
 				var start = event.start.format("HH:mm");
 				var end = event.end.format("HH:mm");
-				console.log(start + " / " + end);
 				var color = event.color;
 				
 				changeEditRemoveModal(idArry, titleArry, start, end, color);
@@ -336,7 +335,7 @@
 		html += "<td>";
 		html += "<select id='edt_memberId' name='memberId' class='form-control'>";
 		for (var j = 0; j < employ.length; j++) {
-			html += "<option value='" + "test" + "'>" + employ[j].name + "</option>";
+			html += "<option value='" + employ[j].memberId + "'>" + employ[j].name + "</option>";
 		}
 		html += "</select>";
 		html += "</td>";
@@ -389,7 +388,6 @@
 		$("#table_body_edit").html(html);
 	}
 	
-	
 	function drawAddModal() {
 		var html = "";
 		
@@ -398,7 +396,7 @@
 		html += "<td>";
 		html += "<select id='memberId' name='memberId' class='form-control'>";
 		for (var j = 0; j < employ.length; j++) {
-			html += "<option value='" + "test" + "'>" + employ[j].name + "</option>";
+			html += "<option value='" + employ[j].memberId + "'>" + employ[j].name + "</option>";
 		}
 		html += "</select>";
 		html += "</td>";
@@ -454,4 +452,9 @@
 		$("#time").html(y + "년 " + m + "월 " + d + "일 시간표 등록");
 		$("#currentDate").val(y + "-" + m + "-" + d);
 	}
+	
+	$("#removeBtn").click(function() {
+        $('input[name=_method]').val('delete');
+        $("#editRemoveForm").submit();
+     })
 </script>

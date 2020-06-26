@@ -19,4 +19,5 @@ public class Schedule implements Serializable {
 	private String name;
 	private String memberId;
 	private char state;
+	private int branchNo;
 }

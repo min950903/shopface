@@ -86,30 +86,9 @@
 													<th>상태</th>
 													<th>관리</th>
 													<th></th>
-													
 												</tr>
 											</thead>
 											 <tbody id="table_body">
-												<!-- <tr th:each="employ : ${employList}">
-													<td th:text="${employ.name}"></td>
-													<td th:if="${employ.phone}" th:text="${employ.phone}"></td>
-													<td th:if="!${employ.phone}"></td>
-													<td th:if="${employ.email}" th:text="${employ.email}"></td>
-													<td th:if="!${employ.email}"></td>
-													<td th:if="${employ.salary != null}" th:text="${employ.salary}"></td>
-													<td th:if="${employ.state} == 'B'" >합류전</td>
-													<td th:if="${employ.state} == 'C'">합류 완료</td>
-													<td th:if="${employ.state} == 'D'" >비활성화</td>
-													<td th:if="${employ.phone}">
-														<button type="button" class="btn btn-primary" name="detailBtn" th:value="${employ.no}">조회</button>
-													</td>
-													<td th:if="!${employ.phone}"></td>
-													<td th:if="${employ.state} != 'C'">
-														<span data-toggle="modal" data-target="#resendInviteModal" style="color:blue;" 
-															th:onclick="|javascript:sendEmployNo('${employ.no}')|">다시 초대하기</span>
-													</td>
-													<td th:if="${employ.state} == 'C'"></td>
-												</tr> -->
 											</tbody>
 										</table>
 									</form>
@@ -162,20 +141,21 @@ var token = $("meta[name=_csrf]").attr("content");
 
 $(document).ready(function() {
 	drawEmploy();
+	drawBranchList(currentBranchNo);
 	
 	function drawEmploy() {
 		var searchData= {
 				name: $('#search-name').val(),
 		};
 		
-		if (branchNo > 0) {
+		if (currentBranchNo > 0) {
 			currentBranchNo = $('#selectBranch').val();		
 		} else {
 			var currentUri = location.pathname;
 			currentBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
 		}
 		searchData.branchNo = currentBranchNo;
-		drawSelectBranch(currentBranchNo);
+		drawBranchList(currentBranchNo);
 		
 		if ($("#disableCheck").prop('checked') == true) {
 			searchData.state='D';

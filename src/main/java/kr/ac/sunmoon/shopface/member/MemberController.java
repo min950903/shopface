@@ -35,7 +35,6 @@ public class MemberController {
 		
 		String referrer = request.getHeader("Referer");
 		
-		log.info(referrer);
 		if ("employ".equals(referrer.substring(referrer.lastIndexOf("/") + 1, referrer.lastIndexOf("/") + 7))) {
 			modelAndView.addObject("type", "E");
 		} else {
