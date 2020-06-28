@@ -43,7 +43,7 @@ public class TimetableServiceImple implements TimetableService {
 					} else {
 						if (timetables.size() == 1) {
 							Schedule parameter = new Schedule();
-							parameter.setTimetableNo(timetables.get(1).getTimetableNo());
+							parameter.setTimetableNo(timetables.get(0).getTimetableNo());
 							
 							List<Schedule> schedules = this.scheduleMapper.selectAll(parameter);
 							if (schedules == null) {

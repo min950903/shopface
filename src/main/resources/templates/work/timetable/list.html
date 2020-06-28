@@ -144,29 +144,8 @@
 			drawEditModal();
 		});
 		
-		$("#modal-color").spectrum({
-				
-			
-			  showPaletteOnly: true,
-			  showPalette:true,
-			  color: '#0070C0',
-			  palette: [
-			      ['#0070C0', '#00B050', '#FFC000', '#7030A0', '#C00000'],
-			      ['#4BACC6', '#9BBB59', '#F79646', '#C0504D', '#7F7F7F']
-			  ]
-		});
-		
-		$("#edt_modal-color").spectrum({
-			  showPaletteOnly: true,
-			  showPalette:true,
-			  color: '#0070C0',
-			  palette: [
-			      ['#0070C0', '#00B050', '#FFC000', '#7030A0', '#C00000'],
-			      ['#4BACC6', '#9BBB59', '#F79646', '#C0504D', '#7F7F7F']
-			  ]
-		});
-		
-		$("#addBtn").click(function(){
+
+		$("#addBtn").click(function() {
 			var day = $("#currentDate").val();
 			var sHour = $("#startHour").val();
 			var sMin = $("#startMin").val();
@@ -176,12 +155,11 @@
 			$("#workStartTime").val(day + " " + sHour + ":" + sMin + ":" + "00");
 			$("#workEndTime").val(day + " " + eHour + ":" + eMin + ":" + "00");
 			$("#branchNo").val(parseInt(branchNo));
-			$("#modal-color").val($("#modal-color").spectrum("get").toHexString().toUpperCase());
 			
 			$("#addForm").submit();
 		});
 		
-		$("#editBtn").click(function(){
+		$("#editBtn").click(function() {
 			var day = $("#edt_currentDate").val();
 			var sHour = $("#edt_startHour").val();
 			var sMin = $("#edt_startMin").val();
@@ -191,7 +169,6 @@
 			$("#edt_workStartTime").val(day + " " + sHour + ":" + sMin + ":" + "00");
 			$("#edt_workEndTime").val(day + " " + eHour + ":" + eMin + ":" + "00");
 			$("#edt_branchNo").val(parseInt(branchNo));
-			$("#edt_modal-color").val($("#edt_modal-color").spectrum("get").toHexString().toUpperCase());
 			
 			$('input[name=_method]').val('put');
 			$("#editRemoveForm").submit();
@@ -312,8 +289,6 @@
 		$("#timetableNo").val(idArry[0]);
 		$("#no").val(idArry[1]);
 
-		//$('#edt_memberId option[value=' + idArry[2] + ']').prop('selected', 'selected').change();
-		
 		$("#edt_branchNo").val(parseInt(branchNo));
 		
 		$('#edt_startHour option[value=' + startArry[0] + ']').prop('selected', 'selected').change();
@@ -322,7 +297,15 @@
 		$('#edt_endMin option[value=' + endArry[1] + ']').prop('selected', 'selected').change();
 		
 		$("#edt_occupName option[value='" + titleArry[1] + "']").prop('selected', 'selected').change();
-		$("#edt_modal-color").spectrum('set',color);
+		
+		for (var i = 0; i < occupation.length; i++) {
+			if(occupation[i].name == titleArry[1]) {
+				$('#edt_modal-color').attr({
+					value: occupation[i].color,
+					style: 'background-color:' + occupation[i].color  +';color:' + occupation[i].color
+				});
+			}
+		}
 	}
 	
 	function drawEditModal() {
@@ -388,6 +371,20 @@
 		$("#table_body_edit").html(html);
 	}
 	
+	$('#table_body_edit').on('change', 'select[name=occupName]', function() {
+		var occupationName = $('#edt_occupName').val();
+		if (occupation.length > 0) {
+			for(var i = 0; i < occupation.length; i++) {
+				if (occupationName == occupation[i].name) {
+					$('#edt_modal-color').attr({
+						value: occupation[i].color,
+						style: 'background-color:' + occupation[i].color  +';color:' + occupation[i].color
+					});
+				}
+			}	
+		}
+	});
+	
 	function drawAddModal() {
 		var html = "";
 		
@@ -436,17 +433,35 @@
 		html += "<tr>";
 		html += "<td>업무</td>";
 		html += "<td>";
-		html += "<select class='ml-2 mr-2' id='occupName' name='occupName'>";
-		for (var i = 0; i < occupation.length; i++) {
-			html += "<option value='" + occupation[i].name + "'>" + occupation[i].name + "</option>";
+		if (occupation.length > 0) {
+			html += "<select class='ml-2 mr-2' id='occupName' name='occupName'>";
+			for (var i = 0; i < occupation.length; i++) {
+				html += "<option value='" + occupation[i].name + "'>" + occupation[i].name + "</option>";
+			}
+			html += "</select>";
+			html += "<input type='text' id='modal-color' name='occupColor'" 
+					+ " style='background-color:" + occupation[0].color + "; color:"+ occupation[0].color
+					+ "' value='" + occupation[0].color + "'/>";
+			html += "</td>";
 		}
-		html += "</select>";
-		html += "<input type='text' id='modal-color' name='occupColor'/>";
-		html += "</td>";
 		html += "</tr>";
 		
 		$("#table_body_add").html(html);
 	}
+	
+	$('#table_body_add').on('change', 'select[name=occupName]', function() {
+		var occupationName = $('#occupName').val();
+		if (occupation.length > 0) {
+			for(var i = 0; i < occupation.length; i++) {
+				if (occupationName == occupation[i].name) {
+					$('#modal-color').attr({
+						value: occupation[i].color,
+						style: 'background-color:' + occupation[i].color  +';color:' + occupation[i].color
+					});
+				}
+			}	
+		}
+	});
 	
 	function formatDate(y, m, d) {
 		$("#time").html(y + "년 " + m + "월 " + d + "일 시간표 등록");
