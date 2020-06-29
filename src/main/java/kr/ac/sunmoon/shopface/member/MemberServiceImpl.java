@@ -1,6 +1,8 @@
 package kr.ac.sunmoon.shopface.member;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +33,8 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	@Override
 	public boolean addMember(Member member, String certiCode) {
+		boolean isSuccess = false;
+		
 		if (!member.getId().equals("") 
 				&& !member.getName().equals("")
 				&& !member.getPassword().equals("")
@@ -45,6 +49,8 @@ public class MemberServiceImpl implements MemberService {
 				Employ existEmploy = employMapper.select(employ);
 				
 				employ.setNo(existEmploy.getNo());
+				employ.setMemberId(member.getId());
+				employ.setEmployDate(new Date(Calendar.getInstance().getTime().getTime()));
 				employ.setCertiCode(null);
 				employ.setState('C');
 				employMapper.update(employ);
@@ -58,10 +64,10 @@ public class MemberServiceImpl implements MemberService {
 				alarmMapper.insert(alarm);
 			}
 			
-			return true;
-		} else {
-			return false;			
-		}
+			isSuccess = true;
+		} 
+		
+		return isSuccess;
 	}
 	
 	@Transactional

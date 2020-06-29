@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import lombok.RequiredArgsConstructor;
 
@@ -84,11 +85,9 @@ public class EmployController {
     @GetMapping(value = "/employ/check", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> checkCertiCode(Employ employ, @RequestParam("expiredDate") String expiredDate) {
     	Map<String, Object> result = new HashMap<String, Object>();
-    	if (employService.checkCertiCode(employ, expiredDate)) {
-    		result.put("isCorrect", true);
-    	} else {
-    		result.put("isCorrect", false);
-    	}
+    	
+    	String checker = employService.checkCertiCode(employ, expiredDate);
+    	result.put("checker", checker);
     	
     	return result;
     }

@@ -35,7 +35,7 @@ public class TimetableServiceImple implements TimetableService {
 						this.timetableMapper.insert(timetable);//시간표 등록
 						List<Timetable> result = this.timetableMapper.selectAll(timetable);
 						if (result.size() == 1) {
-							schedule.setTimetableNo(result.get(0).getTimetableNo());
+							schedule.setTimetableNo(result.get(0).getNo());
 							schedule.setState('R');
 							this.scheduleMapper.insert(schedule);
 							return true;
@@ -43,7 +43,7 @@ public class TimetableServiceImple implements TimetableService {
 					} else {
 						if (timetables.size() == 1) {
 							Schedule parameter = new Schedule();
-							parameter.setTimetableNo(timetables.get(0).getTimetableNo());
+							parameter.setTimetableNo(timetables.get(0).getNo());
 							
 							List<Schedule> schedules = this.scheduleMapper.selectAll(parameter);
 							if (schedules == null) {
@@ -68,13 +68,13 @@ public class TimetableServiceImple implements TimetableService {
 		List<TimetableSchedule> timetableSchedules = new ArrayList<TimetableSchedule>();
 		try {
 			if (branchNo > 0 
-					&& !"".equals(branchNo)) {
+					&& !"".equals(branchNo)) { 
 				Timetable timetable = new Timetable();
 				timetable.setBranchNo(branchNo);
 				List<Timetable> timetables = this.timetableMapper.selectAll(timetable);
 				if (timetables.size() > 0) {
 					for (int i = 0; i < timetables.size(); i++) {
-						int no = timetables.get(i).getTimetableNo();
+						int no = timetables.get(i).getNo();
 						
 						Schedule parameterSchedule = new Schedule();
 						parameterSchedule.setTimetableNo(no);
@@ -125,7 +125,7 @@ public class TimetableServiceImple implements TimetableService {
 		
 					List<Timetable> result = this.timetableMapper.selectAll(timetable);
 					if (result != null && result.size() == 1) {
-						schedule.setTimetableNo(result.get(1).getTimetableNo());
+						schedule.setTimetableNo(result.get(1).getNo());
 						this.scheduleMapper.update(schedule);
 						
 						return true;
@@ -145,7 +145,7 @@ public class TimetableServiceImple implements TimetableService {
 	public boolean removeTimetable(Schedule schedule) {
 		try {
 			if (schedule.getNo() > 0
-					&& schedule.getTimetableNo() > 0) {
+					&& schedule.getNo() > 0) {
 				List<Schedule> schedules = new ArrayList<Schedule>();
 				schedules = this.scheduleMapper.selectAll(schedule);
 				if (schedules != null) {
@@ -153,7 +153,7 @@ public class TimetableServiceImple implements TimetableService {
 						if (schedules.get(1).getState() == 'R' || schedules.get(1).getState() == 'B') {
 							this.scheduleMapper.delete(schedule);
 							Schedule parameter = new Schedule();
-							parameter.setTimetableNo(schedule.getTimetableNo());
+							parameter.setTimetableNo(schedule.getNo());
 							
 							List<Schedule> resultSchedules = this.scheduleMapper.selectAll(parameter);
 							if (resultSchedules != null) {
@@ -161,7 +161,7 @@ public class TimetableServiceImple implements TimetableService {
 									return true;
 								}
 							} else {
-								this.timetableMapper.delete(new Timetable(schedule.getTimetableNo()));
+								this.timetableMapper.delete(new Timetable(schedule.getNo()));
 								return true;
 							}
 						} else {

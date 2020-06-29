@@ -1,6 +1,7 @@
 package kr.ac.sunmoon.shopface.employ;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -128,6 +129,12 @@ public class EmployServiceImpl implements EmployService {
         if (employ.getName() != null && employ.getName() != "") {
             employMapper.update(employ);
             isSuccess = true;
+        } else if (employ.getCertiCode() != null) {
+        	Employ existEmploy = employMapper.select(employ);
+        	existEmploy.setState('C');
+        	existEmploy.setEmployDate(new Date(Calendar.getInstance().getTime().getTime()));
+        	
+        	employMapper.update(existEmploy);
         }
         
         return isSuccess;
@@ -169,7 +176,7 @@ public class EmployServiceImpl implements EmployService {
 
     @Transactional
 	@Override
-	public boolean checkCertiCode(Employ employ, String expiredDate) {
+	public String checkCertiCode(Employ employ, String expiredDate) {
     	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     	
     	CryptogramImpl cryptogram = new CryptogramImpl(secretKey);
@@ -184,14 +191,19 @@ public class EmployServiceImpl implements EmployService {
 			e.printStackTrace();
 		}
     	
-    	boolean isCorrect = false;
+    	String result = "F";
+    	
     	int compareResult = targetDate.compareTo(currentDate);
     	if (compareResult <= 0) {
-    		if (employMapper.findByCertiCode(employ) > 0) {
-    			isCorrect = true;
+    		Employ existEmploy = employMapper.select(employ);
+    	    if (existEmploy != null 
+    				&& existEmploy.getMemberId() != null) {
+    			result = "R";
+    		} else if (existEmploy != null) {
+    			result = "S";
     		}
     	}
     	
-		return isCorrect;
+		return result;
 	}
 }

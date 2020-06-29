@@ -17,7 +17,9 @@
 						</div>
 						<div class="card">
 							<div class="m-sm-4">
-								<form th:action="@{/member/form}" method="get">
+								<form id="authForm" th:action="@{/member/form}" method="get">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+									<input type="hidden" name="_method">
 									<input type="hidden" id="expiredDate" th:value="${date}" />
 									<label for="id">인증코드  : </label>
 									<input type="text" id="certiCode" class="form-control form-control-lg" name="certiCode"/>
@@ -38,13 +40,15 @@
 </body>
 </html>
 
-<script>
+<script th:inline="javascript">
+	var action = /*[[@{/rejoin}]]*/ '';
 	$("#certiCode").keyup(function() {
 		var certiCode = $('#certiCode').val();
 		var expiredDate = $('#expiredDate').val();
 		if (certiCode == null || certiCode == '') {
 			$('#checkIdDiv').html('인증코드를 입력해주세요.');
 			$('#checkIdDiv').css("color", "red");
+			$('#authenticateBtn').attr('disabled', true);
 		} else {
 			$.ajax({
 				url: '/employ/check?certiCode=' + certiCode + '&expiredDate=' + expiredDate,
@@ -54,8 +58,13 @@
 					"Content-Type" : 'application/json;charset=UTF-8'
 				},
 				success: function(response) {
-					if (response.isCorrect == true) {
+					if (response.checker == 'S') {
 						$('#checkIdDiv').html("");
+						$('#authenticateBtn').attr('disabled', false);
+					} else if (response.checker == 'R') {
+						$('#checkIdDiv').html("");
+						/* $('#authForm').attr("action", action);
+						$('#authForm').attr("method", "post"); */
 						$('#authenticateBtn').attr('disabled', false);
 					} else {
 						$('#checkIdDiv').html("유효하지 않은 인증코드입니다 다시 입력해주세요.");

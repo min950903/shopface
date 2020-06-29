@@ -45,7 +45,7 @@
 	
 	<select id ="select" resultMap="TestMap">
 		SELECT * 
-		FROM TIMETABLE T, BRANCH_NEW B, SCHEDULE S
+		FROM TIMETABLE T, BRANCH B, SCHEDULE S
 		WHERE T.BRANCH_NO = B.NO AND T.NO = S.TIMETABLE_NO 
 	</select>
 

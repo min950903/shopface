@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
-
+	private final ScheduleMapper scheduleMapper;
 	private final TestMapper testMapper;
 
 	@Override

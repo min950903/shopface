@@ -12,7 +12,7 @@ public interface EmployService {
     public boolean removeEmploy(Employ employ);
     public String createAuthCode();
     public String verificationAuthCode(Employ employ);
-    public boolean checkCertiCode(Employ employ, String expiredDate);
+    public String checkCertiCode(Employ employ, String expiredDate);
     public SimpleMailMessage createInviteMessage(Employ employ);
     public boolean sendInviteMessage(Employ employ);
     public boolean resendInviteMessage(Employ employ);

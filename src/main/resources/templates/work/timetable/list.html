@@ -16,15 +16,6 @@
             <div class="row">
                <div class="col-12">
                   <div class="card">
-                     <div class="card-header">
-                        <div class="row">
-							<div class="col-sm-12 col-md-6"></div>
-							<div class="col-sm-12 col-md-6">
-								<div id="datatables-buttons_filter" class="dataTables_filter">
-								</div>
-							</div>
-						</div>
-                     </div>
                      <div class="card-body">
                         <div id="datatables-buttons_wrapper"
                            class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -195,15 +186,13 @@
 		$.ajax({
 			url : "/employ/" + parseInt(branchNo),
 			type : "get",
-			data : {
-				branchNo : parseInt(branchNo)
-			},
 			async : false,
 			headers : {
 				"Content-Type" : "application/json;charset=UTF-8"
 			},
 			success : function(data) {
 				employ = data;
+				console.log(data);
 			}, error : function(request, status, error) {
 				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 			}

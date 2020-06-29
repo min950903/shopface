@@ -14,52 +14,15 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="card">
-							<div class="card-header">
-								<h5 class="card-title">FullCalendar</h5>
-							</div>
 							<div class="card-body">
 								<div id="datatables-buttons_wrapper"
 									class="dataTables_wrapper dt-bootstrap4 no-footer">
 									<div class="row">
 										<div class="col-sm-12 col-md-6"></div>
 										<div class="col-sm-12 col-md-6">
-											<!-- 	<div id="datatables-buttons_filter"
-													class="dataTables_filter">
-													<form class="form-inline d-none d-sm-inline-block"
-														action="/test" method="GET">
-														<div class="form-inline">
-															<select id="condition" name="condition" class="form-control">
-																<option value="branch.name">지점명</option>
-															</select> 
-															<input type="search" name="searchQuery"
-																class="form-control form-control-sm" placeholder=""
-																aria-controls="datatables-buttons"> <input
-																type="button" class="btn btn-primary" id="searchButton"
-																name="searchButton" value="검색">
-														</div>
-													</form>
-												</div> -->
 										</div>
 									</div>
 									<div id="fullcalendar"></div>
-									<!-- 		<div class="row">
-											<div class="col-sm-12">
-												<table id="datatables-buttons"
-													class="table table-striped dataTable no-footer dtr-inline"
-													style="width: 100%;" role="grid"
-													aria-describedby="datatables-buttons_info">
-													<thead>
-														<tr role="row">
-															<th>시작시간</th>
-															<th>종료시간</th>
-															<th>업무명</th>
-														</tr>
-													</thead>
-													<tbody id="table_body">
-													</tbody>
-												</table>
-											</div>
-										</div>  -->
 								</div>
 							</div>
 						</div>
@@ -70,55 +33,6 @@
 	</th:block>
 </body>
 </html>
-
-<!-- 
-<script>
-	var dataObj;
-	$(document).ready(function() {
-		/* 		$('#searchButton').click(function() {
-		 if ($('#condition').val() == 'branch.name') {
-		 dataObj = {
-		 "branch.name" : $('input[name=searchQuery]').val()
-		 }
-		 }
-		 drawTable(dataObj);
-		 }) */
-		drawTable(dataObj);
-	});
-
-	function drawTable() {
-		$
-				.ajax({
-					url : "/schedule",
-					type : "get",
-					data : dataObj,
-					headers : {
-						"Content-Type" : "application/json;charset=UTF-8"
-					},
-					success : function(data) {
-						var html = "";
-						if (data.length > 0) {
-							for (var i = 0; i < data.length; i++) {
-								html += "	<tr>";
-							/* 	html += "	<td>"+ data[i].timetable.workStartTime + "</td>"; */
-							/* 	html += "	<td>" + data[i].timetable.workEndTime + "</td>";
-								html += "	<td>" + data[i].timetable.occupName	+ "</td>"; */
-								html += "	</tr>";
-							}
-						} else {
-							html += "<tr><td>검색 결과가 없습니다.</td></tr>";
-						}
-						$('#table_body').html(html);
-					},
-					error : function(request, status, error) {
-						console.log("Code:" + request.status + "\n"
-								+ "message:" + request.responseText + "\n"
-								+ "error:" + error);
-					}
-				})
-	}
-</script>
- -->
 <script>
 $(function() {
 	$("#fullcalendar").fullCalendar({
@@ -149,6 +63,8 @@ $(function() {
 				            title: data[i].timetable.occupName + "," + data[i].branch.name,
 				            start: data[i].timetable.workStartTime,
 				            end: data[i].timetable.workEndTime, 
+				            color: data[i].timetable.occupColor,
+				            textColor: "#ffffff"
 				        });
 					}
 					callback(events);

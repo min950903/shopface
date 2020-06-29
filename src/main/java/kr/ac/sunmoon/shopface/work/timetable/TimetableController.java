@@ -15,14 +15,19 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import kr.ac.sunmoon.shopface.work.schedule.Schedule;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 @RestController
 public class TimetableController {
 	private final TimetableService timetableService;
 	
 	@PostMapping("/timetable")
 	public ModelAndView addTimetable(RedirectAttributes redirect, Timetable timetable, Schedule schedule) {
+		log.info(schedule.getMemberId());
+		log.info(timetable.getWorkStartTime());
+		
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
 		
 		boolean result = this.timetableService.addTimetable(timetable, schedule);
