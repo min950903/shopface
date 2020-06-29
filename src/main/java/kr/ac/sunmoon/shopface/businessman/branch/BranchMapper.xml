@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.sunmoon.shopface.businessman.branch.BranchMapper">
+	<insert id="insert" parameterType="Branch">
+		INSERT INTO BRANCH(NO, MEMBER_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, STATE, APPROVAL_STATUS)
+		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{memberId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipCode}, 'A', 'W')
+	</insert>
+	
+	<select id="selectAll" parameterType="Branch" resultType="Branch">
+		SELECT 
+			 NO
+			,MEMBER_ID
+			,NAME
+			,PHONE
+			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
+			,ADDRESS
+			,DETAIL_ADDRESS
+			,ZIP_CODE
+			,BUSINESS_L_PATH
+			,STATE
+			,APPROVAL_STATUS
+		FROM BRANCH
+		<where>
+			<if test="memberId != null and memberId != ''">
+				AND MEMBER_ID = #{memberId}
+			</if>
+			<if test="approvalStatus != null and approvalStatus != ''">
+				AND APPROVAL_STATUS = #{approvalStatus}
+			</if>
+		</where>
+		ORDER BY NO DESC
+	</select>
+	
+	<select id="select" parameterType="int" resultType="Branch">
+		SELECT 
+			 NO
+			,MEMBER_ID
+			,NAME
+			,PHONE
+			,TO_CHAR(REGISTER_DATE, 'YYYY-MM-DD') AS "REGISTER_DATE"
+			,ADDRESS
+			,DETAIL_ADDRESS
+			,ZIP_CODE
+			,BUSINESS_L_PATH
+			,STATE
+			,APPROVAL_STATUS
+		FROM BRANCH
+		WHERE NO = #{no}
+	</select>
+	
+	<update id="update" parameterType="Branch">
+		UPDATE BRANCH
+		<set>
+			<if test="name != null and name != ''">
+				NAME = #{name},
+			</if> 
+			<if test="address != null and address != ''">
+				ADDRESS = #{address},
+			</if>
+			<if test="detailAddress != null and detailAddress != ''">
+				DETAIL_ADDRESS = #{detailAddress},
+			</if>
+			<if test="zipCode != null and zipCode != ''">
+				ZIP_CODE = #{zipCode},
+			</if>
+			<if test="phone != null and phone != ''">
+				PHONE = #{phone},
+			</if>
+			<if test="approvalStatus != null and approvalStatus != ''">
+				APPROVAL_STATUS = #{approvalStatus},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="businessLPath != null and businessLPath != ''">
+				BUSINESS_L_PATH = #{businessLPath}
+			</if>
+		</set>
+		WHERE NO = #{no}
+	</update>
+	
+	<delete id="delete" parameterType="Branch">
+		DELETE FROM BRANCH
+		WHERE NO = #{no}
+	</delete>
+</mapper>

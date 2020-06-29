@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorator="layout/template">
+<head>
+<meta charset="UTF-8">
+<title>근무자 목록</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+   <main class="content">
+      <div class="container-fluid p-0">
+					<h1 class="h3 mb-3">사업장 목록</h1>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<div id="datatables-buttons_wrapper"
+										class="dataTables_wrapper dt-bootstrap4 no-footer">
+										<div class="row">
+											<div class="col-sm-12" >
+												<button style="float:right" type='button' id='add_button' class='btn btn-outline-primary' onclick="location.href='/branch/form'">등록</button>
+											</div>
+										</div>
+										
+										<div class="modal fade" id="licenseImageModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+										<div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">사업자 등록증 이미지 보기</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      									<span aria-hidden="true">×</span>
+                   									</button>
+												</div>
+												<div class="modal-body m-3">
+													<img src="" id="licenseImg" width="835px" height="1000px">
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<table id="datatables-buttons"
+													class="table table-striped dataTable no-footer dtr-inline"
+													style="width: 100%;" role="grid"
+													aria-describedby="datatables-buttons_info">
+													<thead id="table_head">
+													</thead>
+													<tbody id="table_body">
+														<tr role="row">
+															<td colspan='4'>검색 결과가 없습니다.
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+  		 	</main>
+		</th:block>
+	</body>
+</html>
+<script th:inline="javascript">
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var token = $("meta[name=_csrf]").attr("content");
+	var dataObj;
+	$(document).ready(function () {
+		drawTable();
+		
+		$('#alertsDropdown').click(function() {
+			drawAlarmList();
+		})
+	});
+	
+	function drawTable() {
+		var username = /*[[${#authentication.principal.username}]]*/ '';
+		var url = "/branch?memberId=" + username;
+		
+		$.ajax({
+			url: url,
+			type: "get",
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			success: function (data) {
+				var html = "";
+				if (username == 'admin') {
+					html += "<tr role='row'>";
+					html += "<th>사업장 명</th>";
+					html += "<th>전화번호</th>";
+					html += "<th>승인 현황</th>";
+					html += "<th>사업장 등록증</th>";
+					html += "<th>승인</th>";
+					html += "<th>&nbsp;</th>";
+					html += "<th>&nbsp;</th>";
+					html += "</tr>";
+				} else {
+					html += "<tr role='row'>";
+					html += "<th>사업장 명</th>";
+					html += "<th>전화번호</th>";
+					html += "<th>승인 현황</th>";
+					html += "<th>사업장 등록증</th>";
+					html += "<th>&nbsp;</th>";
+					html += "<th>&nbsp;</th>";
+					html += "</tr>";
+				}
+				
+				$('#table_head').html(html);
+				html = "";
+				
+				if (data.length > 0) {
+					for (var i = 0; i < data.length; i++) {
+						if (data[i].state == 'D') {
+							continue;
+						}
+						
+						html += "	<tr>";
+						html += "	<td>" + "<a href='/branch/" + data[i].no + "'>" + data[i].name + "</a>" + "</td>";
+						html += "	<td>" + data[i].phone + "</td>";
+					
+						if (data[i].approvalStatus == 'W') {
+							html += "	<td>" + "승인 대기중" + "</td>";
+						} else if (data[i].approvalStatus == 'Y') {
+							html += "	<td>" + "승인 완료" + "</td>";
+						} else if (data[i].approvalStatus == 'N') {
+							html += "	<td>" + "승인 거부됨" + "</td>";
+						}
+						html += "   <td><button type='button' class='btn btn-square btn-primary' name='licenseViewBtn' data-toggle='modal' data-target='#licenseImageModal'>보기</button></td>";
+						
+						if (username == 'admin') {
+							html += "   <td><span><button type='button' class='btn btn-square btn-primary' name='acceptBtn'>승인</button><button type='button' class='btn btn-square btn-primary' name='rejectBtn'>거절</button></span></td>";
+						}
+						html += "	<td><input type='hidden' name='imagePath' value='" + data[i].businessLPath + "'/></td>";
+						html += "	<td><input type='hidden' name='branchNo' value='" + data[i].no + "'/></td>";
+						html += "	</tr>";
+					}
+				} else {
+					html += "<tr><td colspan='4'>검색 결과가 없습니다.</td></tr>";
+				}
+				
+				if (html == "") {
+					html += "<tr><td colspan='4'>검색 결과가 없습니다.</td></tr>";
+				}
+				
+				$('#table_body').html(html);
+			},
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
+			}
+		})
+	}
+	
+	$('#table_body').on('click', 'button[name=licenseViewBtn]', function() {
+		var currentRow = $(this).closest('tr');
+		var imagePath = currentRow.find('input[name=imagePath]').val();
+		$('#licenseImg').attr("src", imagePath);
+	});
+	
+	$('#table_body').on('click', 'button[name=acceptBtn]', function() {
+		var currentRow = $(this).closest('tr');
+		var branchNo = currentRow.find('td:eq(6) input[name=branchNo]').val();
+		$.ajax({
+			url: "/branch",
+			type: "put",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			datatype: 'json',
+			data: JSON.stringify({
+				"no": branchNo,
+				"approvalStatus": "Y"
+			}),
+			contentType: 'application/json; charset=utf-8',
+			success: function(response) {
+				if (response.isSuccess == true) {
+					drawTable();
+				} else {
+					console.log('실패');
+				}
+			}
+		});
+	});
+	
+	$('#table_body').on('click', 'button[name=rejectBtn]', function() {
+		var currentRow = $(this).closest('tr');
+		var branchNo = currentRow.find('td:eq(6) input[name=branchNo]').val();
+		$.ajax({
+			url: "/branch",
+			type: "put",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			datatype: 'json',
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			data: JSON.stringify({
+				"no": branchNo,
+				"approvalStatus": 'N'
+			}),
+			success: function(response) {
+				if (response.isSuccess == true) {
+					drawTable();
+				} else {
+					console.log('실패');
+				}
+			}
+		});
+	});
+</script>

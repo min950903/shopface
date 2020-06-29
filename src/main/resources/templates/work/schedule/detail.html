@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form id="schedule" th:action="@{/schdule/{no}(no=${schedule.no})}" method="post">
+			<input type="hidden" name="_method">
+			<input type="hidden" name="timetableNo" value="1">
+			<input type="hidden" name="memberId" value="admin">
+			<label for="no">스케줄 번호 : </label>
+			<input type="text" name="no" th:value="${schedule.no}"><br>
+			
+			<label for="timetableNo">시간표 번호 : </label>
+			<input type="text" name="timetableNo" th:value="${schedule.timetableNo}" ><br>
+			
+			<label for="memberId">회원 ID</label>
+			<input type="text" name="memberId" th:value="${schedule.memberId}"><br>
+			
+			<label for="state">상태</label>
+			<input type="text" name="state" th:value="${schedule.state}"><br>
+		</form>
+	</body>
+</html>

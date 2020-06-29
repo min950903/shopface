@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.sunmoon.shopface.member.MemberMapper">
+	<select id="selectAll" parameterType="member"
+		resultType="member">
+		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
+		FROM MEMBER
+		<where>
+			<if test="name != null and !name.equals('')">AND NAME LIKE '%'||#{name}||'%'</if>
+			<if test="state != null and state != ''">AND STATE = #{state}</if>
+			<if test="type != null and type != ''">AND TYPE = #{type}</if>
+		</where>
+		ORDER BY STATE ASC
+	</select>
+	<select id="select" parameterType="member" resultType="member">
+		SELECT ID, NAME, PASSWORD, PHONE, EMAIL, BANK_NAME, ACCOUNT_NUM, STATE, TYPE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE 
+		FROM MEMBER
+		<where>
+			<if test="id != null and !id.equals('')">AND ID = #{id}</if>
+			<if test="email != null and !email.equals('')">AND EMIAL = #{email}</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="member">
+		INSERT INTO MEMBER
+		(ID, PASSWORD, NAME, PHONE, EMAIL, TYPE)
+		VALUES(
+			#{id}, 
+			#{password},
+			#{name},
+			#{phone}, 
+			#{email}, 
+			#{type}
+		)
+	</insert>
+	<update id="update" parameterType="member">
+		UPDATE MEMBER
+		<set> 
+			<if test="name != null">NAME = #{name},</if>
+			<if test="password != null">PASSWORD = #{password},</if>
+			<if test="email != null">EMAIL = #{email},</if>
+			<if test="bankName != null">BANK_NAME = #{bankName},</if>
+			<if test="phone != null">PHONE = #{phone},</if>
+			<if test="accountNum != null">ACCOUNT_NUM = #{accountNum},</if>
+			<if test="address != null">ADDRESS = #{address},</if>
+			<if test="state != null">STATE = #{state},</if>
+			<if test="detailAddress != null">DETAIL_ADDRESS = #{detailAddress},</if>
+			<if test="zipCode != null">ZIP_CODE = #{zipCode}</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	<delete id="delete" parameterType="member">
+		DELETE FROM MEMBER
+		WHERE ID = #{id}
+	</delete>
+	
+	<select id="countActiveMember" resultType="Integer">
+		SELECT COUNT(*) FROM MEMBER WHERE STATE = 'A';
+	</select>
+	
+	<select id="pageList" parameterType="criteria" resultType="member">
+		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
+		FROM (  SELECT ROW_NUMBER() OVER (ORDER BY ID) NUM, M.*
+        		FROM MEMBER M
+        		ORDER BY ID )
+		WHERE ROWNUM BETWEEN #{pageStart} AND #{perPageNum}
+	</select>
+</mapper>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+<head>
+<meta charset="UTF-8">
+<title>회원 정보</title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<main class="content">
+            	<div class="container-fluid p-0">
+            		<h1>회원 정보</h1>
+            		<div class="row">
+            			<div class="col-12">
+            				<div class="card">
+            					<div class="card-header"></div>
+            					<div class="card-body">
+            						<form id="member_form" th:action="@{/member/{id}(id=${member.id})}" method="post">
+					                    <input type="hidden" name="_method">
+            							<div class="form-group col-md-4">
+						                    <label for="name">이름 : </label>
+						                    <input type="text" class="form-control" name="name" th:value="${member.name}" readOnly>
+            							</div>
+            							<div class="form-group col-md-4">
+						                    <label>비밀번호 : </label>
+						                    <button type="button" id="password_edit_button" class="btn btn-outline-primary">비밀번호 수정</button><br>
+						                    <div id="password_edit_div"></div>            							
+            							</div>
+					                    <div class="form-group col-md-4">
+					                    	<label for="phone">전화번호 : </label>
+					                    	<input type="text" class="form-control" name="phone" th:value="${member.phone}" readOnly><br>
+            							</div>
+					                    <div class="form-group col-md-4">
+						                    <label for="email">이메일 : </label>
+						                    <input type="text" class="form-control" name="email" th:value="${member.email}" readOnly><br>            							
+            							</div>
+					                    <div class="form-group col-md-4">
+					                    	<label for="bankName">은행 명 : </label>
+					                    	<input type="text" class="form-control" name="bankName" th:value="${member.bankName}" readOnly><br>
+            							
+            							</div>
+					                    <div class="form-group col-md-4">
+						                    <label for="accountNum">계좌번호 : </label>
+						                    <input type="text" class="form-control" name="accountNum" th:value="${member.accountNum}" readOnly><br>            							
+            							</div>
+            							<div class="form-group col-md-4">
+            								<label for="zip_code">우편 번호 : </label>
+            								<button type="button" id="searchAddressButton" class="btn btn-outline-primary" >우편번호 찾기</button>
+						                    <input type="text" class="form-control" name="zipCode" th:value="${member.zipCode}" readOnly><br>
+            							</div>
+            							<div class="form-group col-md-4">
+            								<label for="address">주소 : </label>
+						                    <input type="text" class="form-control" name="address" th:value="${member.address}" readOnly><br>
+            							</div>
+            							<div class="form-group col-md-2">
+            								<label for="detail_address">상세 주소 : </label>
+						                    <input type="text" class="form-control" name="detailAddress" th:value="${member.detailAddress}" readOnly><br>
+            							</div>
+					                    <div class="form-group" id="message_div" th:text="${message}" style="color:red;"></div>
+					                    <button type="button" id="edit_button" class="btn btn-outline-primary">수정</button>
+					                    <button type="button" id="delete_button" class="btn btn-outline-primary">삭제</button>
+					                    <button type="button" class="btn btn-outline-primary" onclick="location.href='/member'">목록</button>
+					                </form>
+            					</div>
+            				</div>
+            			</div>
+            		</div>
+            	</div>
+        </main>
+        </th:block>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#edit_button').click(function () {
+            $('input[name=_method]').val('put');
+            $('#member_form').submit();
+        });
+
+        $('#delete_button').click(function () {
+            $('input[name=_method]').val('delete');
+            $('#member_form').submit();
+        });
+        $('#password_edit_button').click(function () {
+            var html = "";
+            html += "<label for='old_password'>기존 비밀번호</label>";
+            html += "<input type='password' class='form-control' id='oldPassword' name='oldPassword'><br>";
+            html += "<label for='new_password'>변경 비밀번호</label>";
+            html += "<input type='password' class='form-control' id='password' name='password'><br>";
+            html += "<label for='check_password'>변경 비밀번호 확인</label>";
+            html += "<input type='password' class='form-control' id='check_password' name='check_password'>";
+
+            $('#password_edit_div').html(html);
+        });
+        $('#searchAddressButton').click(function() {
+        	postcodeSearch();
+        })
+    });
+
+    function postcodeSearch() {
+    	new daum.Postcode({
+    		oncomplete: function(data) {
+    			$('input[name=zipCode]').val(data.zonecode);
+    			$('input[name=address]').val(data.address)
+    		}
+    	}).open();
+    };
+    
+    $(document).on('click', "#password_edit_submit", function () {
+        if ($('#password').val() != $('#check_password').val()) {
+            $('#message_div').text("변경 비밀번호와 확인이 일치하지 않습니다.");
+            $('#message_div').css('color', 'red');
+        } else {
+            $('input[name=_method]').val('put');
+            $('#member_form').submit();
+        }
+    });
+    
+    $('input[readOnly]').click(function() {
+    	$(this).removeAttr('readOnly');
+    })
+</script>

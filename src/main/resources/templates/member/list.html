@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+<head>
+<meta charset="UTF-8">
+<title>회원 목록</title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<main class="content">
+			<div class="container-fluid p-0">
+				<h1 class="h3 mb-3">회원 목록</h1>
+				<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
+								<div id="datatables-buttons_wrapper"
+									class="dataTables_wrapper dt-bootstrap4 no-footer">
+									<div class="row">
+										<div class="col-sm-12 col-md-6"></div>
+										<div class="col-sm-12 col-md-6">
+											<!-- form 태그 있던 자리  -->
+											<div class="row">
+												<div class="form-inline col">
+													<div class="form-inline col-8"></div>
+														<select id="condition" name="condition"
+															class="form-control">
+															<option value="name">이름</option>
+															<option value="state">상태</option>
+														</select> <input type="text" id="searchQuery" name="searchQuery"
+															class="form-control form-control-sm mr-1 ml-1" placeholder=""
+															aria-controls="datatables-buttons"> <input
+															type="button" class="btn btn-primary mr-1 ml-1" id="searchButton"
+															name="searchButton" value="검색">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<table id="datatables-buttons"
+												class="table table-striped dataTable no-footer dtr-inline"
+												style="width: 100%;" role="grid"
+												aria-describedby="datatables-buttons_info">
+												<thead>
+													<tr role="row">
+														<th>이름</th>
+														<th>휴대폰 번호</th>
+														<th>이메일</th>
+														<th>구분</th>
+														<th>상태</th>
+													</tr>
+												</thead>
+												<tbody id="table_body">
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</th:block>
+</body>
+</html>
+<script>
+	var dataObj;
+	$(document).ready(function () {
+		drawTable();
+		
+		$('#searchButton').click(function () {
+			drawTable();
+		})
+		
+		$('#searchQuery').keyup(function(e) {
+			if (e.keyCode == 13) {
+				drawTable();
+			}
+		})
+	});
+
+	function drawTable() {
+		var url = "/member?";
+		if ($('#condition').val() == 'name') {
+			url += "name=" + $('#searchQuery').val();
+		} else {
+			url += "state=" +  $('#searchQuery').val();
+		}
+		
+		$.ajax({
+			url: url,
+			type: "get",
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			success: function (data) {
+				var html = "";
+				if (data.length > 0) {
+					for (var i = 0; i < data.length; i++) {
+						html += "	<tr>";
+						html += "	<td>" + "<a href='/member/" + data[i].id + "'>" + data[i].name + "</a>" +
+							"</td>";
+						html += "	<td>" + data[i].phone + "</td>";
+						if (data[i].email != null) {
+							html += "	<td>" + data[i].email + "</td>";
+						} else {
+							html += "<td></td>";
+						}
+						if (data[i].type == 'B') {
+							html += "	<td>" + "사업자" + "</td>";
+						} else {
+							html += "	<td>" + "회원" + "</td>";
+						}
+						if (data[i].state == 'A') {
+							html += "	<td>" + "활성화" + "</td>";
+						} else {
+							html += "	<td>" + "비활성화" + "</td>";
+						}
+						html += "	</tr>";
+					}
+				} else {
+					html += "<tr><td colspan='6'>검색 결과가 없습니다.</td></tr>";
+				}
+				$('#table_body').html(html);
+			},
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
+			}
+		})
+	}
+</script>

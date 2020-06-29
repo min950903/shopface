@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorator="layout/template">
+<head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<meta charset="UTF-8">
+<title>업무 관리</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/spectrum/spectrum.css}">
+</head>
+<body>
+<th:block layout:fragment="content">
+     <main class="content">
+    <div class="container-fluid p-0">
+      <h1 class="h3 mb-3">업무 관리</h1>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="col-sm-6">
+                <form class="form-inline" id="post-form" th:action="@{/occupation}" method="post">
+                	<input type="hidden" id="occupationNo-input" name="branchNo">
+					<label for="occupationLabel">업무 명: </label>
+	                <input type="text" class="form-control ml-2 mr-2" id="occupation-input" name="name">
+					
+					<label for="occupationColor" class="mr-2">색상:</label>
+	                <input type='text' id="occupation-color" name="color"/>
+					<div class="ml-4 mr-2">
+						<button type="submit" class="btn btn-primary" id="post-button" name="postBtn">등록</button>
+					</div>
+				</form>
+              </div>
+              <div id="datatables-buttons_wrapper"
+                class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <table id="datatables-buttons"
+                      class="table table-striped dataTable no-footer dtr-inline"
+                      style="width: 100%;" role="grid"
+                      aria-describedby="datatables-buttons_info">
+                      <thead>
+                        <tr role="row">
+                          <th style="display:none;"></th>
+                          <th style="display:none;"></th>
+                          <th>업무</th>
+                          <th>색상</th>
+                          <th>관리</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-body">
+                      </tbody>
+                    </table>
+		            <div class="modal fade" id="color-modal-form" tabindex="-1" role="dialog" aria-hidden="true">
+		              <div class="modal-dialog modal-dialog-centered" role="document">
+		                <div class="modal-content">
+		                  <div class="modal-header">
+		                    <h5 class="modal-title">색상 선택</h5>
+		                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		                                  <span aria-hidden="true">&times;</span>
+		                              </button>
+		                  </div>
+		                  <div class="modal-body m-3">
+		                    <label for="occupation-color-modal" class="mr-2">색상:</label>
+		                    <input type='text' id="modal-color" name="modalColor"/>
+		                  </div>
+		                  <div class="modal-footer">
+		                    <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
+		                    <button type="button" class="btn btn-primary" id="change-color-button">선택</button>
+		                  </div>
+		                </div>
+		              </div>
+		            </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</th:block>
+</body>
+</html>
+<script type="text/javascript" src="/js/spectrum/spectrum.js"></script>
+<script type='text/javascript' src="/js/spectrum/toc.js"></script>
+<script type='text/javascript' src="/js/spectrum/docs.js"></script>
+<script type="text/javascript" src="/js/spectrum/prettify.js"></script>
+<script>
+var currentBranchNo = 0;
+
+var header = $("meta[name='_csrf_header']").attr("content");
+var token = $("meta[name=_csrf]").attr("content");
+
+$('document').ready(function() {
+	drawOccupationTable();
+
+	function drawOccupationTable() {
+		if (currentBranchNo > 0) {
+			currentBranchNo = $('#selectBranch').val();		
+		} else {
+			var currentUri = location.pathname;
+			currentBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
+		}
+		
+		drawBranchList(currentBranchNo);
+		
+		$.ajax({
+			url: '/occupation/' + currentBranchNo,
+			type: 'GET',
+			contentType: "application/json;charset=UTF-8",
+			success: function(data) {
+				var colorArr = ["#0070C0", "#00B050", "#FFC000", "#7030A0", "#C00000"
+							   ,"#4BACC6", "#9BBB59", "#F79646", "#C0504D", "#7F7F7F"];
+				var html = "";
+				
+				if(data.length != 0) {
+					for(var i = 0; i < data.length; i++) {
+						html += "<tr>";
+						html += 	"<td style='display:none;'>";
+						html +=  		"<input type='hidden' name='occupationNo' value=" + data[i].no + ">";
+						html +=  	"</td>";
+						html += 	"<td  style='display:none;'>";
+						html +=  		"<input type='hidden' name='occupationBranchNo' value=" + data[i].branchNo + ">";
+						html +=  	"</td>";
+						html +=  	"<td>";
+						html += 		"<input type='text' class='form-control col-md-4' name='occupationName' value=" + data[i].name + ">";
+						html +=  	"</td>";
+						html +=  	"<td>";
+						html +=			"<input type='text' class='form-control col-md-4' id='occupation-selected-color'"
+										 + " data-toggle='modal' data-target='#color-modal-form'" 
+										 + " style='background-color:"+ data[i].color +"; color:" + data[i].color 
+										 + "' name='selectedColor' value=" + data[i].color + ">";		
+						html +=  	"</td>";
+						html +=  	"<td>";
+						html +=			"<button type='button' class='btn btn-primary mr-2' name='editBtn'>수정</button>";
+						html +=			"<button type='button' class='btn btn-primary' name='removeBtn'>삭제</button>";
+						html +=  	"</td>";
+						html += "<tr>";
+						
+					}
+				} else {
+					html += "<td>업무 목록이 존재하지 않습니다.</td>";
+				}
+				
+				$('#table-body').html(html);
+			},
+			error: function(error) {
+				console.log("error: " + error);
+			}
+		})
+	}
+	
+	$(document).on('change', 'select[name=selectBranch]', function() {
+		var currentValue = $('#selectBranch').val(); 
+		
+		$('option:selected', this).removeAttr('selected');
+		$('#selectBranch > option[value=currentValue]').attr('selected', true);
+		
+		drawOccupationTable();
+	})
+	
+	$('#table-body').on("click", "button[name='editBtn']", function() {
+		var currentRow = $(this).closest("tr");
+		var occupationData = {
+			no: currentRow.find("td:eq(0) input[name='occupationNo']").val(),
+			brancNo: currentBranchNo,
+			name: currentRow.find('td:eq(2) input[name="occupationName"]').val(),
+			color: currentRow.find('td:eq(3) input[name="selectedColor"]').val()
+		};
+		
+		$.ajax({
+			url: '/occupation',
+			type: 'PUT',
+			data: JSON.stringify(occupationData),
+			dataType: 'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			contentType: 'application/json; charset=utf-8',
+			success: function(response) {
+				if (response.isSuccess) {
+					alert("수정하였습니다");
+					
+					drawOccupationTable();
+				} else {
+					alert("수정에 실패 했습니다.");
+				}
+			},
+			error: function(error) {
+				console.log(error);
+				alert("오류가 발생했습니다.")
+			}
+		});		
+	});
+	
+	$('#table-body').on("click", "button[name='removeBtn']", function() {
+		var currentRow = $(this).closest("tr");
+		var no = {no: currentRow.find("td:eq(0) input[name='occupationNo']").val()};
+		
+		$.ajax({
+			url: '/occupation',
+			type: 'DELETE',
+			data: JSON.stringify(no),
+			dataType: 'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			contentType: 'application/json; charset=utf-8',
+			success: function(response) {
+				if (response.isSuccess) {
+					alert("삭제 하였습니다.");
+					
+					drawOccupationTable();
+				} else {
+					alert("삭제에 실패 했습니다.");
+					
+				}
+			},
+			error: function(error) {
+				console.log(error);
+				alert("오류가 발생했습니다.");
+			}
+		});		
+	});
+	
+	$('#post-button').click(function() {
+		if($('input[name=name]').val() != null && $('input[name=name]').val() != '' ) {
+		 	var occupationColor = $("#occupation-color").spectrum("get").toHexString().toUpperCase();
+			$('input[name=color]').val(occupationColor);
+			$('input[name=branchNo]').val(currentBranchNo);
+			$('#post-form').submit();
+		} else {
+			alert("업무명을 입력해주세요");
+		}
+	})
+	
+	$("#occupation-color").spectrum({
+		  showPaletteOnly: true,
+		  showPalette:true,
+		  color: '#0070C0',
+		  palette: [
+		      ['#0070C0', '00B050', '#FFC000', '#7030A0', '#C00000'],
+		      ['#4BACC6', '#9BBB59', '#F79646', '#C0504D', '#7F7F7F']
+		  ]
+	});
+	
+	var selectRow
+	$('#table-body').on('click', 'input[name=selectedColor]', function() {
+		$("#modal-color").spectrum({
+		  showPaletteOnly: true,
+		  showPalette:true,
+		  color: '#0070C0',
+		  palette: [
+		      ['#0070C0', '00B050', '#FFC000', '#7030A0', '#C00000'],
+		      ['#4BACC6', '#9BBB59', '#F79646', '#C0504D', '#7F7F7F']
+		  ]
+		});
+		
+		selectRow = $(this).closest('tr');
+		var inputColor = selectRow.find('td:eq(3) input[name=selectedColor]').val();
+		$("#modal-color").spectrum('set',inputColor);
+	});
+	
+	$('#change-color-button').click(function() {
+		var occupationColor = $("#modal-color").spectrum("get").toHexString().toUpperCase();
+		selectRow.find('td:eq(3) input[name=selectedColor]').attr({
+			value: occupationColor,
+			style: 'background-color:' + occupationColor  +';color:' + occupationColor
+		});
+		
+		$('#color-modal-form').modal('hide');
+	});
+});
+</script>

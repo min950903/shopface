@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
+<head>
+<meta charset="UTF-8">
+<title>근무 기록</title>
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<main class="content">
+			<div class="container-fluid p-0">
+				<h1>근무 기록</h1>
+				<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-body">
+									<div id="datatables-buttons_wrapper"
+										class="dataTables_wrapper dt-bootstrap4 no-footer">
+										<div class="row">
+											<div class="col-sm-12 col-md-6"></div>
+											<div class="col-sm-12 col-md-6">
+												<div class="row">
+													<div class="form-inline col">
+														<div class="form-inline col-8"></div>
+															<select id="condition" name="condition" class="form-control">
+																<option value="name">이름</option>
+																<option value="state">상태</option>
+															</select> 
+															<input type="text" id="searchQuery" name="searchQuery" class="form-control form-control-sm mr-1 ml-1" placeholder=""
+																aria-controls="datatables-buttons"> 
+															<input type="button" class="btn btn-primary mr-1 ml-1" id="searchButton" name="searchButton" value="검색">
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<table id="datatables-buttons"
+													class="table table-striped dataTable no-footer dtr-inline"
+													style="width: 100%;" role="grid"
+													aria-describedby="datatables-buttons_info">
+													<thead id="table_head">
+													</thead>
+													<tbody id="table_body">
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</th:block>
+</body>
+</html>
+<script type="text/javascript" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
+	$(document).ready(function() {
+		var html = "";
+		html += "<tr role='row'>";
+		html += "<th>업무 명</th>";
+		html += "<th>사업장 명</th>";
+		html += "<th>근무자 명</th>";
+		html += "<th>근무 시간</th>";
+		html += "<th>출근 시간</th>";
+		html += "<th>퇴근 시간</th>";
+		html += "<th>급여(예상)</th>";
+		html += "<th>급여(지급)</th>";
+		html += "<th>평점</th>";
+		html += "<th>비고</th>";
+		html += "<th>&nbsp;</th>";
+		html += "</tr>";
+		
+		$('#table_head').html(html);
+	});
+</script>
+<script type="text/javascript" sec:authorize="hasRole('ROLE_MEMBER')">
+	$(document).ready(function() {
+		var html = "";
+		html += "<tr role='row'>";
+		html += "<th>업무 명</th>";
+		html += "<th>사업장 명</th>";
+		html += "<th>근무 시간</th>";
+		html += "<th>출근 시간</th>";
+		html += "<th>퇴근 시간</th>";
+		html += "<th>급여(예상)</th>";
+		html += "<th>급여(지급)</th>";
+		html += "<th>평점</th>";
+		html += "<th>비고</th>";
+		html += "<th>&nbsp;</th>";
+		html += "</tr>";
+		
+		$('#table_head').html(html);
+	});
+</script>
+<script th:inline="javascript">
+	var username = /*[[${#authentication.principal.username}]]*/ '';
+	
+	$(document).ready(function() {
+		drawTable();
+		
+		$(document).on('change', 'select[name=selectBranch]', function() {
+			drawTable();
+		});
+	});
+	function drawTable() {
+		var currentUri = location.pathname;
+		var initBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
+		
+		var branchNo = $('#selectBranch').val() > 0 ? $('#selectBranch').val() : initBranchNo;
+		
+		if (branchNo > 0) {
+			var url = "/record?businessmanId=" + username +"&branchNo=" + branchNo;
+		} else {
+			var url = "/record?memberId=" + username;
+		}
+		
+		/* if ($('#condition').val() == 'name') {
+			url += "name=" + $('#searchQuery').val();
+		} else {
+			url += "state=" +  $('#searchQuery').val();
+		} */
+	
+		$.ajax({
+			url: url,
+			type: "get",
+			headers: {
+				"Content-Type": "application/json;charset=UTF-8"
+			},
+			success: function (data) {
+				var html = "";
+				if (data.length > 0) {
+					for (var i = 0; i < data.length; i++) {
+						html += "	<tr>";
+						html += "	<td>" + data[i].occupationName + "</td>";
+						html += "	<td>" + data[i].branchName + "</td>";
+						if (branchNo > 0) {
+							html += "	<td>" + data[i].memberName + "</td>";	
+						}
+						html += "	<td>" + data[i].workStartTime + " ~ " + data[i].workEndTime + "</td>";
+						html += "	<td>" + data[i].workingTime + "</td>";
+						if (data[i].quittingTime != null) {
+							html += "	<td>" + data[i].quittingTime + "</td>";
+						} else {
+							html += "	<td>-</td>"
+						}
+						html += "	<td>" + data[i].salaryPlan + "</td>";
+						html += "	<td>" + data[i].salaryPay + "</td>";
+						if (data[i].evaluation > 0) {
+							html += "	<td>" + data[i].evaluation + "</td>";
+						} else {
+							html += "	<td></td>";
+						}
+						if (data[i].note != null) {
+							html += "	<td>" + data[i].note + "</td>";
+						} else {
+							html += "	<td></td>";
+						}
+						html += "	<td><input type='hidden' name='no' value=" + data[i].no + "</td>";
+						html += "	</tr>";
+					}
+				} else {
+					html += "<tr><td colspan='6'>검색 결과가 없습니다.</td></tr>";
+				}
+				$('#table_body').html(html);
+			},
+			error: function (request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
+					"error:" + error);
+			}
+		})
+	};
+</script>

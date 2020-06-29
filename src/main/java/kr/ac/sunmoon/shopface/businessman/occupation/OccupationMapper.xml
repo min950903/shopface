@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.sunmoon.shopface.businessman.occupation.OccupationMapper">
+    <insert id="insert" parameterType="occupation">
+        INSERT INTO OCCUPATION(NO, BRANCH_NO, NAME, COLOR) 
+        VALUES(OCCUPATION_NO_SEQ.NEXTVAL, #{branchNo}, #{name}, #{color})
+    </insert>
+    <select id="selectAll" parameterType="occupation" resultType="occupation">
+        SELECT NO, BRANCH_NO, NAME, COLOR FROM OCCUPATION
+        WHERE BRANCH_NO = #{branchNo}
+        ORDER BY NAME
+    </select>
+    <update id="update" parameterType="occupation">
+        UPDATE OCCUPATION SET NAME = #{name}, COLOR = #{color}
+        WHERE NO = #{no}
+    </update>
+    <delete id="delete" parameterType="occupation">
+        DELETE FROM OCCUPATION
+        WHERE NO= #{no}
+    </delete>
+</mapper> 

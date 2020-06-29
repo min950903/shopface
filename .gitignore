@@ -1,4 +1,5 @@
 HELP.md
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
@@ -29,3 +30,9 @@ build/
 
 ### VS Code ###
 .vscode/
+/.apt_generated_tests/
+
+application-db.properties
+application-mail.properties
+application-aws.properties
+/bin/

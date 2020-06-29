@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.sunmoon.shopface.work.schedule.TestMapper">
+
+	<resultMap type="timetable" id="timetableMap">
+		<id column="NO" property="no" />
+		<result column="BRANCH_NO" property="branchNo" />
+		<result column="WORK_START_TIME" property="workStartTime" />
+		<result column="WORK_END_TIME" property="workEndTime" />
+		<result column="OCCUP_NAME" property="occupName" />
+		<result column="OCCUP_COLOR" property="occupColor" />
+		<result column="REGISTER_DATE" property="registerDate" />
+	</resultMap>
+
+	 <resultMap type="schedule" id="scheduleMap">
+		<id column="NO" property="no" />
+		<result column="TIMETABLE_NO" property="timetableNo" />
+		<result column="MEMBER_ID" property="memberId" />
+		<result column="STATE" property="state" />
+	</resultMap> 
+
+
+	 <resultMap type="branch" id="branchMap">
+		<id column="NO" property="no" />
+		<result column="MEMBER_ID" property="memberId" />
+		<result column="NAME" property="name" />
+		<result column="PHONE" property="phone" />
+		<result column="REGISTER_DATE" property="registerDate" />
+		<result column="ADDRESS" property="address" />
+		<result column="DETAIL_ADDRESS" property="detailAddress" />
+		<result column="ZIP_CODE" property="zipCode" />
+		<result column="BUSINESS_PATH" property="businessPath" />
+		<result column="STATE" property="state" />
+		<result column="APPROVAL_STATUS" property="approvalStatus" />
+	</resultMap>  
+
+
+	<resultMap type="test" id="TestMap">
+		<collection property="timetable" resultMap="timetableMap"></collection>
+		<collection property="schedule" resultMap="scheduleMap"></collection>
+		<collection property="branch" resultMap="branchMap"></collection>
+	</resultMap>
+	
+	<select id ="select" resultMap="TestMap">
+		SELECT * 
+		FROM TIMETABLE T, BRANCH B, SCHEDULE S
+		WHERE T.BRANCH_NO = B.NO AND T.NO = S.TIMETABLE_NO 
+	</select>
+
+</mapper>
