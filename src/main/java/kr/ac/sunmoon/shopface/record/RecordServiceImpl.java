@@ -56,6 +56,7 @@ public class RecordServiceImpl implements RecordService {
 			record.setWorkEndTime(existTimetable.getWorkEndTime());
 			
 			Branch existBranch = branchMapper.select(existTimetable.getBranchNo());
+			record.setBranchNo(existBranch.getNo());
 			record.setBranchName(existBranch.getName());
 			record.setBranchPhone(existBranch.getPhone());
 			
@@ -79,7 +80,7 @@ public class RecordServiceImpl implements RecordService {
 			
 			Employ employ = new Employ();
 			employ.setBranchNo(existBranch.getNo());
-			employ.setMemberId(existBusinessman.getId());
+			employ.setMemberId(existMember.getId());
 			Employ existEmploy = employMapper.selectEmploy(employ);
 			record.setSalaryPlan((int)(existEmploy.getSalary() * hours));
 			

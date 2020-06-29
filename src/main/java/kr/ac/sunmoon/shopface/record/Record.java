@@ -1,9 +1,5 @@
 package kr.ac.sunmoon.shopface.record;
 
-import java.time.LocalDateTime;
-
-import javax.validation.constraints.NotBlank;
-
 import org.apache.ibatis.type.Alias;
 
 import lombok.Getter;
@@ -18,6 +14,7 @@ public class Record {
 	private int no;
 	private String businessmanId;
 	private String businessmanName;
+	private int branchNo;
 	private String branchName;
 	private String branchPhone;
 	private String memberId;

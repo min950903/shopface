@@ -49,7 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/login", "/member/form", "/member/check", "/employ/check", "/forgotpassword", "/employ/auth").permitAll()
 			.antMatchers(HttpMethod.POST, "/member", "/employ", "/login", "/working", "/quitting", "/rejoin").permitAll()
 			.antMatchers(HttpMethod.PUT, "/employ", "/employ/invite/").permitAll()
-			.antMatchers("/member").hasRole("ADMIN")
+			.antMatchers("/member", "/branch", "/branch/**").hasRole("ADMIN")
+			.antMatchers("/employ/**", "/timetable/**", "/occupation/**", "/branch/**").hasRole("BUSINESSMAN")
+			.antMatchers("/schedule/**", "/salary").hasRole("MEMBER")
 			.antMatchers("/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MEMBER", "ROLE_BUSINESSMAN")
 		.and()
 			.formLogin()
@@ -66,6 +68,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID")
 		.and()
 			.exceptionHandling().accessDeniedPage("/login");
-//		.and().csrf().disable();
 	}
 }

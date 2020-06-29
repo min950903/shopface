@@ -5,7 +5,7 @@
 <mapper
 	namespace="kr.ac.sunmoon.shopface.work.schedule.ScheduleMapper">
 	<resultMap type="timetable" id="timetableMap">
-		<id column="NO" property="no" />
+		<id column="TIMETABLE_KEY" property="no" />
 		<result column="BRANCH_NO" property="branchNo" />
 		<result column="WORK_START_TIME" property="workStartTime" />
 		<result column="WORK_END_TIME" property="workEndTime" />
@@ -15,7 +15,7 @@
 	</resultMap>
 
 	<resultMap type="schedule" id="scheduleMap">
-		<id column="NO" property="no" />
+		<id column="SCHEDULE_KEY" property="no" />
 		<result column="TIMETABLE_NO" property="timetableNo" />
 		<result column="MEMBER_ID" property="memberId" />
 		<result column="STATE" property="state" />
@@ -23,7 +23,7 @@
 
 
 	<resultMap type="branch" id="branchMap">
-		<id column="NO" property="no" />
+		<id column="BRANCH_KEY" property="no" />
 		<result column="MEMBER_ID" property="memberId" />
 		<result column="NAME" property="name" />
 		<result column="PHONE" property="phone" />
@@ -43,11 +43,21 @@
 		<collection property="branch" resultMap="branchMap"></collection>
 	</resultMap>
 
-	<select id="select" resultMap="TestMap">
-		SELECT *
+	<select id="selectView" resultMap="TestMap">
+		SELECT T.NO AS TIMETABLE_KEY, T.BRANCH_NO, T.WORK_START_TIME, T.WORK_END_TIME, T.OCCUP_NAME, T.OCCUP_COLOR, T.REGISTER_DATE,
+		B.NO AS BRANCH_KEY, B.MEMBER_ID, B.NAME, B.PHONE, B.ADDRESS, B.DETAIL_ADDRESS,
+		S.NO AS SCHEDULE_KEY, S.TIMETABLE_NO, S.MEMBER_ID, S.STATE
 		FROM TIMETABLE T, BRANCH B, SCHEDULE S
 		WHERE T.BRANCH_NO = B.NO AND
 		T.NO = S.TIMETABLE_NO
+	</select>
+
+	<select id="select" parameterType="schedule" resultType="schedule">
+		SELECT NO, TIMETABLE_NO, MEMBER_ID, STATE
+		FROM SCHEDULE
+		<where>
+			<if test="no > 0">AND NO = #{no}</if>
+		</where>
 	</select>
 
 	<select id="selectAll" parameterType="schedule"

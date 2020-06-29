@@ -27,6 +27,39 @@
 							</div>
 						</div>
 					</div>
+					<div class="modal fade" id="scheduleModal" tabindex="-1"
+							role="dialog" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">
+											<div id="edt_time">
+										</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body m-3">
+											<div class="form-group">
+												<table id="datatables-buttons"
+													class="table table-striped dataTable no-footer dtr-inline"
+													style="width: 100%;" role="grid"
+													aria-describedby="datatables-buttons_info">
+													<thead>
+													</thead>
+													<tbody id="table_body">
+													</tbody>
+												</table>
+											</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" id="workingBtn">출근</button>
+										<button type="button" class="btn btn-primary" id="quittingBtn">퇴근</button>
+									</div>
+								</div>
+							</div>
+						</div>
 				</div>
 			</div>
 		</main>
@@ -34,6 +67,9 @@
 </body>
 </html>
 <script>
+var header = $("meta[name='_csrf_header']").attr("content");
+var token = $("meta[name=_csrf]").attr("content");
+
 $(function() {
 	$("#fullcalendar").fullCalendar({
 		header : {
@@ -49,9 +85,6 @@ $(function() {
 			$.ajax({
 				url : "/schedule",
 				type : "get",
-			/* 	data : {
-					branchNo : branchNo
-				}, */
 				datatype : "json",
 				headers : {
 					"Content-Type" : "application/json;charset=UTF-8"
@@ -60,6 +93,7 @@ $(function() {
 					var events = [];
 					for (i in data) {
 						events.push({
+							id: data[i].schedule.no,
 				            title: data[i].timetable.occupName + "," + data[i].branch.name,
 				            start: data[i].timetable.workStartTime,
 				            end: data[i].timetable.workEndTime, 
@@ -73,6 +107,86 @@ $(function() {
 				}
 			})    
 		},
+		eventClick:function (event) {
+			$('#table_body').html(
+				"<input type='hidden' name='scheduleNo' value='" + event.id + "' />" 
+				+ event.title 
+				+ "<br>" 
+				+ event.start.format("YYYY") + "년 "
+				+ event.start.format("MM")
+				+ "월 "
+				+ event.start.format("DD") 
+				+ "일 "
+				+ "<br>"
+				+ event.start.format("HH:mm")
+				+ " ~ "
+				+ event.end.format("HH:mm")
+			);
+			$('#scheduleModal').modal("show");
+			$('#workingBtn').show();
+			$('#quittingBtn').show();
+			
+			return false;
+		}
+	});
+})
+
+$('#workingBtn').click(function() {
+	var scheduleNo = $('input[name=scheduleNo]').val();
+	$.ajax({
+		url: "/working",
+		type: "post",
+		data: JSON.stringify({
+			"no" : scheduleNo
+		}),
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		dataType: "json",
+		headers : {
+			"Content-Type" : "application/json;charset=UTF-8"
+		},
+		success : function(response) {
+			console.log(response);
+			if (response.success == true) {
+				var time = new Date();
+				$('#table_body').html("출근 시간 : " + time.getHours() + " : " + time.getMinutes() + " : " + time.getSeconds() );
+				$('#workingBtn').hide();
+			} else {
+				$('#table_body').html("출근 실패" );
+			}
+		},
+		error : function() {
+			
+		}
+	});
+})
+
+$('#quittingBtn').click(function() {
+	var scheduleNo = $('input[name=scheduleNo]').val();
+	$.ajax({
+		url: "/quitting",
+		type: "post",
+		data: JSON.stringify({
+			"no" : scheduleNo
+		}),
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		dataType: "json",
+		contentType: 'application/json; charset=utf-8',
+		success : function(response) {
+			var time = new Date();
+			if (response.success == true) {
+				$('#table_body').html("퇴근 시간 : " + time.getHours() + " : " + time.getMinutes() + " : " + time.getSeconds() );
+				$('#quittingBtn').hide();
+			} else {
+				$('#table_body').html("퇴근 실패" );
+			}
+		},
+		error : function() {
+			
+		}
 	});
 })
 </script> 
