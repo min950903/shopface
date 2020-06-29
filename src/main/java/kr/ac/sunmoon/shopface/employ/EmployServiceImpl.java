@@ -137,7 +137,7 @@ public class EmployServiceImpl implements EmployService {
 
     @Transactional
     @Override
-    public boolean deleteEmploy(Employ employ) {
+    public boolean removeEmploy(Employ employ) {
         employMapper.delete(employ);
         
         return true;
