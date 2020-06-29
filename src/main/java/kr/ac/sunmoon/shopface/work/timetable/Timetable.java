@@ -1,7 +1,5 @@
 package kr.ac.sunmoon.shopface.work.timetable;
 
-import java.sql.Date;
-
 import org.apache.ibatis.type.Alias;
 
 import lombok.Getter;

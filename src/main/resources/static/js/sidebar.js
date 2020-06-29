@@ -1,14 +1,16 @@
 function drawSelectBranch() {
 	if(userId != null && userId != '') {
+		
 		$.ajax({
 			url: '/branch',
 			type:'GET',
+			async: 'false', 
 			data: {
-				memberId: userId
+				memberId: userId,
+				approvalStatus: 'Y'
 			},
 			dataType: 'JSON',
 			contentType : 'application/json;charset=UTF-8',
-			async: false,
 			success: function(branchList) {
 				var html="";
 				html +="<select class='form-control ml-4' id='selectBranch'>";

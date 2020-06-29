@@ -15,12 +15,13 @@
 	</select>
 	
 	<select id="selectAll" parameterType="record" resultType="record">
-		SELECT NO, BUSINESSMAN_NAME, BRANCH_NAME, MEMBER_ID,
+		SELECT NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NAME, MEMBER_ID,
 		MEMBER_NAME, MEMBER_PHONE, OCCUPATION_NAME, WORK_START_TIME, WORK_END_TIME, 
 		WORKING_TIME, QUITTING_TIME, SALARY_PLAN, SALARY_PAY, EVALUATION, NOTE
 		FROM RECORD
 		<where>
 			<if test="memberId != null and memberId != ''">AND MEMBER_ID = #{memberId}</if>
+			<if test="businessmanId != null and businessmanId != ''">AND BUSINESSMAN_ID = #{businessmanId}</if>
 			<if test="branchNo > 0">AND BRANCH_NO = #{branchNo}</if>
 		</where>
 	</select>

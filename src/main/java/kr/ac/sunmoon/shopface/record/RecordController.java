@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class RecordController {
 	private final RecordService recordService;
 	
-	@GetMapping(value = "/record")
-	public ModelAndView getRecordList() {
+	@GetMapping(value = "/record/{branchNo}")
+	public ModelAndView getRecordList(@PathVariable int branchNo) {
 		return new ModelAndView("work/record/list");
 	}
 	
@@ -46,6 +47,8 @@ public class RecordController {
 	
 	@PostMapping(value = "/quitting", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecordMessage> quitting(@RequestBody Schedule schedule) {
+		log.info("" + schedule.getNo());
+		
 		RecordMessage message = new RecordMessage();
 		
 		if (recordService.qutting(schedule)) {

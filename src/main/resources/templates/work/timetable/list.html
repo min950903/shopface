@@ -124,6 +124,8 @@
 	var employ;
 
 	$(function() {
+		drawSelectBranch();
+		
 		branchNo = $("#selectBranch").val();
 		drawCalendar();
 		getOccupation();
@@ -132,7 +134,8 @@
 		drawEditModal();
 		drawBranchList(branchNo);
 
-		$("#selectBranch").change(function() {
+
+		$(document).on('change', 'select[name=selectBranch]', function() {
 			branchNo = $("#selectBranch").val();
 			$("#fullcalendar").fullCalendar('destroy');
 			drawCalendar();
@@ -140,8 +143,8 @@
 			getEmploy();
 			drawAddModal();
 			drawEditModal();
-		});
-
+		})
+		
 		$("#addBtn").click(
 				function() {
 					var day = $("#currentDate").val();

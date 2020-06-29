@@ -24,12 +24,12 @@
 			,OCCUP_COLOR
 			,REGISTER_DATE
 		FROM TIMETABLE
-		WHERE NO = #{timetableNo}
+		WHERE NO = #{no}
 	</select>
 	
 	<select id="selectAll" parameterType="timetable" resultType="timeTable">
 		SELECT 
-			 NO AS TIMETABLE_NO
+			 NO
 			,BRANCH_NO
 			,TO_CHAR(WORK_START_TIME, 'YYYY-MM-DD HH24:MI:SS') AS "WORK_START_TIME"
 			,TO_CHAR(WORK_END_TIME, 'YYYY-MM-DD HH24:MI:SS') AS "WORK_END_TIME"
@@ -74,6 +74,6 @@
 
 	<delete id="delete" parameterType="Timetable">
 		DELETE FROM TIMETABLE
-		WHERE NO = #{timetableNo}
+		WHERE NO = #{no}
 	</delete>
 </mapper>

@@ -26,13 +26,16 @@ public class CommonController {
 	
 	@GetMapping("/")
 	public ModelAndView index(@AuthenticationPrincipal User user) {
-		Stream<String> authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority);
-		if (authorities.anyMatch(authority -> authority.equals("ROLE_ADMIN"))) {
-			return new ModelAndView(new RedirectView("/member"));
-		} else if (authorities.anyMatch(authority -> authority.equals("ROLE_MEMBER"))) {
-			return new ModelAndView(new RedirectView("/schedule"));
-		} else if (authorities.anyMatch(authority -> authority.equals("ROLE_BUSINESSMAN"))) {
-			return new ModelAndView(new RedirectView("/timetable"));
+		if (user != null) {
+			Stream<String> authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+
+			if (authorities.anyMatch(authority -> authority.equals("ROLE_ADMIN"))) {
+				return new ModelAndView(new RedirectView("/member"));
+			} else if (authorities.anyMatch(authority -> authority.equals("ROLE_MEMBER"))) {
+				return new ModelAndView(new RedirectView("/schedule"));
+			} else if (authorities.anyMatch(authority -> authority.equals("ROLE_BUSINESSMAN"))) {
+				return new ModelAndView(new RedirectView("/timetable"));
+			}
 		}
 		
 		return new ModelAndView(new RedirectView("/login"));

@@ -21,19 +21,16 @@
 										<div class="row">
 											<div class="col-sm-12 col-md-6"></div>
 											<div class="col-sm-12 col-md-6">
-												<div id="datatables-buttons_filter"
-													class="dataTables_filter">
-													<!-- form 태그 있던 자리  -->
-													<div class="form-inline">
-														<select id="condition" name="condition"
-															class="form-control">
-															<option value="name">이름</option>
-															<option value="state">상태</option>
-														</select> <input type="text" id="searchQuery" name="searchQuery"
-															class="form-control form-control-sm" placeholder=""
-															aria-controls="datatables-buttons"> <input
-															type="button" class="btn btn-primary" id="searchButton"
-															name="searchButton" value="검색">
+												<div class="row">
+													<div class="form-inline col">
+														<div class="form-inline col-8"></div>
+															<select id="condition" name="condition" class="form-control">
+																<option value="name">이름</option>
+																<option value="state">상태</option>
+															</select> 
+															<input type="text" id="searchQuery" name="searchQuery" class="form-control form-control-sm mr-1 ml-1" placeholder=""
+																aria-controls="datatables-buttons"> 
+															<input type="button" class="btn btn-primary mr-1 ml-1" id="searchButton" name="searchButton" value="검색">
 													</div>
 												</div>
 											</div>
@@ -44,63 +41,11 @@
 													class="table table-striped dataTable no-footer dtr-inline"
 													style="width: 100%;" role="grid"
 													aria-describedby="datatables-buttons_info">
-													<thead>
-														<tr role="row">
-															<th>업무 명</th>
-															<th>사업장 명</th>
-															<th>근무 시간</th>
-															<th>출근 시간</th>
-															<th>퇴근 시간</th>
-															<th>급여(예상)</th>
-															<th>급여(지급)</th>
-															<th>평점</th>
-															<th>비고</th>
-															<th>&nbsp;</th>
-														</tr>
+													<thead id="table_head">
 													</thead>
 													<tbody id="table_body">
 													</tbody>
 												</table>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12 col-md-5">
-												<div class="dataTables_info" id="datatables-buttons_info"
-													role="status" aria-live="polite">Showing 1 to 10 of
-													XX entries</div>
-											</div>
-											<div class="col-sm-12 col-md-7">
-												<div class="dataTables_paginate paging_simple_numbers"
-													id="datatables-buttons_paginate">
-													<ul class="pagination">
-														<li class="paginate_button page-item previous disabled"
-															id="datatables-buttons_previous"><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="0"
-															tabindex="0" class="page-link">Previous</a></li>
-														<li class="paginate_button page-item active"><a
-															href="#" aria-controls="datatables-buttons"
-															data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="2"
-															tabindex="0" class="page-link">2</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="3"
-															tabindex="0" class="page-link">3</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="4"
-															tabindex="0" class="page-link">4</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="5"
-															tabindex="0" class="page-link">5</a></li>
-														<li class="paginate_button page-item "><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="6"
-															tabindex="0" class="page-link">6</a></li>
-														<li class="paginate_button page-item next"
-															id="datatables-buttons_next"><a href="#"
-															aria-controls="datatables-buttons" data-dt-idx="7"
-															tabindex="0" class="page-link">Next</a></li>
-													</ul>
-												</div>
 											</div>
 										</div>
 									</div>
@@ -114,16 +59,63 @@
 	</th:block>
 </body>
 </html>
+<script type="text/javascript" sec:authorize="hasRole('ROLE_BUSINESSMAN')">
+	$(document).ready(function() {
+		var html = "";
+		html += "<tr role='row'>";
+		html += "<th>업무 명</th>";
+		html += "<th>사업장 명</th>";
+		html += "<th>근무자 명</th>";
+		html += "<th>근무 시간</th>";
+		html += "<th>출근 시간</th>";
+		html += "<th>퇴근 시간</th>";
+		html += "<th>급여(예상)</th>";
+		html += "<th>급여(지급)</th>";
+		html += "<th>평점</th>";
+		html += "<th>비고</th>";
+		html += "<th>&nbsp;</th>";
+		html += "</tr>";
+		
+		$('#table_head').html(html);
+	});
+</script>
+<script type="text/javascript" sec:authorize="hasRole('ROLE_MEMBER')">
+	$(document).ready(function() {
+		var html = "";
+		html += "<tr role='row'>";
+		html += "<th>업무 명</th>";
+		html += "<th>사업장 명</th>";
+		html += "<th>근무 시간</th>";
+		html += "<th>출근 시간</th>";
+		html += "<th>퇴근 시간</th>";
+		html += "<th>급여(예상)</th>";
+		html += "<th>급여(지급)</th>";
+		html += "<th>평점</th>";
+		html += "<th>비고</th>";
+		html += "<th>&nbsp;</th>";
+		html += "</tr>";
+		
+		$('#table_head').html(html);
+	});
+</script>
 <script th:inline="javascript">
 	var username = /*[[${#authentication.principal.username}]]*/ '';
+	
 	$(document).ready(function() {
 		drawTable();
+		
+		$(document).on('change', 'select[name=selectBranch]', function() {
+			drawTable();
+		});
 	});
 	function drawTable() {
-		var branchNo = $('#selectBranch').val() > 0 ? $('#selectBranch').val() : 0;
+		var currentUri = location.pathname;
+		var initBranchNo = Number(currentUri.substring(currentUri.lastIndexOf('/') + 1));
+		
+		var branchNo = $('#selectBranch').val() > 0 ? $('#selectBranch').val() : initBranchNo;
 		
 		if (branchNo > 0) {
-			var url = "/record?businessmanId=" + username;
+			var url = "/record?businessmanId=" + username +"&branchNo=" + branchNo;
 		} else {
 			var url = "/record?memberId=" + username;
 		}
@@ -147,6 +139,9 @@
 						html += "	<tr>";
 						html += "	<td>" + data[i].occupationName + "</td>";
 						html += "	<td>" + data[i].branchName + "</td>";
+						if (branchNo > 0) {
+							html += "	<td>" + data[i].memberName + "</td>";	
+						}
 						html += "	<td>" + data[i].workStartTime + " ~ " + data[i].workEndTime + "</td>";
 						html += "	<td>" + data[i].workingTime + "</td>";
 						if (data[i].quittingTime != null) {

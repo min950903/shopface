@@ -28,7 +28,7 @@ function drawAlarmList() {
 						html += "</a>";
 					}
 				} else {
-					html += "<div class='row no-gutters align-items-center'><div class='col-10'>알람이 없습니다.</div></div>";
+					html += "<div class='row no-gutters align-items-center'><div class='col-12'><div class='text-center'>알람이 없습니다.</div></div></div>";
 				}
 				$('#alarmSpace').html(html);
 			},

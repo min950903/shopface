@@ -2,6 +2,7 @@ package kr.ac.sunmoon.shopface.record;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -85,6 +86,16 @@ public class RecordServiceImpl implements RecordService {
 			record.setSalaryPlan((int)(existEmploy.getSalary() * hours));
 			
 			recordMapper.insert(record);
+			
+			Date now = new Date();
+			if (now.compareTo(new Date(workStart)) > -1) {
+				existSchedule.setState('P');
+			} else {
+				existSchedule.setState('L');
+			}
+			
+			scheduleMapper.update(existSchedule);
+			
 			isSuccess = true;
 		}
 		

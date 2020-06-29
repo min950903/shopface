@@ -43,13 +43,14 @@
 		<collection property="branch" resultMap="branchMap"></collection>
 	</resultMap>
 
-	<select id="selectView" resultMap="TestMap">
+	<select id="selectView" parameterType="schedule" resultMap="TestMap">
 		SELECT T.NO AS TIMETABLE_KEY, T.BRANCH_NO, T.WORK_START_TIME, T.WORK_END_TIME, T.OCCUP_NAME, T.OCCUP_COLOR, T.REGISTER_DATE,
 		B.NO AS BRANCH_KEY, B.MEMBER_ID, B.NAME, B.PHONE, B.ADDRESS, B.DETAIL_ADDRESS,
 		S.NO AS SCHEDULE_KEY, S.TIMETABLE_NO, S.MEMBER_ID, S.STATE
 		FROM TIMETABLE T, BRANCH B, SCHEDULE S
-		WHERE T.BRANCH_NO = B.NO AND
-		T.NO = S.TIMETABLE_NO
+		WHERE T.BRANCH_NO = B.NO 
+			AND T.NO = S.TIMETABLE_NO
+			AND S.MEMBER_ID = #{memberId}
 	</select>
 
 	<select id="select" parameterType="schedule" resultType="schedule">

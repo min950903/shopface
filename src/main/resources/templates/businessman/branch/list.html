@@ -27,7 +27,7 @@
 										<div class="modal-dialog modal-lg" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title">Default modal</h5>
+													<h5 class="modal-title">사업자 등록증 이미지 보기</h5>
 													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       									<span aria-hidden="true">×</span>
                    									</button>
@@ -48,16 +48,7 @@
 													class="table table-striped dataTable no-footer dtr-inline"
 													style="width: 100%;" role="grid"
 													aria-describedby="datatables-buttons_info">
-													<thead>
-														<tr role="row">
-															<th>사업장 명</th>
-															<th>전화번호</th>
-															<th>승인 현황</th>
-															<th>사업장 등록증</th>
-															<th>승인</th>
-															<th>&nbsp</th>
-															<th>&nbsp</th>
-														</tr>
+													<thead id="table_head">
 													</thead>
 													<tbody id="table_body">
 														<tr role="row">
@@ -102,6 +93,30 @@
 			},
 			success: function (data) {
 				var html = "";
+				if (username == 'admin') {
+					html += "<tr role='row'>";
+					html += "<th>사업장 명</th>";
+					html += "<th>전화번호</th>";
+					html += "<th>승인 현황</th>";
+					html += "<th>사업장 등록증</th>";
+					html += "<th>승인</th>";
+					html += "<th>&nbsp;</th>";
+					html += "<th>&nbsp;</th>";
+					html += "</tr>";
+				} else {
+					html += "<tr role='row'>";
+					html += "<th>사업장 명</th>";
+					html += "<th>전화번호</th>";
+					html += "<th>승인 현황</th>";
+					html += "<th>사업장 등록증</th>";
+					html += "<th>&nbsp;</th>";
+					html += "<th>&nbsp;</th>";
+					html += "</tr>";
+				}
+				
+				$('#table_head').html(html);
+				html = "";
+				
 				if (data.length > 0) {
 					for (var i = 0; i < data.length; i++) {
 						if (data[i].state == 'D') {
@@ -120,7 +135,10 @@
 							html += "	<td>" + "승인 거부됨" + "</td>";
 						}
 						html += "   <td><button type='button' class='btn btn-square btn-primary' name='licenseViewBtn' data-toggle='modal' data-target='#licenseImageModal'>보기</button></td>";
-						html += "   <td><span><button type='button' class='btn btn-square btn-primary' name='acceptBtn'>승인</button><button type='button' class='btn btn-square btn-primary' name='rejectBtn'>거절</button></span></td>";
+						
+						if (username == 'admin') {
+							html += "   <td><span><button type='button' class='btn btn-square btn-primary' name='acceptBtn'>승인</button><button type='button' class='btn btn-square btn-primary' name='rejectBtn'>거절</button></span></td>";
+						}
 						html += "	<td><input type='hidden' name='imagePath' value='" + data[i].businessLPath + "'/></td>";
 						html += "	<td><input type='hidden' name='branchNo' value='" + data[i].no + "'/></td>";
 						html += "	</tr>";
@@ -142,49 +160,9 @@
 		})
 	}
 	
-	function drawAlarmList() {
-		var url = "/alarm?addresseeId=" + $('#user').html();
-		
-		$.ajax({
-			url: url,
-			type: "get",
-			data : {
-				memberId : ""
-			},
-			headers: {
-				"Content-Type": "application/json;charset=UTF-8"
-			},
-			success: function(data) {
-				var html = "";
-				if (data.length > 0) {
-					for(var i = 0; i < data.length; i++) {
-						html += "<a href='#' class='list-group-item'>";
-						html += "<div class='row no-gutters align-items-center'>";
-						html += "<div class='col-2'></div>";
-						//추후 그림 추가
-						html += "<div class='col-10'>";
-						html += "<div class='text-dark'>" + data[i].type  +"</div>";
-						html += "<div class='text-muted small mt-1'>"+ data[i].contents +"</div>";
-						html += "<div class='text-muted small mt-1'>"+ data[i].registerDate +"</div>";
-						html += "</div>";
-						html += "</div>";
-						html += "</a>";
-					}
-				} else {
-					html += "<div class='row no-gutters align-items-center'><div class='col-10'>알람이 없습니다.</div></div>";
-				}
-				$('#alarmSpace').html(html);
-			},
-			error: function (request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
-					"error:" + error);
-			}
-		})
-	};
-	
 	$('#table_body').on('click', 'button[name=licenseViewBtn]', function() {
 		var currentRow = $(this).closest('tr');
-		var imagePath = currentRow.find('td:eq(5) input[name=imagePath]').val();
+		var imagePath = currentRow.find('input[name=imagePath]').val();
 		$('#licenseImg').attr("src", imagePath);
 	});
 	

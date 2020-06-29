@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import kr.ac.sunmoon.shopface.work.schedule.Schedule;
 import kr.ac.sunmoon.shopface.work.schedule.ScheduleMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class TimetableServiceImple implements TimetableService {
 	private final TimetableMapper timetableMapper;
@@ -18,7 +20,8 @@ public class TimetableServiceImple implements TimetableService {
 	
 	@Override
 	public boolean addTimetable(Timetable timetable, Schedule schedule) {
-		try {
+		boolean isSuccess = false;
+		
 			if (timetable.getWorkStartTime() != null 
 					&& !"".equals(timetable.getWorkStartTime())
 					&& timetable.getWorkEndTime() != null
@@ -30,37 +33,18 @@ public class TimetableServiceImple implements TimetableService {
 					&& schedule.getMemberId() != null
 					&& !"".equals(schedule.getMemberId())) {
 				List<Timetable> timetables = this.timetableMapper.selectAll(timetable);
-				if (timetables != null) {
-					if (timetables.size() < 1) {
-						this.timetableMapper.insert(timetable);//시간표 등록
-						List<Timetable> result = this.timetableMapper.selectAll(timetable);
-						if (result.size() == 1) {
-							schedule.setTimetableNo(result.get(0).getNo());
-							schedule.setState('R');
-							this.scheduleMapper.insert(schedule);
-							return true;
-						}
-					} else {
-						if (timetables.size() == 1) {
-							Schedule parameter = new Schedule();
-							parameter.setTimetableNo(timetables.get(0).getNo());
-							
-							List<Schedule> schedules = this.scheduleMapper.selectAll(parameter);
-							if (schedules == null) {
-								this.scheduleMapper.insert(schedule);
-								return true;
-							}
-							return false;
-						}
-					}return false;
+				
+				if (timetables.size() == 0) {
+					timetableMapper.insert(timetable);
 					
-				}  return true;
+					schedule.setTimetableNo(timetableMapper.selectAll(timetable).get(0).getNo());
+					schedule.setState('R');
+					scheduleMapper.insert(schedule);
+					
+					isSuccess = true;
+				} 
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		return false;
+		return isSuccess;
 	}
 
 	@Override
@@ -75,6 +59,8 @@ public class TimetableServiceImple implements TimetableService {
 				if (timetables.size() > 0) {
 					for (int i = 0; i < timetables.size(); i++) {
 						int no = timetables.get(i).getNo();
+						
+						log.info("" + no);
 						
 						Schedule parameterSchedule = new Schedule();
 						parameterSchedule.setTimetableNo(no);
@@ -125,7 +111,7 @@ public class TimetableServiceImple implements TimetableService {
 		
 					List<Timetable> result = this.timetableMapper.selectAll(timetable);
 					if (result != null && result.size() == 1) {
-						schedule.setTimetableNo(result.get(1).getNo());
+						schedule.setTimetableNo(result.get(0).getNo());
 						this.scheduleMapper.update(schedule);
 						
 						return true;
@@ -150,7 +136,7 @@ public class TimetableServiceImple implements TimetableService {
 				schedules = this.scheduleMapper.selectAll(schedule);
 				if (schedules != null) {
 					if (schedules != null && schedules.size() == 1) {
-						if (schedules.get(1).getState() == 'R' || schedules.get(1).getState() == 'B') {
+						if (schedules.get(0).getState() == 'R' || schedules.get(0).getState() == 'B') {
 							this.scheduleMapper.delete(schedule);
 							Schedule parameter = new Schedule();
 							parameter.setTimetableNo(schedule.getNo());

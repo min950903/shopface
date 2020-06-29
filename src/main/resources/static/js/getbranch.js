@@ -6,7 +6,8 @@ function drawBranchList(currentBranchNo) {
 			url: '/branch',
 			type:'GET',
 			data: {
-				memberId: userId
+				memberId: userId,
+				approvalStatus: 'Y'
 			},
 			dataType: 'JSON',
 			contentType : 'application/json;charset=UTF-8',
@@ -44,6 +45,14 @@ function drawBranchList(currentBranchNo) {
 	}
 }
 
+function moveTimeTable() {
+	location.href="/timetable/" + selectBranchNo;
+}
+
+function moveRecord() {
+	location.href="/record/" + selectBranchNo;
+}
+
 function moveEmploy() {
 	location.href="/employ/" + selectBranchNo;
 }
@@ -51,3 +60,4 @@ function moveEmploy() {
 function moveOccupation() {
 	location.href="/occupation/" + selectBranchNo;
 }
+

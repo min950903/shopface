@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ScheduleMapper {
 	public void insert(Schedule schedule);
 	public List<Schedule> selectAll(Schedule schedule);
-	public List<Test> selectView();
+	public List<Test> selectView(Schedule schedule);
 	public Schedule select(Schedule schedule);
 	public void update(Schedule schedule);
 	public void delete(Schedule schedule);

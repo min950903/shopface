@@ -82,9 +82,14 @@ $(function() {
 		editable : false,
 		displayEventEnd : true,
 		events : function(start, end, timezone, callback) {
+			var user = $('#user').text();
+			
 			$.ajax({
 				url : "/schedule",
 				type : "get",
+				data: {
+					memberId: user
+				},
 				datatype : "json",
 				headers : {
 					"Content-Type" : "application/json;charset=UTF-8"
@@ -123,8 +128,6 @@ $(function() {
 				+ event.end.format("HH:mm")
 			);
 			$('#scheduleModal').modal("show");
-			$('#workingBtn').show();
-			$('#quittingBtn').show();
 			
 			return false;
 		}
@@ -150,7 +153,10 @@ $('#workingBtn').click(function() {
 			console.log(response);
 			if (response.success == true) {
 				var time = new Date();
-				$('#table_body').html("출근 시간 : " + time.getHours() + " : " + time.getMinutes() + " : " + time.getSeconds() );
+				$('#table_body').append("<br>" + "출근 시간 : " + time.getHours() + " : " + time.getMinutes() + " : " + time.getSeconds());
+				setTimeout(function() {
+					$('#scheduleModal').modal("hide");
+				}, 2000);
 				$('#workingBtn').hide();
 			} else {
 				$('#table_body').html("출근 실패" );
@@ -178,7 +184,10 @@ $('#quittingBtn').click(function() {
 		success : function(response) {
 			var time = new Date();
 			if (response.success == true) {
-				$('#table_body').html("퇴근 시간 : " + time.getHours() + " : " + time.getMinutes() + " : " + time.getSeconds() );
+				$('#table_body').append("<br>" + "퇴근 시간 : " + time.getHours() + " : " + time.getMinutes() + " : " + time.getSeconds() );
+				setTimeout(function() {
+					$('#scheduleModal').modal("hide");
+				}, 2000);
 				$('#quittingBtn').hide();
 			} else {
 				$('#table_body').html("퇴근 실패" );
