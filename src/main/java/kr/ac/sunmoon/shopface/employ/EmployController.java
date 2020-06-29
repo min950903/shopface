@@ -11,21 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class EmployController {
     private final EmployService employService;
         
-    @PostMapping(value = "/employ")
+    @PostMapping("/employ")
     public Map<String, Object> addEmploy(Employ employ) {
         boolean isSuccess = employService.addEmploy(employ);
         
@@ -61,10 +58,10 @@ public class EmployController {
         return modelAndView;
     }
     
-    @DeleteMapping("/employ/{branchNo}")
+    @DeleteMapping("/employ")
     public ModelAndView removeEmploy(Employ employ) {
         employService.removeEmploy(employ);
-        return new ModelAndView("/employ/list.html");
+        return new ModelAndView("redirect:/employ/" + employ.getBranchNo());
     }
     
     @PutMapping("/employ/invite")
@@ -76,7 +73,7 @@ public class EmployController {
         return responseMap;
     }
     
-    @GetMapping("/employ/todo")
+    @GetMapping("/employ/auth")
     public ModelAndView certificationCode(@RequestParam("date") String expiredDate) {
     	ModelAndView modelAndView = new ModelAndView("/member/authenticationCode");
     	modelAndView.addObject("date", expiredDate);
