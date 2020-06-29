@@ -92,7 +92,7 @@ public class RecordServiceImpl implements RecordService {
 
 	@Transactional
 	@Override
-	public List<Record> getRecordList(Record record) {
+	public List<Record> getRecordList(Record record, Branch branch) {
 		if (!"".equals(record.getMemberId())) {
 			return recordMapper.selectAll(record);
 		} else {

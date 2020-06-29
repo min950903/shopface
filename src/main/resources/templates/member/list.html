@@ -189,7 +189,7 @@
 				var html = "";
 				if (data.length > 0) {
 					for(var i = 0; i < data.length; i++) {
-						html += "<a href='#' class='list-group-item'>";
+						html += "<a href='#'id='alarmItem' class='list-group-item' onclick='alarm'>";
 						html += "<div class='row no-gutters align-items-center'>";
 						html += "<div class='col-2'></div>";
 						//추후 그림 추가
@@ -212,4 +212,17 @@
 			}
 		})
 	}
+	
+	/* $('#alarmItem').on('click', function(no) {
+		var url = "/alarm?no=" + no;
+		
+		$.ajax({
+			url: url,
+			type:'delete',
+			success: function(data) {
+				console.log("success alarm delete");
+				drawAlarmList();
+			}
+		}); 알람 삭제 
+	}); */
 </script>

@@ -11,10 +11,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class EmployServiceImpl implements EmployService {
     private final EmployMapper employMapper;
@@ -96,8 +99,10 @@ public class EmployServiceImpl implements EmployService {
             e.printStackTrace();
         }
 
+        String serverUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        
         String contents = "안녕하세요" + employ.getName() + "님 \r\n" + "초대경로와 인증코드 첨부드립니다. \r\n" + "초대경로 : "
-                            + "http://localhost:8080/employ?date=" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
+                            + serverUrl + "/employ/auth?date=" + encryptDate + "\r\n" + "인증 코드 : " + employ.getCertiCode();
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(employ.getEmail());

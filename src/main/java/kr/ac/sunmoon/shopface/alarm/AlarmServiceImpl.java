@@ -37,14 +37,16 @@ public class AlarmServiceImpl implements AlarmService {
 	@Transactional
 	@Override
 	public boolean updateAlarm(Alarm alarm) {
+		boolean isSuccess = false;
+		
 		Alarm existAlarm = alarmMapper.select(alarm);
 		if (existAlarm != null) {
 			alarmMapper.update(alarm);
 			
-			return true;
-		} else {
-			return false;
+			isSuccess = true;
 		}
+		
+		return isSuccess;
 	}
 
 	@Transactional
@@ -57,8 +59,6 @@ public class AlarmServiceImpl implements AlarmService {
 			alarmMapper.delete(alarm);
 			
 			isSuccess = true;
-		} else {
-			isSuccess = false;
 		}
 		
 		return isSuccess;

@@ -47,7 +47,6 @@
 													<thead>
 														<tr role="row">
 															<th>업무 명</th>
-															<th>사업자 이름</th>
 															<th>사업장 명</th>
 															<th>근무 시간</th>
 															<th>출근 시간</th>
@@ -122,11 +121,11 @@
 	});
 	function drawTable() {
 		var url = "/record?memberId=" + username;
-		if ($('#condition').val() == 'name') {
+		/* if ($('#condition').val() == 'name') {
 			url += "name=" + $('#searchQuery').val();
 		} else {
 			url += "state=" +  $('#searchQuery').val();
-		}
+		} */
 	
 		$.ajax({
 			url: url,
@@ -150,8 +149,16 @@
 						}
 						html += "	<td>" + data[i].salaryPlan + "</td>";
 						html += "	<td>" + data[i].salaryPay + "</td>";
-						html += "	<td>" + data[i].evaluation + "</td>";
-						html += "	<td>" + data[i].note + "</td>";
+						if (data[i].evaluation > 0) {
+							html += "	<td>" + data[i].evaluation + "</td>";
+						} else {
+							html += "	<td></td>";
+						}
+						if (data[i].note != null) {
+							html += "	<td>" + data[i].note + "</td>";
+						} else {
+							html += "	<td></td>";
+						}
 						html += "	<td><input type='hidden' name='no' value=" + data[i].no + "</td>";
 						html += "	</tr>";
 					}

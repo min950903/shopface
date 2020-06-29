@@ -5,7 +5,7 @@
 	<select id="selectAll" parameterType="member"
 		resultType="member">
 		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
-		FROM NEW_MEMBER
+		FROM MEMBER
 		<where>
 			<if test="name != null and !name.equals('')">AND NAME LIKE '%'||#{name}||'%'</if>
 			<if test="state != null and state != ''">AND STATE = #{state}</if>
@@ -15,14 +15,14 @@
 	</select>
 	<select id="select" parameterType="member" resultType="member">
 		SELECT ID, NAME, PASSWORD, PHONE, EMAIL, BANK_NAME, ACCOUNT_NUM, STATE, TYPE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE 
-		FROM NEW_MEMBER
+		FROM MEMBER
 		<where>
 			<if test="id != null and !id.equals('')">AND ID = #{id}</if>
 			<if test="email != null and !email.equals('')">AND EMIAL = #{email}</if>
 		</where>
 	</select>
 	<insert id="insert" parameterType="member">
-		INSERT INTO NEW_MEMBER
+		INSERT INTO MEMBER
 		(ID, PASSWORD, NAME, PHONE, EMAIL, TYPE)
 		VALUES(
 			#{id}, 
@@ -34,7 +34,7 @@
 		)
 	</insert>
 	<update id="update" parameterType="member">
-		UPDATE NEW_MEMBER
+		UPDATE MEMBER
 		<set> 
 			<if test="name != null">NAME = #{name},</if>
 			<if test="password != null">PASSWORD = #{password},</if>
@@ -50,18 +50,18 @@
 		WHERE ID = #{id}
 	</update>
 	<delete id="delete" parameterType="member">
-		DELETE FROM NEW_MEMBER
+		DELETE FROM MEMBER
 		WHERE ID = #{id}
 	</delete>
 	
 	<select id="countActiveMember" resultType="Integer">
-		SELECT COUNT(*) FROM NEW_MEMBER WHERE STATE = 'A';
+		SELECT COUNT(*) FROM MEMBER WHERE STATE = 'A';
 	</select>
 	
 	<select id="pageList" parameterType="criteria" resultType="member">
 		SELECT ID, NAME,PHONE,EMAIL,STATE,TYPE
 		FROM (  SELECT ROW_NUMBER() OVER (ORDER BY ID) NUM, M.*
-        		FROM NEW_MEMBER M
+        		FROM MEMBER M
         		ORDER BY ID )
 		WHERE ROWNUM BETWEEN #{pageStart} AND #{perPageNum}
 	</select>

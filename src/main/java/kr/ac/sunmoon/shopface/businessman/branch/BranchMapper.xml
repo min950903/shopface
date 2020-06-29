@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.ac.sunmoon.shopface.businessman.branch.BranchMapper">
 	<insert id="insert" parameterType="Branch">
-		INSERT INTO BRANCH_NEW(NO, MEMBER_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, STATE, APPROVAL_STATUS)
+		INSERT INTO BRANCH(NO, MEMBER_ID, NAME, PHONE, REGISTER_DATE, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, STATE, APPROVAL_STATUS)
 		VALUES(BRANCH_NO_SEQ.NEXTVAL, #{memberId}, #{name}, #{phone}, SYSDATE, #{address}, #{detailAddress}, #{zipCode}, 'A', 'W')
 	</insert>
 	
@@ -22,7 +22,7 @@
 			,BUSINESS_L_PATH
 			,STATE
 			,APPROVAL_STATUS
-		FROM BRANCH_NEW
+		FROM BRANCH
 		<where>
 			<if test="memberId != null and memberId != ''">
 				AND MEMBER_ID = #{memberId}
@@ -47,12 +47,12 @@
 			,BUSINESS_L_PATH
 			,STATE
 			,APPROVAL_STATUS
-		FROM BRANCH_NEW
+		FROM BRANCH
 		WHERE NO = #{no}
 	</select>
 	
 	<update id="update" parameterType="Branch">
-		UPDATE BRANCH_NEW
+		UPDATE BRANCH
 		<set>
 			<if test="name != null and name != ''">
 				NAME = #{name},
@@ -83,7 +83,7 @@
 	</update>
 	
 	<delete id="delete" parameterType="Branch">
-		DELETE FROM BRANCH_NEW
+		DELETE FROM BRANCH
 		WHERE NO = #{no}
 	</delete>
 </mapper>

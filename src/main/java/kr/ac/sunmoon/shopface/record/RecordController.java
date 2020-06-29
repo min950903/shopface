@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.ac.sunmoon.shopface.businessman.branch.Branch;
 import kr.ac.sunmoon.shopface.work.schedule.Schedule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,8 +60,8 @@ public class RecordController {
 	}
 	
 	@GetMapping(value = "/record", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<Record> getRecordList(Record record) {
-		return recordService.getRecordList(record);
+	public List<Record> getRecordList(Record record, Branch branch) {
+		return recordService.getRecordList(record, branch);
 	}
 	
 	@PutMapping("/record")
