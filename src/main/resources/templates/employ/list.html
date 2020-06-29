@@ -274,7 +274,7 @@ $(document).ready(function() {
 	})
 	
 	$('#table_body').on('click','button[name=detailBtn]', function() {
-		var currentRow =$ (this).closest('tr');
+		var currentRow = $(this).closest('tr');
 		var no = currentRow.find('td:eq(5) button[name="detailBtn"]').val()
 		$('#employNo-input').val(no);
 		

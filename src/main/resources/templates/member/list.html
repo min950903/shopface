@@ -115,14 +115,11 @@
 			drawTable();
 		})
 		
-		$('#alertsDropdown').click(function() {
-			drawAlarmList();
-		})
 		$('#searchQuery').keyup(function(e) {
-		if (e.keyCode == 13) {
-			drawTable();
-		}
-	})
+			if (e.keyCode == 13) {
+				drawTable();
+			}
+		})
 	});
 
 	function drawTable() {
@@ -175,54 +172,4 @@
 			}
 		})
 	}
-	
-	function drawAlarmList() {
-		var url = "/alarm?addresseeId=" + $('#user').html();
-		
-		$.ajax({
-			url: url,
-			type: "get",
-			headers: {
-				"Content-Type": "application/json;charset=UTF-8"
-			},
-			success: function(data) {
-				var html = "";
-				if (data.length > 0) {
-					for(var i = 0; i < data.length; i++) {
-						html += "<a href='#'id='alarmItem' class='list-group-item' onclick='alarm'>";
-						html += "<div class='row no-gutters align-items-center'>";
-						html += "<div class='col-2'></div>";
-						//추후 그림 추가
-						html += "<div class='col-10'>";
-						html += "<div class='text-dark'>" + data[i].type  +"</div>";
-						html += "<div class='text-muted small mt-1'>"+ data[i].contents +"</div>";
-						html += "<div class='text-muted small mt-1'>"+ data[i].registerDate +"</div>";
-						html += "</div>";
-						html += "</div>";
-						html += "</a>";
-					}
-				} else {
-					html += "<div class='row no-gutters align-items-center'><div class='col-10'>알람이 없습니다.</div></div>";
-				}
-				$('#alarmSpace').html(html);
-			},
-			error: function (request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" +
-					"error:" + error);
-			}
-		})
-	}
-	
-	/* $('#alarmItem').on('click', function(no) {
-		var url = "/alarm?no=" + no;
-		
-		$.ajax({
-			url: url,
-			type:'delete',
-			success: function(data) {
-				console.log("success alarm delete");
-				drawAlarmList();
-			}
-		}); 알람 삭제 
-	}); */
 </script>
