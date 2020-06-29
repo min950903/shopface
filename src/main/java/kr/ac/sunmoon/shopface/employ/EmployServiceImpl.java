@@ -14,10 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
-@Slf4j
 @Service
 public class EmployServiceImpl implements EmployService {
     private final EmployMapper employMapper;
