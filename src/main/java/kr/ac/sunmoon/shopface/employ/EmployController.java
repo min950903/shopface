@@ -63,7 +63,7 @@ public class EmployController {
     
     @DeleteMapping("/employ/{branchNo}")
     public ModelAndView removeEmploy(Employ employ) {
-        employService.deleteEmploy(employ);
+        employService.removeEmploy(employ);
         return new ModelAndView("/employ/list.html");
     }
     
