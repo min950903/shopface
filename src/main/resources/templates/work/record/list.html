@@ -120,7 +120,14 @@
 		drawTable();
 	});
 	function drawTable() {
-		var url = "/record?memberId=" + username;
+		var branchNo = $('#selectBranch').val() > 0 ? $('#selectBranch').val() : 0;
+		
+		if (branchNo > 0) {
+			var url = "/record?businessmanId=" + username;
+		} else {
+			var url = "/record?memberId=" + username;
+		}
+		
 		/* if ($('#condition').val() == 'name') {
 			url += "name=" + $('#searchQuery').val();
 		} else {

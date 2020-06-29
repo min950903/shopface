@@ -1,121 +1,128 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorator="layout/template">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/template">
 <head>
 <meta charset="UTF-8">
 <title>전체 시간표 관리</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/spectrum/spectrum.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/spectrum/spectrum.css}">
 </head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <body>
-   <th:block layout:fragment="content">
-      <main class="content">
-         <div class="container-fluid p-0">
-            <h1 class="h3 mb-3">전체 시간표</h1>
-            <div class="row">
-               <div class="col-12">
-                  <div class="card">
-                     <div class="card-body">
-                        <div id="datatables-buttons_wrapper"
-                           class="dataTables_wrapper dt-bootstrap4 no-footer">
-                           
-                           <div class="row">
-                              <div class="col-sm-12 col-md-6"></div>
-                              <div class="col-sm-12 col-md-6">
-                              </div>
-                           </div>
-                           <div id="fullcalendar"></div>
-                        </div>
-                     </div>
-                  </div>
-                  
-                  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title"><div id="time"></h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				                     <span aria-hidden="true">&times;</span>
-				                   </button>
+	<th:block layout:fragment="content">
+		<main class="content">
+			<div class="container-fluid p-0">
+				<h1 class="h3 mb-3">전체 시간표</h1>
+				<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
+								<div id="datatables-buttons_wrapper"
+									class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+									<div class="row">
+										<div class="col-sm-12 col-md-6"></div>
+										<div class="col-sm-12 col-md-6"></div>
+									</div>
+									<div id="fullcalendar"></div>
+								</div>
 							</div>
-							<div class="modal-body m-3">
-								<form id="addForm" th:action="@{/timetable}" method="post">
-									<div class="form-group">
-										<table id="datatables-buttons"
+						</div>
+
+						<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+							aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">
+											<div id="time">
+										</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body m-3">
+										<form id="addForm" th:action="@{/timetable}" method="post">
+											<div class="form-group">
+												<table id="datatables-buttons"
 													class="table table-striped dataTable no-footer dtr-inline"
 													style="width: 100%;" role="grid"
 													aria-describedby="datatables-buttons_info">
 													<thead>
 													</thead>
 													<tbody id="table_body_add">
-														
+
 													</tbody>
 												</table>
 											</div>
 										</form>
 									</div>
-							
-							<div class="modal-footer">
-								<button type="button" class="btn btn-primary" id="addBtn">시간표 등록</button>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" id="addBtn">시간표
+											등록</button>
+									</div>
+
+								</div>
 							</div>
-							
 						</div>
-					</div>
-				</div>
-				<div class="modal fade" id="editRemoveModal" tabindex="-1" role="dialog" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title"><div id="edt_time"></h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				                     <span aria-hidden="true">&times;</span>
-				                   </button>
-							</div>
-							<div class="modal-body m-3">
-								<form id="editRemoveForm" th:action="@{/timetable}" method="post">
-									<input type="hidden" name="_method">
-									<div class="form-group">
-										<table id="datatables-buttons"
+						<div class="modal fade" id="editRemoveModal" tabindex="-1"
+							role="dialog" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">
+											<div id="edt_time">
+										</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body m-3">
+										<form id="editRemoveForm" th:action="@{/timetable}"
+											method="post">
+											<input type="hidden" name="_method">
+											<div class="form-group">
+												<table id="datatables-buttons"
 													class="table table-striped dataTable no-footer dtr-inline"
 													style="width: 100%;" role="grid"
 													aria-describedby="datatables-buttons_info">
 													<thead>
 													</thead>
 													<tbody id="table_body_edit">
-														
+
 													</tbody>
 												</table>
 											</div>
 										</form>
 									</div>
-							
-							<div class="modal-footer">
-								<button type="button" class="btn btn-primary" id="editBtn">수정</button>
-								<button type="button" class="btn btn-primary" id="removeBtn">삭제</button>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary" id="editBtn">수정</button>
+										<button type="button" class="btn btn-primary" id="removeBtn">삭제</button>
+									</div>
+								</div>
 							</div>
-							
 						</div>
 					</div>
 				</div>
-				
-               </div>
-            </div>
-         </div>
-      </main>
-   </th:block>
+			</div>
+		</main>
+	</th:block>
 </body>
 </html>
-<script type="text/javascript" src="/js/sidebar.js"></script> 
+<script type="text/javascript" src="/js/sidebar.js"></script>
 <script type="text/javascript" src="/js/spectrum/spectrum.js"></script>
 <script type='text/javascript' src="/js/spectrum/toc.js"></script>
 <script type='text/javascript' src="/js/spectrum/docs.js"></script>
-<script type="text/javascript" src="/js/spectrum/prettify.js"></script> 
+<script type="text/javascript" src="/js/spectrum/prettify.js"></script>
 <script th:inline="javascript">
 	var branchNo = $("#selectBranch").val();
 	var occupation;
 	var employ;
-	 
+
 	$(function() {
 		branchNo = $("#selectBranch").val();
 		drawCalendar();
@@ -125,7 +132,7 @@
 		drawEditModal();
 		drawBranchList(branchNo);
 
-		$("#selectBranch").change(function () {
+		$("#selectBranch").change(function() {
 			branchNo = $("#selectBranch").val();
 			$("#fullcalendar").fullCalendar('destroy');
 			drawCalendar();
@@ -134,38 +141,43 @@
 			drawAddModal();
 			drawEditModal();
 		});
-		
 
-		$("#addBtn").click(function() {
-			var day = $("#currentDate").val();
-			var sHour = $("#startHour").val();
-			var sMin = $("#startMin").val();
-			var eHour = $("#endHour").val();
-			var eMin = $("#endMin").val();
-			
-			$("#workStartTime").val(day + " " + sHour + ":" + sMin + ":" + "00");
-			$("#workEndTime").val(day + " " + eHour + ":" + eMin + ":" + "00");
-			$("#branchNo").val(parseInt(branchNo));
-			
-			$("#addForm").submit();
-		});
-		
-		$("#editBtn").click(function() {
-			var day = $("#edt_currentDate").val();
-			var sHour = $("#edt_startHour").val();
-			var sMin = $("#edt_startMin").val();
-			var eHour = $("#edt_endHour").val();
-			var eMin = $("#edt_endMin").val();
-			
-			$("#edt_workStartTime").val(day + " " + sHour + ":" + sMin + ":" + "00");
-			$("#edt_workEndTime").val(day + " " + eHour + ":" + eMin + ":" + "00");
-			$("#edt_branchNo").val(parseInt(branchNo));
-			
-			$('input[name=_method]').val('put');
-			$("#editRemoveForm").submit();
-		});
+		$("#addBtn").click(
+				function() {
+					var day = $("#currentDate").val();
+					var sHour = $("#startHour").val();
+					var sMin = $("#startMin").val();
+					var eHour = $("#endHour").val();
+					var eMin = $("#endMin").val();
+
+					$("#workStartTime").val(
+							day + " " + sHour + ":" + sMin + ":" + "00");
+					$("#workEndTime").val(
+							day + " " + eHour + ":" + eMin + ":" + "00");
+					$("#branchNo").val(parseInt(branchNo));
+
+					$("#addForm").submit();
+				});
+
+		$("#editBtn").click(
+				function() {
+					var day = $("#edt_currentDate").val();
+					var sHour = $("#edt_startHour").val();
+					var sMin = $("#edt_startMin").val();
+					var eHour = $("#edt_endHour").val();
+					var eMin = $("#edt_endMin").val();
+
+					$("#edt_workStartTime").val(
+							day + " " + sHour + ":" + sMin + ":" + "00");
+					$("#edt_workEndTime").val(
+							day + " " + eHour + ":" + eMin + ":" + "00");
+					$("#edt_branchNo").val(parseInt(branchNo));
+
+					$('input[name=_method]').val('put');
+					$("#editRemoveForm").submit();
+				});
 	});
-	
+
 	function getOccupation() {
 		$.ajax({
 			url : "/occupation/" + branchNo,
@@ -176,12 +188,14 @@
 			},
 			success : function(data) {
 				occupation = data;
-			}, error : function(request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			},
+			error : function(request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:"
+						+ request.responseText + "\n" + "error:" + error);
 			}
 		});
 	}
-	
+
 	function getEmploy() {
 		$.ajax({
 			url : "/employ/" + parseInt(branchNo),
@@ -193,132 +207,171 @@
 			success : function(data) {
 				employ = data;
 				console.log(data);
-			}, error : function(request, status, error) {
-				console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			},
+			error : function(request, status, error) {
+				console.log("Code:" + request.status + "\n" + "message:"
+						+ request.responseText + "\n" + "error:" + error);
 			}
 		});
 	}
 
 	function drawCalendar() {
 		var eventData;
-		$("#fullcalendar").fullCalendar({
-			header : {
-				left : "prev,next today",
-				center : "title", 
-			 	right : "month" 
-			},
-			eventLimit : true,
-			editable : false,
-			displayEventEnd : true,
-			events : function (start, end, timezone, callback) {
-				$.ajax({
-					url : "/timetable",
-					type : "get",
-					data : {
-						branchNo : parseInt(branchNo)
-					},
-					datatype : "json",
-					headers : {
-						"Content-Type" : "application/json;charset=UTF-8"
-					},
-					success : function(data) {
-						var events = [];
-						for (i in data) {
-							events.push({
-								id: data[i].timetable.timetableNo + "/" + data[i].schedule.no + "/" + data[i].schedule.memberId,
-					            title: "\n" + data[i].timetable.occupName + "\n" + data[i].schedule.name,
-					            start: data[i].timetable.workStartTime,
-					            end: data[i].timetable.workEndTime, 
-					            color: data[i].timetable.occupColor,
-					            textColor: "#ffffff"
-					        });
-						}
-						callback(events);
-					}, error : function(request, status, error) {
-						console.log("Code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-					}
-				});
-			 },
-			timeFormat: 'H:mm',
-			eventClick:function (event) {
-				$("#edt_time").html(event.start.format("YYYY") + "년 " + event.start.format("MM") + "월 " + event.start.format("DD") + "일 시간표 ");
-				$("#edt_currentDate").val(event.start.format("YYYY") + "-" + event.start.format("MM") + "-" + event.start.format("DD"));
-				var idArry = event.id.split("/");
-				var titleArry = event.title.split("\n");
-				var start = event.start.format("HH:mm");
-				var end = event.end.format("HH:mm");
-				var color = event.color;
-				
-				changeEditRemoveModal(idArry, titleArry, start, end, color);
-				
-				$('#editRemoveModal').modal("show");
-				
-				return false;
-			},
-			dayClick:function(date, jsEvent, view) {
-				var now = new Date();
-				var thisDate = new Date();
-				thisDate.setFullYear(date.format("YYYY"), date.format("MM") - 1, date.format("DD"));
-				
-				if (now.getTime() <= thisDate.getTime()) {
-					formatDate(date.format("YYYY"), date.format("MM"), date.format("DD"));
-					$('#addModal').modal("show");
-					return false;
-				} else {
-					alert("시간표를 등록 할 수 없는 날짜입니다. ");
-				}
-			}
-		});
+		$("#fullcalendar")
+				.fullCalendar(
+						{
+							header : {
+								left : "prev,next today",
+								center : "title",
+								right : "month"
+							},
+							eventLimit : true,
+							editable : false,
+							displayEventEnd : true,
+							events : function(start, end, timezone, callback) {
+								$.ajax({
+									url : "/timetable",
+									type : "get",
+									data : {
+										branchNo : parseInt(branchNo)
+									},
+									datatype : "json",
+									headers : {
+										"Content-Type" : "application/json;charset=UTF-8"
+									},
+									success : function(data) {
+										var events = [];
+										for (i in data) {
+											events
+													.push({
+														id : data[i].timetable.timetableNo
+																+ "/"
+																+ data[i].schedule.no
+																+ "/"
+																+ data[i].schedule.memberId,
+														title : "\n"
+																+ data[i].timetable.occupName
+																+ "\n"
+																+ data[i].schedule.name,
+														start : data[i].timetable.workStartTime,
+														end : data[i].timetable.workEndTime,
+														color : data[i].timetable.occupColor,
+														textColor : "#ffffff"
+													});
+										}
+										callback(events);
+									},
+									error : function(request, status,
+											error) {
+										console.log("Code:"
+												+ request.status + "\n"
+												+ "message:"
+												+ request.responseText
+												+ "\n" + "error:"
+												+ error);
+									}
+								});
+							},
+							timeFormat : 'H:mm',
+							eventClick : function(event) {
+								$("#edt_time").html(
+										event.start.format("YYYY") + "년 "
+												+ event.start.format("MM")
+												+ "월 "
+												+ event.start.format("DD")
+												+ "일 시간표 ");
+								$("#edt_currentDate").val(
+										event.start.format("YYYY") + "-"
+												+ event.start.format("MM")
+												+ "-"
+												+ event.start.format("DD"));
+								var idArry = event.id.split("/");
+								var titleArry = event.title.split("\n");
+								var start = event.start.format("HH:mm");
+								var end = event.end.format("HH:mm");
+								var color = event.color;
+
+								changeEditRemoveModal(idArry, titleArry, start,
+										end, color);
+
+								$('#editRemoveModal').modal("show");
+
+								return false;
+							},
+							dayClick : function(date, jsEvent, view) {
+								var now = new Date();
+								var thisDate = new Date();
+								thisDate.setFullYear(date.format("YYYY"), date
+										.format("MM") - 1, date.format("DD"));
+
+								if (now.getTime() <= thisDate.getTime()) {
+									formatDate(date.format("YYYY"), date
+											.format("MM"), date.format("DD"));
+									$('#addModal').modal("show");
+									return false;
+								} else {
+									alert("시간표를 등록 할 수 없는 날짜입니다. ");
+								}
+							}
+						});
 	}
-	
+
 	function changeEditRemoveModal(idArry, titleArry, start, end, color) {
 		var startArry = start.split(":");
 		var endArry = end.split(":");
-		
+
 		$("#timetableNo").val(idArry[0]);
 		$("#no").val(idArry[1]);
 
 		$("#edt_branchNo").val(parseInt(branchNo));
-		
-		$('#edt_startHour option[value=' + startArry[0] + ']').prop('selected', 'selected').change();
-		$('#edt_startMin option[value=' + startArry[1] + ']').prop('selected', 'selected').change();
-		$('#edt_endHour option[value=' + endArry[0] + ']').prop('selected', 'selected').change();
-		$('#edt_endMin option[value=' + endArry[1] + ']').prop('selected', 'selected').change();
-		
-		$("#edt_occupName option[value='" + titleArry[1] + "']").prop('selected', 'selected').change();
-		
+
+		$('#edt_startHour option[value=' + startArry[0] + ']').prop('selected',
+				'selected').change();
+		$('#edt_startMin option[value=' + startArry[1] + ']').prop('selected',
+				'selected').change();
+		$('#edt_endHour option[value=' + endArry[0] + ']').prop('selected',
+				'selected').change();
+		$('#edt_endMin option[value=' + endArry[1] + ']').prop('selected',
+				'selected').change();
+
+		$("#edt_occupName option[value='" + titleArry[1] + "']").prop(
+				'selected', 'selected').change();
+
 		for (var i = 0; i < occupation.length; i++) {
-			if(occupation[i].name == titleArry[1]) {
-				$('#edt_modal-color').attr({
-					value: occupation[i].color,
-					style: 'background-color:' + occupation[i].color  +';color:' + occupation[i].color
-				});
+			if (occupation[i].name == titleArry[1]) {
+				$('#edt_modal-color').attr(
+						{
+							value : occupation[i].color,
+							style : 'background-color:' + occupation[i].color
+									+ ';color:' + occupation[i].color
+						});
 			}
 		}
 	}
-	
+
 	function drawEditModal() {
 		var html = "";
-		
+
 		html += "<tr role='row'>";
 		html += "<td>이름<input type='hidden' id='edt_branchNo' name='branchNo' value=''>"
-			 + "<input type='hidden' id='timetableNo' name='timetableNo' value=''>"
-			 + "<input type='hidden' id='no' name='no' value=''></td>";
+				+ "<input type='hidden' id='timetableNo' name='timetableNo' value=''>"
+				+ "<input type='hidden' id='no' name='no' value=''></td>";
 		html += "<td>";
 		html += "<select id='edt_memberId' name='memberId' class='form-control'>";
 		for (var j = 0; j < employ.length; j++) {
-			html += "<option value='" + employ[j].memberId + "'>" + employ[j].name + "</option>";
+			html += "<option value='" + employ[j].memberId + "'>"
+					+ employ[j].name + "</option>";
 		}
 		html += "</select>";
 		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>시간 <input type='hidden' id='edt_currentDate' value=''>"
-		 			+ "<input type='hidden' id='edt_workStartTime' name='workStartTime' value=''>" 
-					+ "<input type='hidden' id='edt_workEndTime' name='workEndTime' value=''></td>";
+				+ "<input type='hidden' id='edt_workStartTime' name='workStartTime' value=''>"
+				+ "<input type='hidden' id='edt_workEndTime' name='workEndTime' value=''></td>";
 		html += "<td>";
 		html += "<select id='edt_startHour' name='startHour'>";
-		for (var i = 0; i < 25; i ++) {
+		for (var i = 0; i < 25; i++) {
 			if (i < 10) {
 				html += "<option value='0" + i +"'>0" + i + "</option>";
 			} else {
@@ -330,7 +383,7 @@
 			html += "<option value='"+ i +"0'>" + i + "0</option>";
 		}
 		html += "</select> 분  ~ <select id='edt_endHour' name='endHour'>";
-		for (var i = 0; i < 25; i ++) {
+		for (var i = 0; i < 25; i++) {
 			if (i < 10) {
 				html += "<option value='0" + i +"'>0" + i + "</option>";
 			} else {
@@ -349,51 +402,60 @@
 		html += "<td>";
 		html += "<select class='ml-2 mr-2' id='edt_occupName' name='occupName'>";
 		for (var i = 0; i < occupation.length; i++) {
-			html += "<option value='" + occupation[i].name + "'>" + occupation[i].name + "</option>";
+			html += "<option value='" + occupation[i].name + "'>"
+					+ occupation[i].name + "</option>";
 		}
 		html += "</select>";
 		html += "<input type='text' id='edt_modal-color' name='occupColor'/>";
 		html += "<input type='hidden' id='checkSentence'/>";
 		html += "</td>";
 		html += "</tr>";
-		
+
 		$("#table_body_edit").html(html);
 	}
-	
-	$('#table_body_edit').on('change', 'select[name=occupName]', function() {
-		var occupationName = $('#edt_occupName').val();
-		if (occupation.length > 0) {
-			for(var i = 0; i < occupation.length; i++) {
-				if (occupationName == occupation[i].name) {
-					$('#edt_modal-color').attr({
-						value: occupation[i].color,
-						style: 'background-color:' + occupation[i].color  +';color:' + occupation[i].color
-					});
+
+	$('#table_body_edit').on(
+			'change',
+			'select[name=occupName]',
+			function() {
+				var occupationName = $('#edt_occupName').val();
+				if (occupation.length > 0) {
+					for (var i = 0; i < occupation.length; i++) {
+						if (occupationName == occupation[i].name) {
+							$('#edt_modal-color').attr(
+									{
+										value : occupation[i].color,
+										style : 'background-color:'
+												+ occupation[i].color
+												+ ';color:'
+												+ occupation[i].color
+									});
+						}
+					}
 				}
-			}	
-		}
-	});
-	
+			});
+
 	function drawAddModal() {
 		var html = "";
-		
+
 		html += "<tr role='row'>";
 		html += "<td>이름<input type='hidden' id='branchNo' name='branchNo' value=''></td>";
 		html += "<td>";
 		html += "<select id='memberId' name='memberId' class='form-control'>";
 		for (var j = 0; j < employ.length; j++) {
-			html += "<option value='" + employ[j].memberId + "'>" + employ[j].name + "</option>";
+			html += "<option value='" + employ[j].memberId + "'>"
+					+ employ[j].name + "</option>";
 		}
 		html += "</select>";
 		html += "</td>";
 		html += "</tr>";
 		html += "<tr>";
 		html += "<td>시간 <input type='hidden' id='currentDate' value=''>"
-		 			+ "<input type='hidden' id='workStartTime' name='workStartTime' value=''>" 
-					+ "<input type='hidden' id='workEndTime' name='workEndTime' value=''></td>";
+				+ "<input type='hidden' id='workStartTime' name='workStartTime' value=''>"
+				+ "<input type='hidden' id='workEndTime' name='workEndTime' value=''></td>";
 		html += "<td>";
 		html += "<select id='startHour' name='startHour'>";
-		for (var i = 0; i < 25; i ++) {
+		for (var i = 0; i < 25; i++) {
 			if (i < 10) {
 				html += "<option value='0" + i +"'>0" + i + "</option>";
 			} else {
@@ -405,7 +467,7 @@
 			html += "<option value='"+ i +"0'>" + i + "0</option>";
 		}
 		html += "</select> 분  ~ <select id='endHour' name='endHour'>";
-		for (var i = 0; i < 25; i ++) {
+		for (var i = 0; i < 25; i++) {
 			if (i < 10) {
 				html += "<option value='0" + i +"'>0" + i + "</option>";
 			} else {
@@ -425,7 +487,8 @@
 		if (occupation.length > 0) {
 			html += "<select class='ml-2 mr-2' id='occupName' name='occupName'>";
 			for (var i = 0; i < occupation.length; i++) {
-				html += "<option value='" + occupation[i].name + "'>" + occupation[i].name + "</option>";
+				html += "<option value='" + occupation[i].name + "'>"
+						+ occupation[i].name + "</option>";
 			}
 			html += "</select>";
 			html += "<input type='text' id='modal-color' name='occupColor'" 
@@ -434,31 +497,38 @@
 			html += "</td>";
 		}
 		html += "</tr>";
-		
+
 		$("#table_body_add").html(html);
 	}
-	
-	$('#table_body_add').on('change', 'select[name=occupName]', function() {
-		var occupationName = $('#occupName').val();
-		if (occupation.length > 0) {
-			for(var i = 0; i < occupation.length; i++) {
-				if (occupationName == occupation[i].name) {
-					$('#modal-color').attr({
-						value: occupation[i].color,
-						style: 'background-color:' + occupation[i].color  +';color:' + occupation[i].color
-					});
+
+	$('#table_body_add').on(
+			'change',
+			'select[name=occupName]',
+			function() {
+				var occupationName = $('#occupName').val();
+				if (occupation.length > 0) {
+					for (var i = 0; i < occupation.length; i++) {
+						if (occupationName == occupation[i].name) {
+							$('#modal-color').attr(
+									{
+										value : occupation[i].color,
+										style : 'background-color:'
+												+ occupation[i].color
+												+ ';color:'
+												+ occupation[i].color
+									});
+						}
+					}
 				}
-			}	
-		}
-	});
-	
+			});
+
 	function formatDate(y, m, d) {
 		$("#time").html(y + "년 " + m + "월 " + d + "일 시간표 등록");
 		$("#currentDate").val(y + "-" + m + "-" + d);
 	}
-	
+
 	$("#removeBtn").click(function() {
-        $('input[name=_method]').val('delete');
-        $("#editRemoveForm").submit();
-     })
+		$('input[name=_method]').val('delete');
+		$("#editRemoveForm").submit();
+	})
 </script>

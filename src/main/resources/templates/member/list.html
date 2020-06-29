@@ -20,18 +20,19 @@
 									<div class="row">
 										<div class="col-sm-12 col-md-6"></div>
 										<div class="col-sm-12 col-md-6">
-											<div id="datatables-buttons_filter" class="dataTables_filter">
-												<!-- form 태그 있던 자리  -->
-												<div class="form-inline">
-													<select id="condition" name="condition"
-														class="form-control">
-														<option value="name">이름</option>
-														<option value="state">상태</option>
-													</select> <input type="text" id="searchQuery" name="searchQuery"
-														class="form-control form-control-sm" placeholder=""
-														aria-controls="datatables-buttons"> <input
-														type="button" class="btn btn-primary" id="searchButton"
-														name="searchButton" value="검색">
+											<!-- form 태그 있던 자리  -->
+											<div class="row">
+												<div class="form-inline col">
+													<div class="form-inline col-8"></div>
+														<select id="condition" name="condition"
+															class="form-control">
+															<option value="name">이름</option>
+															<option value="state">상태</option>
+														</select> <input type="text" id="searchQuery" name="searchQuery"
+															class="form-control form-control-sm mr-1 ml-1" placeholder=""
+															aria-controls="datatables-buttons"> <input
+															type="button" class="btn btn-primary mr-1 ml-1" id="searchButton"
+															name="searchButton" value="검색">
 												</div>
 											</div>
 										</div>
@@ -54,46 +55,6 @@
 												<tbody id="table_body">
 												</tbody>
 											</table>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-12 col-md-5">
-											<div class="dataTables_info" id="datatables-buttons_info"
-												role="status" aria-live="polite">Showing 1 to 10 of XX
-												entries</div>
-										</div>
-										<div class="col-sm-12 col-md-7">
-											<div class="dataTables_paginate paging_simple_numbers"
-												id="datatables-buttons_paginate">
-												<ul class="pagination">
-													<li class="paginate_button page-item previous disabled"
-														id="datatables-buttons_previous"><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="0"
-														tabindex="0" class="page-link">Previous</a></li>
-													<li class="paginate_button page-item active"><a
-														href="#" aria-controls="datatables-buttons"
-														data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-													<li class="paginate_button page-item "><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="2"
-														tabindex="0" class="page-link">2</a></li>
-													<li class="paginate_button page-item "><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="3"
-														tabindex="0" class="page-link">3</a></li>
-													<li class="paginate_button page-item "><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="4"
-														tabindex="0" class="page-link">4</a></li>
-													<li class="paginate_button page-item "><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="5"
-														tabindex="0" class="page-link">5</a></li>
-													<li class="paginate_button page-item "><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="6"
-														tabindex="0" class="page-link">6</a></li>
-													<li class="paginate_button page-item next"
-														id="datatables-buttons_next"><a href="#"
-														aria-controls="datatables-buttons" data-dt-idx="7"
-														tabindex="0" class="page-link">Next</a></li>
-												</ul>
-											</div>
 										</div>
 									</div>
 								</div>

@@ -19,16 +19,19 @@
 		MEMBER_NAME, MEMBER_PHONE, OCCUPATION_NAME, WORK_START_TIME, WORK_END_TIME, 
 		WORKING_TIME, QUITTING_TIME, SALARY_PLAN, SALARY_PAY, EVALUATION, NOTE
 		FROM RECORD
-		WHERE MEMBER_ID = #{memberId}
+		<where>
+			<if test="memberId != null and memberId != ''">AND MEMBER_ID = #{memberId}</if>
+			<if test="branchNo > 0">AND BRANCH_NO = #{branchNo}</if>
+		</where>
 	</select>
 	
 	<insert id="insert" parameterType="record">
 	INSERT INTO RECORD
-	(NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NAME,
+	(NO, BUSINESSMAN_ID, BUSINESSMAN_NAME, BRANCH_NO, BRANCH_NAME,
 	BRANCH_PHONE, MEMBER_ID, MEMBER_NAME, MEMBER_PHONE, OCCUPATION_NAME,
 	WORK_START_TIME, WORK_END_TIME, WORKING_TIME,SALARY_PLAN) 
 	VALUES
-	(RECORD_NO_SEQ.NEXTVAL, #{businessmanId}, #{businessmanName}, #{branchName}, #{branchPhone},
+	(RECORD_NO_SEQ.NEXTVAL, #{businessmanId}, #{businessmanName}, #{branchNo}, #{branchName}, #{branchPhone},
 	#{memberId}, #{memberName}, #{memberPhone}, #{occupationName},
 	TO_DATE(#{workStartTime, jdbcType=DATE},'YYYY-MM-DD HH24:MI:SS'),
 	TO_DATE(#{workEndTime, jdbcType=DATE},'YYYY-MM-DD HH24:MI:SS'),

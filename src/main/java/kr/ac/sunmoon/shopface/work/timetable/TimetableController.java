@@ -2,7 +2,12 @@ package kr.ac.sunmoon.shopface.work.timetable;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +30,6 @@ public class TimetableController {
 	
 	@PostMapping("/timetable")
 	public ModelAndView addTimetable(RedirectAttributes redirect, Timetable timetable, Schedule schedule) {
-		log.info(schedule.getMemberId());
-		log.info(timetable.getWorkStartTime());
-		
 		ModelAndView mav = new ModelAndView(new RedirectView("/timetable"));
 		
 		boolean result = this.timetableService.addTimetable(timetable, schedule);
@@ -40,8 +42,13 @@ public class TimetableController {
 	}
 	
 	@GetMapping("/timetable")
-	public ModelAndView getTimetable(@RequestParam(value = "result", required = false, defaultValue = "none") String result) {
+	public ModelAndView getTimetable(@RequestParam(value = "result", required = false, defaultValue = "none") String result, @AuthenticationPrincipal User user) {
 		ModelAndView mav = new ModelAndView("work/timetable/list");
+		
+		List<GrantedAuthority> list = user.getAuthorities().stream().collect(toList());
+		log.info(list.get(0).getAuthority());
+		
+		
 		return mav;
 	}
 	

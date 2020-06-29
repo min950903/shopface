@@ -1,9 +1,10 @@
 package kr.ac.sunmoon.shopface.common;
 
-import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,19 +24,19 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonController {
 	private final CommonService commonService;
 	
-//	@GetMapping("/")
-//	public ModelAndView index(@AuthenticationPrincipal User user) {
-//		Stream<String> authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority);
-//		if (authorities.anyMatch(authority -> authority.equals("ROLE_ADMIN"))) {
-//			return new ModelAndView(new RedirectView("/member"));
-//		} else if (authorities.anyMatch(authority -> authority.equals("ROLE_MEMBER"))) {
-//			return new ModelAndView(new RedirectView("/schedule"));
-//		} else if (authorities.anyMatch(authority -> authority.equals("ROLE_BUSINESSMAN"))) {
-//			return new ModelAndView(new RedirectView("/timetable"));
-//		}
-//		
-//		return null;
-//	}
+	@GetMapping("/")
+	public ModelAndView index(@AuthenticationPrincipal User user) {
+		Stream<String> authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+		if (authorities.anyMatch(authority -> authority.equals("ROLE_ADMIN"))) {
+			return new ModelAndView(new RedirectView("/member"));
+		} else if (authorities.anyMatch(authority -> authority.equals("ROLE_MEMBER"))) {
+			return new ModelAndView(new RedirectView("/schedule"));
+		} else if (authorities.anyMatch(authority -> authority.equals("ROLE_BUSINESSMAN"))) {
+			return new ModelAndView(new RedirectView("/timetable"));
+		}
+		
+		return new ModelAndView(new RedirectView("/login"));
+	}
 	
 	@GetMapping("/login")
 	public ModelAndView login(HttpSession httpSession, @AuthenticationPrincipal User user) {
