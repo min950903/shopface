@@ -5,6 +5,7 @@ function drawBranchList(currentBranchNo) {
 		$.ajax({
 			url: '/branch',
 			type:'GET',
+			async: 'false',
 			data: {
 				memberId: userId,
 				approvalStatus: 'Y'

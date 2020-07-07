@@ -124,7 +124,11 @@
 	var employ;
 
 	$(function() {
-		drawSelectBranch();
+		if (branchNo > 0) {
+			drawBranchList(branchNo);
+		} else {
+			drawBranchList(0);
+		}
 		
 		branchNo = $("#selectBranch").val();
 		drawCalendar();
